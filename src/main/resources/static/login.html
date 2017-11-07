@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+
+
+<script type="text/javascript" src="../jquery-1.7.2.min.js"></script>
+
+<script type="text/javascript">
+
+      $(function(){
+    	  
+    	  $("#ss").click(function(){
+    		  
+    		  
+    		  var adata={"name":"5555"};
+    		  var data=JSON.stringify(adata);
+    		  
+    		  $.ajax({
+    			  type:"POST",
+    			  contentType:"application/json",
+    			  dataType:"json",
+    			  data:data,
+    			  
+    			  success:function(data){
+    				  
+    				  alert("成功");
+    				  
+    			  },
+    			  
+    			  error:function(){
+    				  
+    				  alert("失败");
+    			  },
+    			  
+    			  
+    		  });
+    		  
+    		  
+    		  
+    	  });    	  
+    	  
+    	  
+    	  
+      });
+
+
+
+
+
+</script>
+
+
+
+
+
+
+<body>
+
+<h1>咔咔咔咔咔咔咔咔咔咔咔咔咔咔咔咔</h1>
+
+
+<button id="ss">点击</button>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+
+
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+
+<script type="text/javascript">
+
+      $(function(){
+    	  
+    	  $("#ss").click(function(){
+    		  
+    		  var adata={"name":"5555"};
+    		  var data=JSON.stringify(adata);
+    		  
+    		  $.ajax({
+    			  type:"POST",
+    			  contentType:"application/json",
+    			  dataType:"json",
+    			  data:data,
+    			  url:"saveStudent.do",
+    			  
+    			  success:function(data){
+    				  
+    				 if(data.a==1){
+    					 alert("实验成功");
+    				 }else if(data.a==2){
+    					 alert("实验失败");
+    				 }
+    				  
+    			  },
+    			  
+    			  error:function(){
+    				  
+    				  alert("失败");
+    			  },
+    			  
+    			  
+    		  });
+    		  
+    		  
+    		  
+    	  });    	  
+    	  
+    	  
+    	  
+      });
+
+
+
+
+
+</script>
+
+
+
+
+
+
+<body>
+
+<h1>咔咔咔咔咔咔咔咔咔咔咔咔咔咔咔咔</h1>
+
+
+<button id="ss">点击</button>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
