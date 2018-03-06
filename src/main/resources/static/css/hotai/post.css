@@ -1,0 +1,20 @@
+@CHARSET "UTF-8";
+ .font{
+        font-weight:bold;
+        font-size:x-large;
+      }
+      .css{
+        border:1px;
+        color:#5B5B5B;
+      }
+      .background{
+          background-color:transparent;
+      }
+      .select{
+	background-color: transparent;
+	border: solid 1px;
+	color:#11EEEE;
+       } 
+       input{
+       border:10px;
+       }

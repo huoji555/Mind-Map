@@ -16,6 +16,9 @@ import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource;
@@ -80,5 +83,6 @@ public class TxAdviceInterceptor {
     public SessionFactory sessionFactory(HibernateEntityManagerFactory hemf){    
         return hemf.getSessionFactory();    
     }     
+    
 
 }

@@ -15,7 +15,7 @@ public class TryCatchStudentService {
 	public boolean saveStudent(student student){
 		
 		try {
-			this.iStudentService.saveStudent(student);
+			this.iStudentService.save(student);
 		} catch (Exception e) {
 			// TODO: handle exception
 			return false;
@@ -29,7 +29,7 @@ public class TryCatchStudentService {
 		
 		student student=new student();
 		try {
-			student=this.iStudentService.findByName(propertyName, value);
+			student=this.iStudentService.get(propertyName, value);
 		} catch (Exception e) {
 			// TODO: handle exception
 			return null;

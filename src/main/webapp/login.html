@@ -14,7 +14,9 @@
     	  
     	  $("#ss").click(function(){
     		  
-    		  var adata={"name":"5555"};
+    		  var adata={"name":$("#name").val(),
+    	                 "password":$("#password").val()			  
+    		           };
     		  var data=JSON.stringify(adata);
     		  
     		  $.ajax({
@@ -26,11 +28,7 @@
     			  
     			  success:function(data){
     				  
-    				 if(data.a==1){
-    					 alert("实验成功");
-    				 }else if(data.a==2){
-    					 alert("实验失败");
-    				 }
+    				  alert("成功");
     				  
     			  },
     			  
@@ -42,18 +40,49 @@
     			  
     		  });
     		  
-    		  
-    		  
     	  });    	  
-    	  
-    	  
+  
     	  
       });
 
+</script>
 
 
 
+<script type="text/javascript">
 
+     $(function(){
+    	 
+    	  $("#jj").click(function(){
+    		 
+    	    var adata={"name":$("#name").val(),
+    	     		   "password":$("#password").val()
+                	 };
+    		var data=JSON.stringify(adata);
+    		
+    		$.ajax({
+    			type:"POST",
+    			contentType:"application/json",
+    			dataType:"json",
+    			data:data,
+    			url:"getId.do",
+    			
+    			success:function(data){
+    				alert(data.id);
+    				document.getElementById('show').value=data.id;
+    				
+    			     },
+    			     
+    			error:function(){
+    				alert("网络连接失败");
+    			}     
+    			
+    		}); 
+    		 
+    	  });
+    	 
+     });
+  
 </script>
 
 
@@ -66,12 +95,15 @@
 <h1>咔咔咔咔咔咔咔咔咔咔咔咔咔咔咔咔</h1>
 
 
-<button id="ss">点击</button>
+用户:<input type="text" id="name" >
+密码:<input type="password" id="password">
+<br><br><hr>
+
+显示区<input type="text" id="show">
 
 
-
-
-
+<button id="ss">注册</button><br/>
+<button id="jj">显示id</button>
 
 
 

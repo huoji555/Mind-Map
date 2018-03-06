@@ -54,7 +54,6 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 		getCurrentSession().save(entity);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public T get(Serializable id) {
 		// TODO Auto-generated method stub

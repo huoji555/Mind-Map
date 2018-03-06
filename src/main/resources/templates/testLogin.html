@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>毛线头登录</title>
+<link rel="stylesheet" href="Login/css/style.css">
+
+<script type="text/javascript" src="js/index/jquery.min.js"></script>
+<script type="text/javascript" src="js/index/bootstrap.min.js"></script>
+<script src="Login/js/common.js"></script>
+<!--背景图片自动更换-->
+<script src="Login/js/supersized.3.2.7.min.js"></script>
+<script src="Login/js/supersized-init.js"></script>
+<!--表单验证-->
+<script src="Login/js/jquery.validate.min.js?var1.14.0"></script>
+
+
+<!--  登录数据提交与接收  -->
+<script type="text/javascript">
+        $(function(){
+            $("#login2").click(function(){
+            	
+                var adata={
+                    "user":$("#input").val(),
+                    "password":$("#password").val(),
+                    "verifyImage":$("#verifyCode").val(),
+                };
+                var data=JSON.stringify(adata);
+
+                $.ajax({
+                    type:"POST",
+                    contentType:"application/json",
+                    dataType:"json",
+                    data:data,
+                    url:"loginCheck2.do",
+                    success:function(data) {
+     
+                        if (data.Status == "NotHaveUser" || data.Status == "PasswordError") {
+                            alert("用户名或密码填写不正确");
+                            $(".verifyImage").attr("src", "getVerifyCode.do");
+                        } else if (data.Status == "verifyCodeError") {
+                            alert("验证码不正确");
+                            $(".verifyImage").attr("src", "getVerifyCode.do");
+                        }else if(data.Status=="RoleError"){
+                       		alert("角色不正确");
+                       		$("#verifyImage").attr("src","getVerifyCode.do");
+                       } else if (data.Status == "student") {
+                           location.href = "index1.do";
+                       }else if (data.Status == "teacher"||data.Status == "admin") {
+                           location.href = "main.do";
+                       }
+                    },
+                    error:function(e){
+                        alert("网络连接失败");
+
+                    }
+                });
+            }); 
+        });
+    </script>
+    
+    
+    <!--  每次加载页面后重新加载验证码  -->
+    <!--  下面的src是接受返回图片的地址 -->
+    <script type="text/javascript" >
+
+        function reloadVerifyCode()
+        {
+            $(".verifyImage").attr("src","getVerifyCode.do");
+            
+        }
+
+        jQuery(document).ready(function(){
+            //每次加载页面后重新加载验证码
+            reloadVerifyCode();
+        });
+    </script>
+
+
+
+<body>
+
+<div class="login-container">
+	<h1>毛线头</h1>
+	
+	<div class="connect">
+		<p>毛线头，帮你理清学习思路.</p>
+	</div>
+	
+	
+	<!-- 登录部分 -->
+	    <form>
+		<div>
+			<input id="input" type="text" name="username" class="username" placeholder="用户名" autocomplete="off"/>
+		</div>
+		<div>
+			<input id="password" type="password" name="password" class="password" placeholder="密码" oncontextmenu="return false" onpaste="return false" />
+		</div>
+		<div class="input-group">
+            <input type="text" id="verifyCode"  name="verifyCode" valType="required" placeholder="请输入验证码" />
+            <img class="verifyImage"  src="getVerifyCode.do"  align="left" style="cursor:pointer;"
+                 onclick="reloadVerifyCode();" title="点击更换验证码" alt="看不清，换一张" />
+        </div>
+		<button id="login2" type="button">登 陆</button>
+	    </form>
+
+	<a href="register.do">
+		<button type="button" class="register-tis">还有没有账号？</button>
+	</a>
+    
+</div>
+
+</body>
+
+</html>

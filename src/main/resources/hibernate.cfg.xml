@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <!-- property 元素用于配置Hibernate中的属性
+            键:值 
+          -->
+          <!-- hibernate.connection.driver_class : 连接数据库的驱动  -->
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+
+
+          <!-- hibernate.connection.username : 连接数据库的用户名 -->
+        <property name="hibernate.connection.username">root</property>
+
+
+          <!-- hibernate.connection.password : 连接数据库的密码 -->
+        <property name="hibernate.connection.password">123456</property>
+
+
+          <!-- hibernate.connection.url : 连接数据库的地址,路径 -->
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/mind</property>
+
+
+        <!-- show_sql: 操作数据库时,会 向控制台打印sql语句 -->
+        <property name="show_sql">true</property>
+
+
+       
+
+
+        <!-- format_sql: 打印sql语句前,会将sql语句先格式化  -->
+        <property name="format_sql">true</property>
+
+
+        
+
+        <!-- hbm2ddl.auto: 生成表结构的策略配置
+             update(最常用的取值): 如果当前数据库中不存在表结构,那么自动创建表结构. 
+                     如果存在表结构,并且表结构与实体一致,那么不做修改
+                     如果存在表结构,并且表结构与实体不一致,那么会修改表结构.会保留原有列.
+             create(很少):无论是否存在表结构.每次启动Hibernate都会重新创建表结构.(数据会丢失)
+             create-drop(极少): 无论是否存在表结构.每次启动Hibernate都会重新创建表结构.每次Hibernate运行结束时,删除表结构.
+             validate(很少):不会自动创建表结构.也不会自动维护表结构.Hibernate只校验表结构. 如果表结构不一致将会抛出异常.
+          -->
+        <property name="hbm2ddl.auto">update</property>
+
+
+       
+
+
+        <!-- 数据库方言配置 
+         org.hibernate.dialect.MySQLDialect (选择最短的)
+         -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+
+
+       
+
+        <!-- hibernate.connection.autocommit: 事务自动提交  -->
+        <property name="hibernate.connection.autocommit">true</property>
+
+
+       
+
+        <!-- 将Session与线程绑定=> 只有配置了该配置,才能使用getCurrentSession -->
+        <property name="hibernate.current_session_context_class">thread</property>
+
+
+        
+
+
+        <!-- 引入ORM 映射文件 
+            填写src之后的路径
+         -->
+        <!-- <mapping resource="com/itheima/a_hello/User.hbm.xml"/> -->
+    </session-factory>
+</hibernate-configuration>

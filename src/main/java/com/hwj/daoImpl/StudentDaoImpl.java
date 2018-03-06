@@ -5,6 +5,7 @@ import javax.annotation.Resource;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hwj.dao.IStudentDao;
 import com.hwj.entity.student;
