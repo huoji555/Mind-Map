@@ -1,0 +1,20 @@
+/* CSS Document */
+* {
+padding: 0px;
+margin: 0px;
+}
+body {
+font-size: 14px;
+text-align: center;
+color: #000000;
+}
+li{
+	list-style: none;
+}
+/*分页*/
+#pageGro{ width:450px; height:25px; margin:0px auto; padding-top:30px;}
+#pageGro div,#pageGro div ul li{ font-size:12px; color:#999; line-height:23px; float:left; margin-left:5px;}
+#pageGro div ul li{ width:22px; text-align:center; border:1px solid #999; cursor:pointer;}
+#pageGro div ul li.on{ color:#fff; background:#3c90d9; border:1px solid #3c90d9;}
+#pageGro .pageUp,#pageGro .pageDown,#pageGro .pagestart,#pageGro .pageend{ width:63px; border:1px solid #999; cursor:pointer;}
+

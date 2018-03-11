@@ -1,0 +1,21 @@
+@CHARSET "UTF-8";
+
+
+.aaa{
+	overflow:hidden;
+	width:100px;
+	height:115px;
+	float:left;
+	margin-left:20px;
+	border:1px solid #fff;
+	position:relative;
+	transition:all 0.2s ease-in 0.1s;
+	list-style-type:none;
+	}
+	
+	
+.aaa:hover{
+	background:#f1f2fd;
+	border:1px solid #a7aae3;
+	}	
+	

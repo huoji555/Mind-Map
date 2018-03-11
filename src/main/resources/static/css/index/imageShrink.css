@@ -1,0 +1,91 @@
+@CHARSET "UTF-8";
+.shade {
+		position: absolute;
+		display: none;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		background: rgba(0, 0, 0, 0.55);
+	}
+	
+	.shade div {
+		width: 300px;
+		height: 200px;
+		line-height: 200px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin-top: -100px;
+		margin-left: -150px;
+		background: white;
+		border-radius: 5px;
+		text-align: center;
+	}
+	
+	.a-upload {
+		padding: 4px 10px;
+		height: 20px;
+		line-height: 20px;
+		position: relative;
+		cursor: pointer;
+		color: #888;
+		background: #fafafa;
+		border: 1px solid #ddd;
+		border-radius: 4px;
+		overflow: hidden;
+		display: inline-block;
+		*display: inline;
+		*zoom: 1
+	}
+	
+	.a-upload input {
+		position: absolute;
+		font-size: 100px;
+		right: 0;
+		top: 0;
+		opacity: 0;
+		filter: alpha(opacity=0);
+		cursor: pointer
+	}
+	
+	.a-upload:hover {
+		color: #444;
+		background: #eee;
+		border-color: #ccc;
+		text-decoration: none
+	}
+	.img_div{min-height: 100px; min-width: 100px;}
+	.isImg{width: 120px; height: 120px; position: relative; float: left; margin-left: 10px;}
+	.removeBtn{position: absolute; top: 0; right: 0; z-index: 11; border: 0px; border-radius: 50px; background: red; width: 22px; height: 22px; color: white;}
+	.shadeImg{position: absolute;
+		display: none;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		z-index: 15;
+		text-align: center;
+		background: rgba(0, 0, 0, 0.55);}
+	.showImg{width: 400px; 
+	         height: 500px; 
+	         margin-top: 140px;
+	         }	
+	         
+	         
+	#box{
+		 width:500px;
+		 height:450px;
+	}
+	         
+	.overlay{
+	    position: absolute;  
+	    top: 10%;  
+	    left: 15%;  
+	    width: 70%;  
+	    height: 70%;  
+	    background-color: black;  
+	    opacity: 1;
+	    z-index: 50;  
+	}        
+	

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <title>毛线头</title>
+  
+    <link rel="stylesheet" type="text/css"  href="css/index/bootstrap.min.css" >
+    <link rel="stylesheet" type="text/css"  href="css/index/js.css" >
+    <script type="text/javascript" src="js/index/jquery.min.js"></script>
+    <script type="text/javascript" src="js/index/bootstrap.min.js"></script>
+
+
+    <style>
+        
+    </style>
+
+
+
+    <!--  返回顶部  -->
+    <style type="text/css">
+        #goTop{
+            position:absolute;  display:none;  z-index:1;  width:50px;  height:60px;
+            background:#FFFFFF url(images/index/3111.png) no-repeat 6px 5px;  background-size: 36px 36px;  border:solid 0px #f9f9f8;
+            border-radius:6px;  box-shadow:0 1px 1px rgba(0, 0, 0, 0.2);  cursor:pointer
+        }
+        #goTop:hover{
+            background:#CFCFCF url(images/index/3111.png) no-repeat 6px 5px;
+            background-size: 36px 36px;
+        }
+    </style>
+    <!--  收藏  -->
+    <style type="text/css">
+        #clt{
+            position:absolute;  display:none;  z-index:1;  width:50px;  height:48px;
+            background:#ffffff url(images/index/2131.png) no-repeat 6px 5px;  background-size: 36px 36px;  border:solid 0px #f9f9f8;
+            border-radius:6px;  box-shadow:0 1px 1px rgba(0, 0, 0, 0.2);  cursor:pointer;
+        }
+        #clt:hover{
+            background:#CFCFCF url(images/index/2131.png) no-repeat 6px 5px;
+            background-size: 36px 36px;
+        }
+    </style>
+
+
+    <!--  验证是否登录  -->
+    <script type="text/javascript">
+        var adata = "1";
+        var arr = "";
+
+        var data = JSON.stringify(adata);
+
+        $.ajax({
+            type: "POST",
+            contentType:"application/json",
+            url: "iflogin.do",
+            data: data,
+            dataType: "json",
+            success: function(data){
+            	
+                if(data.nickname!=null){
+                    arr = "<img src='images/index/2242.png' style='width:15px;height:15px'>&nbsp;"+data.nickname+"&nbsp;&nbsp;<button id='btn3' onclick='quit()'>退出</button>"
+                    $("#log").hide();
+                    $("#nickname").html(arr);
+                }
+                
+            },
+        });
+
+    </script>
+    
+  
+
+<!-- 重写一个退出功能 -->
+<script type="text/javascript">
+
+  function quit(){
+	 
+	  $.ajax({
+          type: "POST",
+          contentType:"application/json",
+          url: "quitLogin.do",
+          data: data,
+          dataType: "json",
+          success: function(data){
+          	
+          	if(data.a=="1"){
+          		location.href = "index1.do";	
+          	}
+          	},
+          });
+	  
+  
+  }
+
+</script>
+
+
+
+
+
+    <!--  登录注册框开启与关闭  -->
+    <script>
+        $(document).ready(function(){
+            $("#login").click(function(){/* $("#log").toggle(); */
+            $(location).attr('href', 'testLogin.do');
+            $("#reg").hide();});
+        });
+        $(document).ready(function(){
+            $("#toggle").click(function(){/* $("#reg").toggle(); */
+            $(location).attr('href', 'register.do');
+            $("#log").hide();});
+        });
+        $(document).ready(function(){
+            $("#logg").click(function(){$("#log").hide();});
+        });
+        $(document).ready(function(){
+            $("#regg").click(function(){$("#reg").hide();});
+        });
+    </script>
+
+
+    <!--  输入框清空  -->
+    <script>
+        $(function() {
+            $(".urog-form-role").click(function(){
+                var click_node = getEventTrigger(event);
+                var clickName = click_node.getAttribute("data-close");
+                var clickInput = click_node.nodeName;
+                if(clickName=='input'||clickName=='input2'){
+                    $("#"+clickName).val(null);
+                    $("#"+clickName).next().css("display","none");
+                }
+            });
+            function getEventTrigger(event)
+            {
+                x=event.target;
+                return x;
+            }
+        })
+    </script>
+
+
+    <!--  每次加载页面后重新加载验证码  -->
+    <!--  下面的src是接受返回图片的地址 -->
+    <script type="text/javascript" >
+       
+        reloadVerifyCode();
+    
+        function reloadVerifyCode()
+        {
+            $(".verifyImage").attr("src","getVerifyCode.do");
+            
+        }
+
+        /* jQuery(document).ready(function(){
+            //每次加载页面后重新加载验证码
+            reloadVerifyCode();
+        }); */
+    </script>
+
+
+
+    <!--  加载超链接  -->
+    <script type="text/javascript">
+
+        $(function(){
+            //点击超链接局部刷新页面
+            $(".head a").click(function(){
+
+                $("#view").load(this.href);
+                return false;
+            });
+        });
+    </script>
+
+    <!--   适应电脑频幕  -->
+    <meta name=”viewport” content=”width=device-width, initial-scale=1″ />
+
+
+</head>
+<body > <!--  class="cc"  -->
+
+
+
+
+<!--  右下角  -->
+<div id="goTop" class="goTop "></div>
+<button id="clt" class="btn"></button>
+<!--  右下角  -->
+<script type="text/javascript">
+    $(window).scroll(function(){
+        var sc=$(window).scrollTop();
+        var rwidth=$(window).width()+$(document).scrollLeft();
+        var rheight=$(window).height()+$(document).scrollTop();
+        if(sc>0){
+            $("#goTop").css("display","block");
+            $("#goTop").css("left",(rwidth-50)+"px");
+            $("#goTop").css("top",(rheight-120)+"px");
+        }else{
+            $("#goTop").css("display","none");
+        }
+    });
+    $("#goTop").click(function(){
+        $('body,html').animate({scrollTop:0},300);
+    });
+
+    $(window).scroll(function(){
+        var rwidth=$(window).width()+$(document).scrollLeft();
+        var rheight=$(window).height()+$(document).scrollTop();
+        $("#clt").show();
+        $("#clt").css("left",(rwidth-50)+"px");
+        $("#clt").css("top",(rheight-73)+"px");
+    });
+</script>
+
+
+
+<!--  有效显示  -->
+<table align="center"  valign="top" border="0" class="table" style="width:100%">
+    <!--  开头  -->
+   <tr>
+        <td align="center" valign="top">
+            <!-- <table align="center" background="images/index/990.jpg" class="cc001" style="width:100%;height:75px" border="0" > -->
+            <table align="center" class="cc004"  style="width:100%;height:75px" border="0" >
+                <tr style="cursor:pointer;">
+                    <td align="center" width="20%" rowspan="3" class="aa011">基于JavaWeb的资源管理系统</td>
+                    <td align="right" width="80%" colspan="3" id="nickname" class="aa"><span id='login'>登录&nbsp;&nbsp;</span><span id='toggle'>注册&nbsp;&nbsp;</span></td>
+                </tr>
+                <tr>
+                    <td align="center">&nbsp;</td>
+                    <td width="22%" align="center">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="3" align="center">
+                        <table align="center" width=100% border="0">
+                            <tr align="center" class="bb" >
+                                <td style="width:12.5%" >&nbsp;</td>
+                                <td style="width:12.5%" ><a href="index1.do" class="head1">首页</a></td>
+                                <td style="width:12.5%" class="head"><a href="view.do" class="head1">资源</a></td>
+                                <td style="width:12.5%" class="head"><a href="**" class="head1">学习</a></td>
+                                <td style="width:12.5%" class="head"><a href="mindmap2.do" class="head1">知识图谱</a></td>
+                                <!-- <td style="width:12.5%" class="head"><a href="**" class="head1">电子笔记</a></td> -->
+                                <td style="width:12.5%" class="head"><a href="**" class="head1">消息动态</a></td>
+                                <td class="head" style="width:12.5%"><a href="stuinfo.do" class="head1">个人信息</a></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+    
+        <td id="view">
+
+            <table align="center" valign="top" border="0" style="width:100%">
+                <!--  轮播  -->
+                <tr>
+                    <td align="center">
+                        <script>
+                            $(document).ready(function() {
+                                $('.carousel').carousel({
+                                    interval: 3000
+                                })
+                            });
+                        </script>
+
+                        <table align="center" style="width:100%" border="0" class="aa006">
+                            <tr>
+                                <td align="center">
+                                    <div id="myCarousel" class="carousel slide">
+                                        <!-- 轮播（Carousel）指标 -->
+                                        <ol class="carousel-indicators">
+                                            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                                            <li data-target="#myCarousel" data-slide-to="1"></li>
+                                            <li data-target="#myCarousel" data-slide-to="2"></li>
+                                            <li data-target="#myCarousel" data-slide-to="3"></li> 
+                                        </ol>
+                                        <!-- 轮播（Carousel）项目 -->
+                                        <div class="carousel-inner">
+                                            <div class="item active"><img src="images/gg/4.jpg" style="width:100%;height:560px" alt="First slide"></div>
+                                            <div class="item"><img src="images/gg/g6.jpg" style="width:100%;height:560px" alt="Second slide"></div>
+                                            <div class="item"><img src="images/gg/g20.jpg" style="width:100%;height:560px" alt="Third slide"></div>
+                                            <div class="item"><img src="images/gg/g17.jpg" style="width:100%;height:560px" alt="Four slide"></div>
+                                        </div>
+                                        <!-- 轮播（Carousel）导航 -->
+                                        <a class="carousel-control left " href="#myCarousel" data-slide="prev">
+                                            <div class="ff001"><img src="images/index/3081.png" style="width:60px;height:60px"></div>
+                                        </a>
+                                        <a class="carousel-control right" href="#myCarousel" data-slide="next">
+                                            <div class="ff002"><img src="images/index/3092.png" style="width:60px;height:60px"></div>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+
+
+                <!--  我的软件  -->
+                <tr>
+                    <td >
+                        <table align="center"  class="cc001" width="100%">
+                            <tr>
+                                <td>
+                                    <table align="center" border="0" style="width:90%" >
+                                        <tr>
+                                            <td colspan="4" align="left" valign="bottom" class="aa002"><br/>我的软件
+                                                <div style="width:1200px;height:2px;margin:0px auto;padding:0px;background-color:#000000;overflow:hidden;"></div><br/>
+                                                <div colspan="4" align="center" class="aa003">基于JavaWeb的资源管理系统</div><br/>
+                                            </td>
+                                        </tr>
+                                        <tr valign="top" class="aa006" style="height:200px">
+                                            <td width="25%" >
+                                                <div class="head"><a href='#' class="mind">
+                                                <table align="center"  style="width:90%" border="0">
+                                                    <tr><td align="center"><img src="images/aType/d1.png" style="width:90px;height:90px" alt="图片加载失败"></td></tr>
+                                                    <tr><td>&nbsp;</td></tr>
+                                                    <tr><td align="center" class="aa005">学习</td></tr>
+                                                </table>
+                                                </a></div>
+                                            </td>
+                                            <td width="25%">
+                                                <div class="head"><a href='####' class="mind">
+                                                <table align="center" width="90%" border="0">
+                                                    <tr><td align="center"><img src="images/aType/d2.png" style="width:90px;height:90px" alt="图片加载失败"></td></tr>
+                                                    <tr><td>&nbsp;</td></tr>
+                                                    <tr><td align="center" class="aa005">资源</td></tr>
+                                                </table>
+                                                </a></div>
+                                            </td>
+                                            <td width="25%">
+                                                <div class="head"><a href='stuinfo.do' class="mind">
+                                                <table width="90%" border="0" align="center">
+                                                    <tr><td align="center"><img src="images/aType/d3.png" style="width:90px;height:90px" alt="图片加载失败"></td></tr>
+                                                    <tr><td>&nbsp;</td></tr>
+                                                    <tr><td align="center" class="aa005">信息</td></tr>
+                                                </table>
+                                                </a></div>
+                                            </td>
+                                            <td width="25%">
+                                                <div class="head"><a href='####' class="mind">
+                                                <table width="90%" border="0" align="center">
+                                                    <tr><td align="center"><img src="images/aType/d4.png" style="width:90px;height:90px" alt="图片加载失败"></td></tr>
+                                                   <tr><td>&nbsp;</td></tr>
+                                                    <tr><td align="center" class="aa005">消息</td></tr>
+                                                </table>
+                                                </a></div>
+                                            </td>
+                                        </tr>
+                                        <tr valign="top" class="aa006" height="200px" class="mind">
+                                            <td width="25%">
+                                                <div class="head"><a href='####' class="mind">
+                                                <table width="90%" border="0" align="center">
+                                                    <tr><td align="center"><img src="images/aType/d5.png" style="width:90px;height:90px" alt="图片加载失败"></td></tr>
+                                                    <tr><td>&nbsp;</td></tr>
+                                                    <tr><td align="center" class="aa005">笔记</td></tr>
+                                                </table>
+                                                </a></div>
+                                            </td>
+                                            <td width="25%">
+                                                <div class="head"><a href='mindmap.do' class="mind">
+                                                <table width="90%" border="0" align="center">
+                                                    <tr><td align="center"><img src="images/aType/d6.png" style="width:90px;height:90px" alt="图片加载失败"></td></tr>
+                                                    <tr><td>&nbsp;</td></tr>
+                                                    <tr><td align="center" class="aa005">知识图谱</td></tr>         
+                                                </table>
+                                                </a></div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+
+                <!--  我的团队  -->
+                <!-- <tr>
+                    <td align="center">
+                        <table align="center" style="width:100%" background="images/index/110.jpg" class="cc001">
+                            <tr>
+                                <td>
+                                    <table align="center" style="width:90%;;height:520px" border="0">
+                                        <tr>
+                                            <td colspan="3" align="left" class="aa002"><br/>我的团队
+                                                <div style="width:1200px;height:2px;margin:0px auto;padding:0px;background-color:#000000;overflow:hidden;"></div><br/>
+                                            </td>
+                                        </tr>
+                                        <tr align="center" valign="top" class="aa004">
+                                            <td width="33%">
+                                                <table width="80%" border="0">
+                                                    <tr><td align="center" bgcolor="#01B60B" height="70px">王志辉</td></tr>
+                                                    <tr><td align="center"><img src="images/index/201.jpg" style="width:100%;height:250px" alt="图片加载失败"></td></tr>
+                                                    <tr><td align="center" bgcolor="#363233" height="70px">总指导</td></tr>
+                                                </table>
+                                            </td>
+                                            <td width="33%">
+                                                <table width="80%%" border="0">
+                                                    <tr><td align="center" bgcolor="#01B60B" height="70px">孙英龙</td></tr>
+                                                    <tr><td align="center"><img src="images/index/205.jpg" style="width:100%;height:250px" alt="图片加载失败"></td></tr>
+                                                    <tr><td align="center" bgcolor="#363233" height="70px">java 前台</td></tr>
+                                                </table>
+                                            </td>
+                                            <td width="33%">
+                                                <table width="80%" border="0">
+                                                    <tr><td align="center" bgcolor="#01B60B" height="70px">刘丹</td></tr>
+                                                    <tr><td align="center"><img src="images/index/206.jpg" style="width:100%;height:250px" alt="图片加载失败"></td></tr>
+                                                    <tr><td align="center" bgcolor="#363233" height="70px">java 后台</td></tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr> -->
+
+                <!--  介绍  -->
+                <tr>
+                    <td align="center" >
+                        <table width="100%" height="400px" border="0" class="aa007" >
+                            <tr align="center" valign="top">
+                                <td width="33%" align="center" >
+                                    <table style="width:80%" border="0">
+                                        <tr><td valign="bottom" class="aa011"><br/>关于系统：<hr/></td></tr>
+                                        <tr><td valign="top">简介:</td></tr>
+                                        <tr><td>&nbsp;   </td></tr>
+                                        <tr><td valign="top">毛线头学习系统是一个将资源和和知识图谱相结合的软件，可以促进学习</td></tr>
+                                    </table>
+                                </td>
+                                <td width="33%">
+                                    <table style="width:80%" border="0">
+                                        <tr><td colspan="3" valign="bottom" class="aa011"><br/>主要功能：<hr/></td></tr>
+                                        <tr style="height:80px">
+                                            <td style="width:33%" align="center"><img src="images/aType/a1.png" style="width:50%;" /></td>
+                                            <td style="width:34%" align="center"><img src="images/aType/a2.png" style="width:50%;" /></td>
+                                            <td style="width:33%" align="center"><img src="images/aType/a7.png" style="width:50%;" /></td>
+                                        </tr>
+                                        <tr style="height:30px">
+                                            <td align="center">消息</td>
+                                            <td align="center">信息</td>
+                                            <td align="center">学习</td>
+                                        </tr>
+                                        <tr style="height:25px">
+                                        	<td> </td>
+                                        </tr>
+                                        <tr style="height:80px;">
+                                           <td style="width:33%" align="center"><img src="images/aType/a4.png" style="width:50%;" /></td>
+                                           <td style="width:34%" align="center"><img src="images/aType/a3.png" style="width:50%;" /></td>
+                                           <td style="width:33%" align="center">&nbsp;</td>
+                                        </tr>
+                                         <tr style="height:30px">
+                                            <td align="center">资源</td>
+                                            <td align="center">笔记</td>
+                                            <td align="center">&nbsp;</td>
+                                        </tr>
+                                    </table></td>
+                                <td width="33%">
+                                    <table style="width:80%" border="0">
+                                        <tr><td height="17" class="aa011"><br/>联系我们：<hr/></td></tr>
+                                        <tr><td>河北省张家口市河北北方学院</td></tr>
+                                        <tr><td>15369337522</td></tr>
+                                        <tr><td>961946407@qq.com</td></tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+
+            </table>
+       
+        </td>
+    </tr> 
+    
+</table>
+
+
+
+
+
+</body>
+</html>

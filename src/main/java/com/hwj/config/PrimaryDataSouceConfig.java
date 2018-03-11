@@ -33,7 +33,8 @@ import java.util.Map;
         basePackages= { "com.hwj.dao"}) //设置Repository所在位置
 public class PrimaryDataSouceConfig {
 	
-	@Autowired @Qualifier("primaryDataSource")
+	@Autowired 
+	@Qualifier("primaryDataSource")
     private DataSource primaryDataSource;
 
     @Primary

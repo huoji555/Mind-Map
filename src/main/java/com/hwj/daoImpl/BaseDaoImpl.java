@@ -11,6 +11,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.jpa.HibernateEntityManagerFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hwj.dao.IBaseDao;
@@ -54,8 +55,8 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 		getCurrentSession().save(entity);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
+	@Transactional
 	public T get(Serializable id) {
 		// TODO Auto-generated method stub
 		System.out.println(entityClass);
@@ -64,7 +65,7 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 
 	@Override
 	public void delete(T entity) {
-		System.out.println(entity);
+		getCurrentSession().update(entity);
 		getCurrentSession().delete(entity);
 	}
 

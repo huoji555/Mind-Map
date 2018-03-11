@@ -1,0 +1,8 @@
+.fangkuang{
+	width:30%;
+	height:200px;
+	margin:12px;
+	float:left;
+}
+.wrap{word-break:break-all; width:100%;}
+
