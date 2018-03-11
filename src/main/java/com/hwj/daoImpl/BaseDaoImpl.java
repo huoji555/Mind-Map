@@ -65,6 +65,7 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 
 	@Override
 	public void delete(T entity) {
+		//更新底层删除
 		getCurrentSession().update(entity);
 		getCurrentSession().delete(entity);
 	}
