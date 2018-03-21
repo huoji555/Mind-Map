@@ -1,8 +1,12 @@
 package com.hwj.web;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javassist.expr.NewArray;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -15,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hwj.entity.FileCollection;
 import com.hwj.entity.UploadFile;
-import com.hwj.entity.student;
 import com.hwj.json.JsonAnalyze;
 import com.hwj.tools.StatusMap;
 import com.hwj.tools.TryCatchFileCollectionService;
@@ -317,6 +320,111 @@ public class CollectionController {
 	
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  节点上删除收藏文件
+	 * @serialData 2018.3.21
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("/delCollectUpload.do")
+	@ResponseBody
+	public String delCollectUpload(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		String zlid = String.valueOf(map.get("zlid"));
+		String nodeid = String.valueOf(map.get("nodeid"));
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		
+		FileCollection fileCollection = tryCatchFileCollectionService.
+				getFileCollection("userid", userid, "nodeid", nodeid,"f_id", zlid);
+		
+		if(tryCatchFileCollectionService.delFileCollection(fileCollection)){
+			return statusMap.a("1");
+		}
+		
+		return statusMap.a("2");
+		
+	}
+	
+	
+	/**
+	 * @author Ragty
+	 * @serialData 2018.3.21
+	 * @param 显示节点上的收藏文件接口
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("/getCollectUpload.do")
+	@ResponseBody
+	public String getCollectUpload(@RequestBody String requestJsonBody,
+			HttpServletRequest request ) throws IOException{
+		
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		String nodeid = String.valueOf(map.get("nodeid"));
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		
+		List<FileCollection> list = tryCatchFileCollectionService.
+				getFileCollection("userid", userid, "nodeid", nodeid);
+		List<Map<String, String>> list2 =new ArrayList<Map<String,String>>();
+		
+		String states = null;
+		
+		if((list == null )|| (list.equals(null))){
+			return statusMap.a("3");
+		} else {
+			
+			for(int i = 0; i < list.size(); i++){
+				
+				FileCollection fileCollection = list.get(i);
+				Map<String, String> map1 = new HashMap<String, String>();
+				
+				String type = fileCollection.getFileType();
+				
+				String tubiao = "";
+				if (type.equals("doc")) {
+					tubiao = "/assets/avatars/word.jpg";
+				} else if (type.equals("video")) {
+					tubiao = "/assets/avatars/shipin.jpg";
+				} else if (type.equals("picture")) {
+					tubiao = "/assets/avatars/tupian.jpg";
+				} else if (type.equals("other")) {
+					tubiao = "/assets/avatars/tuzhi.jpg";
+				} else if (type.equals("5")) {
+					tubiao = "/assets/avatars/yinpin.jpg";
+				}
+				
+				map1.put("zlmc", fileCollection.getF_name());
+				map1.put("tubiao", tubiao);
+				map1.put("zlms", "无任何描述");
+				map1.put("zlid", String.valueOf(fileCollection.getF_id()));
+				map1.put("filepath", fileCollection.getFilePath());
+				map1.put("time", fileCollection.getUploadTime());
+				map1.put("fileType", fileCollection.getFileType());
+				
+				if(list2.size() < list.size()){
+					list2.add(map1);
+				} 
+				
+			}
+		}
+		
+		Map<String, Object> map2 =new HashMap<String, Object>();
+		map2.put("state", states);
+		map2.put("list2", list2);
+		map2.put("nodeid", nodeid);
+		
+		return this.jsonAnalyze.map2Json(map2);
+		
+	}
 	
 	
 	
