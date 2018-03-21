@@ -46,33 +46,38 @@ public class CollectionController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping("getCollectionFile.do")
+	@RequestMapping("/getCollectionFile.do")
 	@ResponseBody
-	public String getCollectionFile(@RequestBody String requestJsonBody,HttpServletRequest request) throws IOException{
-		
+	public String getCollectionFile(HttpServletRequest request)
+			throws IOException {
+
 		HttpSession session = request.getSession();
 		String userid = String.valueOf(session.getAttribute("username"));
-		
-		List<FileCollection> list = tryCatchFileCollectionService.getFileCollection("userid", userid);
-		
-		if(list==null || list.equals(null)){
+
+		List<FileCollection> list = tryCatchFileCollectionService
+				.getFileCollection("userid", userid);
+
+		System.out.println(list + "huoji555");
+		if (list == null || list.equals(null)) {
+
 			return statusMap.a("2");
 		}
-		
-		//去重
-		for(int i=0; i<list.size(); i++){
-			FileCollection fileCollection = list.get(i);
-			for(int j=i+1; j<list.size(); j++){
+
+		for (int i = 0; i < list.size(); i++) {
+
+			FileCollection fileCollection1 = list.get(i);
+			for (int j = i + 1; j < list.size(); j++) {
 				FileCollection fileCollection2 = list.get(j);
-				if(fileCollection.getF_id() == fileCollection2.getF_id()){
+
+				if (fileCollection1.getF_id().equals(fileCollection2.getF_id())) {
 					list.remove(j);
 				}
 			}
-			
+
 		}
-		
+
 		return jsonAnalyze.list2Json(list);
-		
+
 	}
 	
 	
@@ -87,25 +92,39 @@ public class CollectionController {
 	 * @throws IOException
 	 */
 	@RequestMapping("/collectionDelete.do")
-   	@ResponseBody
-   	public String collectionDelete(@RequestBody String requestJsonBody, HttpServletRequest request) throws IOException{
-		
-        Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
-        
-        String f_id = String.valueOf(map.get("f_id"));
+	@ResponseBody
+	public String collectionDelete(@RequestBody String reuqestBody,
+			HttpServletRequest request) throws IOException {
+
+		// 用来取请求体中的数据
+		Map<String, Object> map = jsonAnalyze.json2Map(reuqestBody);
+		String f_id = String.valueOf(map.get("f_id"));
 		String nodeid = String.valueOf(map.get("nodeid"));
 		HttpSession session = request.getSession();
 		String userid = String.valueOf(session.getAttribute("username"));
 		
-		FileCollection fileCollection = tryCatchFileCollectionService.
-				getFileCollection("userid", userid, "nodeid", nodeid, "f_id", f_id);
 		
-		if(tryCatchFileCollectionService.delFileCollection(fileCollection)){
+		FileCollection fileCollection = new FileCollection();
+		
+		//不同情况,分别对待
+        if(nodeid.equals("null")){
+        	System.out.println("到这里了");
+        	fileCollection =tryCatchFileCollectionService.
+        			getFileCollection1("userid", userid, "f_id", f_id);
+        } else {
+        	fileCollection = tryCatchFileCollectionService
+    				.getFileCollection("userid", userid, "f_id", f_id, "nodeid",
+    						nodeid);
+        }
+		
+		System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$"+fileCollection);
+
+		if (tryCatchFileCollectionService.delFileCollection(fileCollection)) {
 			return statusMap.a("1");
+		} else {
+			return statusMap.a("2");
 		}
-		
-		return statusMap.a("2");
-				
+
 	}
 	
 	
@@ -165,7 +184,7 @@ public class CollectionController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping("/search.do")
+	@RequestMapping("/search1.do")
 	@ResponseBody
 	public String search(@RequestBody String requestbody,
 			HttpServletRequest request) throws IOException {
