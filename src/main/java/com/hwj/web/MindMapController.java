@@ -534,6 +534,58 @@ public class MindMapController {
 	}
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  新建子节点接口
+	 * @serialData 2018.3.22
+	 * @param mindNodeTool
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("/saveMindNode2.do")
+	@ResponseBody
+	public String saveMindNode2(MindNodeTool mindNodeTool,
+			HttpServletRequest request) throws IOException{
+		
+		String nodeid = mindNodeTool.getNodeid();
+		String nodename = mindNodeTool.getNodename();
+		String parentid = mindNodeTool.getParentid();
+		
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		
+		if (userid.equals("null") || userid.equals(null)){
+			return statusMap.a("2");
+		}
+		
+		String type =tryCatchMindMapService.getMindNode("nodeid", parentid).get(0).getType();
+		
+		MindNode mindNode = new MindNode();
+		mindNode.setNodeid(nodeid);
+		mindNode.setNodename(nodename);
+		mindNode.setParentid(parentid);
+		mindNode.setUserid(userid);
+		mindNode.setType(type);
+		
+		boolean a;
+		
+		if(tryCatchMindMapService.getMindNode("nodeid", nodeid)!=null){
+			a = this.tryCatchMindMapService.updateMindNodeObject(mindNode);
+			System.out.println("修改");
+		} else {
+			a = this.tryCatchMindMapService.savaMindNodeObject(mindNode);
+			System.out.println("保存");
+		}
+		
+		if(a){
+			return statusMap.a("1");
+		}
+		
+		return statusMap.a("2");
+	}
+	
+	
 	
 	
 	
