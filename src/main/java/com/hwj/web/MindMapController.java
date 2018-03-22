@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hwj.entity.MindNode;
 import com.hwj.entityUtil.MindMapUtil;
+import com.hwj.entityUtil.MindNode2Util;
+import com.hwj.entityUtil.MindNodeTool;
 import com.hwj.entityUtil.MindNodeUtil;
 import com.hwj.entityUtil.Node2;
 import com.hwj.json.JsonAnalyze;
@@ -226,6 +228,15 @@ public class MindMapController {
 	
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  打开一个思维导图(把数据库里的元素有机重组)
+	 * @serialData 2018.3.22
+	 * @param nodeid
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
 	@RequestMapping("/getNodeData.do")
 	@ResponseBody
 	public String getNodeData(@RequestParam String nodeid,
@@ -271,13 +282,260 @@ public class MindMapController {
 		List dataList = list2;
 		HashMap nodeList = new HashMap();
 		Node2 root = null;
+		MindNode2Util mindNode2Util = new MindNode2Util();
 		
 		Set entrySet = nodeList.entrySet();
+		for(Iterator it = entrySet.iterator(); it.hasNext();){
+			Node2 node = (Node2) ((Map.Entry) it.next()).getValue();
+			
+			if ((node.parentid == null) || (node.parentid.equals("00100"))) {
+				System.out.println("node的值@@@@@@@@@@@@@@@"+node);
+				root = node;
+			} else {
+				try {
+					((Node2) nodeList.get(node.parentid)).addChild(node); // 重点，在主节点后面加子节点
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+			
+		}
 		
+		mindNode2Util.setState("1");
+		
+		data.put("data", root.toString());
+		
+		String datas = this.jsonAnalyze.object2Json(data).toString();
+		
+		datas = datas.replace("\"", "'");
+		datas = datas.replace(" ", "");
+		datas = datas.replace("'{", "{");
+		datas = datas.replace("}'", "}");
+		mindNode2Util.setDatas(datas);
+		mindNode2Util.setKcmc(type);
+		mindNode2Util.setMindJson2("success");
+		
+		return this.jsonAnalyze.object2Json(mindNode2Util);
         
-        
-		return null;
 	}
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  打开子节点后的思维导图
+	 * @serialData 2018.3.22
+	 * @param mindNodeTool
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getMindNode2.do")
+	@ResponseBody
+	public String getMindNode2(MindNodeTool mindNodeTool,
+			HttpServletRequest request) throws Exception {
+		String nodeid = mindNodeTool.getNodeid();
+		String parentid = ((MindNode) this.tryCatchMindMapService.getMindNode(
+				"nodeid", nodeid).get(0)).getParentid();
+		String type = ((MindNode) this.tryCatchMindMapService.getMindNode(
+				"nodeid", nodeid).get(0)).getType();
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		if (userid.equals("null") || userid.equals(null)) {
+			return statusMap.a("2");
+		}
+
+		List<MindNode> list = new ArrayList<MindNode>();
+		list = this.tryCatchMindMapService.getMindNode("userid", userid,
+				"type", type);
+
+		System.out.println(list + "##########打开子节点");
+		MindNode2Util mindNode2Util = new MindNode2Util();
+		if ((list == null) || (list.size() <= 0)) {
+			return null;
+		}
+		Map<String, Object> data = new HashMap<String, Object>();
+		Map<String, Object> meta = new HashMap<String, Object>();
+		meta.put("name", "jsMind remote");
+		meta.put("author", "hizzgdev@163.com");
+		meta.put("version", "0.2");
+		data.put("meta", meta);
+		data.put("format", "node_tree");
+
+		List<MindNode> list2 = new ArrayList<MindNode>();
+		list2 = this.tryCatchMindMapService.getMindNode("userid", userid,
+				"type", type);
+
+		List<Map<String, String>> list3 = new ArrayList();
+
+		// 可以显示取出的子节点及它的子数据（分层取数据）
+		list3 = this.tryCatchMindMapService.getzijiedian(nodeid, userid);
+
+		System.out.println(list3 + "list");
+		List dataList = list3;
+		System.out.println(dataList + "  zheishi  jiajijfi");
+
+		HashMap nodeList = new HashMap();
+
+		System.out.println(nodeList + "  zheishi  jiajijfi");
+		Node2 root = null;
+		for (Iterator it = dataList.iterator(); it.hasNext();) {
+			Map dataRecord = (Map) it.next();
+			Node2 node = new Node2();
+			node.id = ((String) dataRecord.get("id"));
+			node.topic = ((String) dataRecord.get("topic"));
+			node.parentid = ((String) dataRecord.get("parentid"));
+			nodeList.put(node.id, node);
+		}
+		System.out.println(root + "  root  jiajijfi");
+
+		Set entrySet = nodeList.entrySet();
+		System.out.println(entrySet + "  entrySet  jiajijfi");
+		for (Iterator it = entrySet.iterator(); it.hasNext();) {
+			Node2 node = (Node2) ((Map.Entry) it.next()).getValue();
+			if ((node.parentid == null) || (node.parentid.equals(parentid))) {
+				root = node;
+			} else {
+				
+				try {
+					((Node2) nodeList.get(node.parentid)).addChild(node);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+				
+			}
+		}
+		System.out.println("sdfsdf :" + root.toString());
+		System.out.println("sdsfsdfds:" + root);
+		mindNode2Util.setState("1");
+
+		data.put("data", root.toString());
+
+		String datas = this.jsonAnalyze.object2Json(data).toString();
+
+		System.out.println("datatatat:" + datas);
+		datas = datas.replace("\"", "'");
+		datas = datas.replace(" ", "");
+		datas = datas.replace("'{", "{");
+		datas = datas.replace("}'", "}");
+		mindNode2Util.setDatas(datas);
+		mindNode2Util.setKcmc(type);
+		mindNode2Util.setMindJson2("success");
+		return this.jsonAnalyze.object2Json(mindNode2Util);
+	}
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  根据一个节点获取整个思维导图
+	 * @serialData 2018.3.22
+	 * @param mindNodeTool
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getMindNode3.do")
+	@ResponseBody
+	public String getMindNode3(MindNodeTool mindNodeTool,
+			HttpServletRequest request) throws Exception {
+		String nodeid = mindNodeTool.getNodeid();
+		String type = ((MindNode) this.tryCatchMindMapService.getMindNode(
+				"nodeid", nodeid).get(0)).getType();
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		if (userid.equals("null") || userid.equals(null)) {
+			return statusMap.a("2");
+		}
+
+		List<MindNode> list = new ArrayList<MindNode>();
+		list = this.tryCatchMindMapService.getMindNode("userid", userid,
+				"type", type);
+
+		MindNode2Util mindNode2Util = new MindNode2Util();
+		if ((list == null) || (list.size() <= 0)) {
+			return null;
+		}
+		Map<String, Object> data = new HashMap<String, Object>();
+		Map<String, Object> meta = new HashMap<String, Object>();
+		meta.put("name", "jsMind remote");
+		meta.put("author", "hizzgdev@163.com");
+		meta.put("version", "0.2");
+		data.put("meta", meta);
+		data.put("format", "node_tree");
+
+		List<MindNode> list2 = new ArrayList<MindNode>();
+		list2 = this.tryCatchMindMapService.getMindNode("userid", userid,
+				"type", type);
+
+		System.out.println("让我看看是何方妖孽"+list2);
+		
+		
+		List<Map<String, String>> list3 = new ArrayList<Map<String, String>>();
+		for (int i = 0; i < list2.size(); i++) {
+			Map<String, String> map2 = new HashMap<String, String>();
+			MindNode mindNode = (MindNode) list2.get(i);
+			map2.put("id", mindNode.getNodeid());
+			map2.put("topic", mindNode.getNodename());
+			map2.put("parentid", mindNode.getParentid());
+
+			list3.add(map2);
+		}
+		System.out.println(list3 + "list");
+		List dataList = list3;
+		System.out.println(dataList + "  zheishi  jiajijfi");
+
+		HashMap nodeList = new HashMap();
+
+		System.out.println(nodeList + "  zheishi  jiajijfi");
+		Node2 root = null;
+		for (Iterator it = dataList.iterator(); it.hasNext();) {
+			Map dataRecord = (Map) it.next();
+			Node2 node = new Node2();
+			node.id = ((String) dataRecord.get("id"));
+			node.topic = ((String) dataRecord.get("topic"));
+			node.parentid = ((String) dataRecord.get("parentid"));
+			node.direction = (String) (dataRecord.get("parentid"));
+			nodeList.put(node.id, node);
+		}
+		System.out.println(root + "  root  jiajijfi");
+
+		Set entrySet = nodeList.entrySet();
+		System.out.println(entrySet + "  entrySet  jiajijfi");
+		for (Iterator it = entrySet.iterator(); it.hasNext();) {
+			Node2 node = (Node2) ((Map.Entry) it.next()).getValue();
+			if ((node.parentid == null) || (node.parentid.equals("00100"))) {
+				root = node;
+			} else {
+				
+				try {
+					((Node2) nodeList.get(node.parentid)).addChild(node);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+				
+			}
+		}
+		System.out.println("sdfsdf :" + root.toString());
+		System.out.println("sdsfsdfds:" + root);
+		mindNode2Util.setState("1");
+
+		data.put("data", root.toString());
+
+		String datas = this.jsonAnalyze.object2Json(data).toString();
+
+		System.out.println("datatatat:" + datas);
+		datas = datas.replace("\"", "'");
+		datas = datas.replace(" ", "");
+		datas = datas.replace("'{", "{");
+		datas = datas.replace("}'", "}");
+		mindNode2Util.setDatas(datas);
+		mindNode2Util.setKcmc(type);
+		mindNode2Util.setMindJson2("success");
+		return this.jsonAnalyze.object2Json(mindNode2Util);
+	}
+	
+	
+	
+	
 	
 	
 	
