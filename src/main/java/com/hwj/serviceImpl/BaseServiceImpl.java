@@ -149,4 +149,32 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
 		return this.dao.get(propertyName1, propertyName2, propertyName3, value1, value2, value3);
 	}
 
+	@Override
+	public List<T> getAllByPage(Integer currentPage, Integer pageSize,
+			String propertyName, Object value) {
+		// TODO Auto-generated method stub
+		return this.dao.getAllByPage(currentPage, pageSize, propertyName, value);
+	}
+
+	@Override
+	public List<T> getAllByPage(Integer currentPage, Integer pageSize,
+			String propertyName1, Object value1, String propertyName2,
+			Object value2) {
+		// TODO Auto-generated method stub
+		return this.dao.getAllByPage(currentPage, pageSize, propertyName1, value1, propertyName2, value2);
+	}
+
+	@Override
+	public Long countByOne(String propertyName, Object value) {
+		// TODO Auto-generated method stub
+		return this.dao.countByOne(propertyName, value);
+	}
+
+	@Override
+	public Long countByTwo(String propertyName1, Object value1,
+			String propertyName2, Object value2) {
+		// TODO Auto-generated method stub
+		return this.dao.countByTwo(propertyName1, value1, propertyName2, value2);
+	}
+
 }

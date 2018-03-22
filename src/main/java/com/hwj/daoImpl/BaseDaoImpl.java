@@ -264,6 +264,8 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 		}
 	}
 
+	
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public T get(String propertyName1, String propertyName2,
@@ -286,6 +288,74 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 		}
 
 	}
+	
+	
+	
+	@Override
+	public List<T> getAllByPage(Integer currentPage, Integer pageSize,
+			String propertyName, Object value) {
+		// TODO Auto-generated method stub
+		String hql="from "+entityClass.getName()+" as model where model."+propertyName+" like '%"+value+"%'";
+		
+		@SuppressWarnings("unchecked")
+		List<T> list=getCurrentSession().createQuery(hql).setFirstResult((currentPage-1)*pageSize)
+	             .setMaxResults(pageSize).list();
+		System.out.println("匹配分页法1");
+		
+		if(list.size()>0){
+			return list;
+		}
+		
+		return null;
+	}
+
+	
+	
+	@Override
+	public List<T> getAllByPage(Integer currentPage, Integer pageSize,
+			String propertyName1, Object value1, String propertyName2,
+			Object value2) {
+		// TODO Auto-generated method stub
+		String hql="from "+entityClass.getName()+" as model where model."+propertyName1+" like '%"+value1+"%'";
+	           hql+=" and model."+propertyName2+" like '%"+value2+"%' ";
+           
+   		@SuppressWarnings("unchecked")
+		List<T> list=getCurrentSession().createQuery(hql).setFirstResult((currentPage-1)*pageSize)
+   	             .setMaxResults(pageSize).list();
+   		System.out.println("匹配分页法2");     
+   		
+   		if(list.size()>0){
+			return list;
+		}
+		
+		return null;
+	}
+
+	
+	
+	@Override
+	public Long countByOne(String propertyName, Object value) {
+		// TODO Auto-generated method stub
+		String hql = "select Count (model) from " + entityClass.getName()+ " as model";
+		       hql+=" where model."+propertyName+" like '%"+value+"%'";
+		Long total = (Long) getCurrentSession().createQuery(hql).uniqueResult();
+		return total;
+		
+	}
+
+	
+	
+	@Override
+	public Long countByTwo(String propertyName1, Object value1,
+			String propertyName2, Object value2) {
+		// TODO Auto-generated method stub
+		String hql = "select Count (model) from " + entityClass.getName()+ " as model";
+	           hql+=" where model."+propertyName1+" like '%"+value1+"%'";
+	           hql+=" and model."+propertyName2+" like '%"+value2+"%' ";
+		Long total = (Long) getCurrentSession().createQuery(hql).uniqueResult();
+		return total;
+	}
+
 
 
 }

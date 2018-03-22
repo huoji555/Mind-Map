@@ -46,4 +46,16 @@ public interface IBaseService<T> {
 
 	public T get(String propertyName1, String propertyName2,
 			String propertyName3, Object value1, Object value2, Object value3);
+	
+	public List<T> getAllByPage(Integer currentPage, Integer pageSize,
+			String propertyName, Object value);
+	
+	public List<T> getAllByPage(Integer currentPage, Integer pageSize,
+			String propertyName1, Object value1,String propertyName2, Object value2);
+	
+    public Long countByOne(String propertyName, Object value);
+	
+	public Long countByTwo(String propertyName1, Object value1,
+			String propertyName2, Object value2);
+	
 }

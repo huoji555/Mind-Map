@@ -49,6 +49,18 @@ public interface IBaseDao<T> {
 
 	public List<T> getAll(String propertyName1, Object value1,
 			String propertyName2, Object value);
+
+	Long countByTwo(String propertyName1, Object value1, String propertyName2,
+			Object value2);
+
+	Long countByOne(String propertyName, Object value);
+
+	List<T> getAllByPage(Integer currentPage, Integer pageSize,
+			String propertyName1, Object value1, String propertyName2,
+			Object value2);
+
+	List<T> getAllByPage(Integer currentPage, Integer pageSize,
+			String propertyName, Object value);
 	
 	
 

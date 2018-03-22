@@ -194,7 +194,97 @@ public class TryCatchMindMapService {
 		}
 		return mindNode;
 	}
+	
+	
+	/**
+	 * @author Ragty
+	 * @param 根据匹配条件查询分页取出list(一个条件)
+	 * @serialData 2017.11.30
+	 * @param pageSize
+	 * @param propertyName
+	 * @param value
+	 * @return list
+	 */
+	public List<MindNode> getMindNodeByPage(Integer currentPage, Integer pageSize,
+			String propertyName,Object value){
+		
+		List<MindNode> list=null;
+		try {
+			list=this.iMindNodeService.getAllByPage(currentPage, pageSize, propertyName, value);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+		return list;
+	}
 
+	
+	/**
+	 * @author Ragty
+	 * @param 根据匹配条件查询分页取出list(两个条件)
+	 * @serialData 2017.11.30
+	 * @param pageSize
+	 * @param propertyName
+	 * @param value
+	 * @return list
+	 */
+	public List<MindNode> getMindNodeByPage(Integer currentPage, Integer pageSize,
+			String propertyName1,Object value1,String propertyName2,Object value2){
+		
+		List<MindNode> list=null;
+		try {
+			list=this.iMindNodeService.getAllByPage(currentPage, pageSize, propertyName1, value1, propertyName2, value2);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+		return list;
+	}
+	
+	
+	/**
+	 * @author Ragty
+	 * @serialData 2017.12.1
+	 * @param 获取根据条件查询到的数据的总数(一个条件)
+	 * @param propertyName
+	 * @param value
+	 * @return total
+	 */
+	public Long countByOneMind(String propertyName,Object value){
+		
+		Long total=null;
+		try {
+			total=this.iMindNodeService.countByOne(propertyName, value);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+		return total;
+	}
+	
+	
+	/**
+	 * @author Ragty
+	 * @param 获取根据条件查询到的数据的总数(两个条件)
+	 * @param propertyName1
+	 * @param propertyName2
+	 * @param value1
+	 * @param value2
+	 * @return total
+	 */
+	public Long countByTwoMind(String propertyName1,
+			String propertyName2, Object value1, Object value2){
+		
+		Long total=null;
+		try {
+			total=this.iMindNodeService.countByTwo(propertyName1, value1, propertyName2, value2);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+		return total;
+	}
+	
 	
 	/**
 	 * @author Ragty

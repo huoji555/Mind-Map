@@ -36,8 +36,7 @@ public class TryCatchFileCollectionService {
 
 		FileCollection fileCollection = null;
 		try {
-			fileCollection = this.iFileCollectionService.get(propertyName1,
-					propertyName2, value1, value2);
+			fileCollection = this.iFileCollectionService.get(propertyName1, propertyName2, value1, value2);
 		} catch (Exception e) {
 			// TODO: handle exception
 			return null;
@@ -69,6 +68,7 @@ public class TryCatchFileCollectionService {
 			this.iFileCollectionService.delete(fileCollection);
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 			return false;
 		}
 		return true;
