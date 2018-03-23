@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hwj.entity.MindNode;
+import com.hwj.entity.UploadFile;
 import com.hwj.entityUtil.MindMapUtil;
 import com.hwj.entityUtil.MindNode2Util;
 import com.hwj.entityUtil.MindNodeTool;
@@ -559,7 +560,8 @@ public class MindMapController {
 			return statusMap.a("2");
 		}
 		
-		String type =tryCatchMindMapService.getMindNode("nodeid", parentid).get(0).getType();
+		String type =tryCatchMindMapService.
+				getMindNode("nodeid", parentid).get(0).getType();
 		
 		MindNode mindNode = new MindNode();
 		mindNode.setNodeid(nodeid);
@@ -586,9 +588,89 @@ public class MindMapController {
 	}
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  修改节点信息接口
+	 * @serialData 2018.3.23
+	 * @param mindNodeTool
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("/updateMindNode.do")
+	@ResponseBody
+	public String updateMindNode(MindNodeTool mindNodeTool,
+			HttpServletRequest request) throws IOException{
+		
+		String nodeid = mindNodeTool.getNodeid();
+		String nodename = mindNodeTool.getNodename();
+		
+		HttpSession session = request.getSession();
+		String userid =String.valueOf(session.getAttribute("username"));
+		
+		if(userid.equals("null") || userid.equals(null)){
+			return statusMap.a("2");
+		}
+		
+		MindNode mindNode = tryCatchMindMapService.
+				getMindNodeObject("userid", "nodeid", userid, nodeid);
+		mindNode.setNodename(nodename);
+		
+		if(tryCatchMindMapService.updateMindNodeObject(mindNode)){
+			return statusMap.a("1");
+		}
+		return statusMap.a("3");
+	}
 	
 	
-	
+	@RequestMapping("/deleteNodeByBatch.do")
+	@ResponseBody
+	public String deleteNodeByBatch(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		String nodeid=String.valueOf(map.get("nodeid"));
+		
+		HttpSession session =request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		
+		if (userid.equals("null") || userid.equals(null)){
+			return statusMap.a("2");
+		}
+		
+		List<Map<String, String>> list = new ArrayList<Map<String,String>>();
+		list = tryCatchMindMapService.getzijiedian(nodeid, userid);
+		
+		List dataList = list;
+		
+		
+		//在循环体里执行删除
+		for(Iterator it = dataList.iterator(); it.hasNext();){
+			Map dataRecord = (Map) it.next();
+			
+			String id = String.valueOf(dataRecord.get("id"));
+			
+			MindNode mindNode = tryCatchMindMapService.
+					getMindNodeObject("nodeid", "userid", id, userid);
+			
+			List<UploadFile> listUploadFiles = null;
+			try {
+				listUploadFiles = tryCatchUploadFileService.getUploadeFile("userid", userid, "zsdid", id);
+				if(listUploadFiles.size() <= 0){
+					return statusMap.a("3");
+				}		
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
+		}
+		
+		
+			
+			
+			
+		return null;
+	}
 	
 	
 	
