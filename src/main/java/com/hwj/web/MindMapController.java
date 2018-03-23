@@ -1,5 +1,6 @@
 package com.hwj.web;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.hwj.entity.FileCollection;
+import com.hwj.entity.FileShare;
+import com.hwj.entity.FileStream;
 import com.hwj.entity.MindNode;
 import com.hwj.entity.UploadFile;
 import com.hwj.entityUtil.MindMapUtil;
@@ -29,6 +33,8 @@ import com.hwj.entityUtil.MindNodeUtil;
 import com.hwj.entityUtil.Node2;
 import com.hwj.json.JsonAnalyze;
 import com.hwj.tools.StatusMap;
+import com.hwj.tools.TryCatchFileCollectionService;
+import com.hwj.tools.TryCatchFileShareService;
 import com.hwj.tools.TryCatchFileStreamService;
 import com.hwj.tools.TryCatchMindMapService;
 import com.hwj.tools.TryCatchUploadFileService;
@@ -46,6 +52,10 @@ public class MindMapController {
 	private TryCatchUploadFileService tryCatchUploadFileService;
 	@Autowired
 	private TryCatchMindMapService tryCatchMindMapService;
+	@Autowired
+	private TryCatchFileCollectionService tryCatchFileCollectionService;
+	@Autowired
+	private TryCatchFileShareService tryCatchFileShareService;
 	
 	
 	
@@ -623,54 +633,190 @@ public class MindMapController {
 	}
 	
 	
+	
+	/**
+	 * @author Ragty
+	 * @param  删除节点以及节点之后的节点(未删除知识点，需构建知识点层)
+	 * @serialData 2018.3.23
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
 	@RequestMapping("/deleteNodeByBatch.do")
 	@ResponseBody
-	public String deleteNodeByBatch(@RequestBody String requestJsonBody,
-			HttpServletRequest request) throws IOException{
-		
-		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
-		String nodeid=String.valueOf(map.get("nodeid"));
-		
-		HttpSession session =request.getSession();
-		String userid = String.valueOf(session.getAttribute("username"));
-		
-		if (userid.equals("null") || userid.equals(null)){
+    public String deleteNodeByBatch(@RequestBody String requestJsonBody,HttpServletRequest request) throws IOException{
+    	
+    	Map<String, Object> map=jsonAnalyze.json2Map(requestJsonBody);
+    	String nodeid=String.valueOf(map.get("nodeid"));
+    	HttpSession session=request.getSession();
+    	String userid=String.valueOf(session.getAttribute("username"));
+    	
+    	if (userid.equals("null") || userid.equals(null)) {
 			return statusMap.a("2");
 		}
+    	
+    	
+    	List<Map<String, String>> list3 = new ArrayList();
+		list3 = this.tryCatchMindMapService.getzijiedian(nodeid, userid);
+		List dataList = list3;
 		
-		List<Map<String, String>> list = new ArrayList<Map<String,String>>();
-		list = tryCatchMindMapService.getzijiedian(nodeid, userid);
+		System.out.println(list3 + "list");
 		
-		List dataList = list;
 		
 		
 		//在循环体里执行删除
-		for(Iterator it = dataList.iterator(); it.hasNext();){
+		for (Iterator it = dataList.iterator(); it.hasNext();) {
 			Map dataRecord = (Map) it.next();
 			
-			String id = String.valueOf(dataRecord.get("id"));
+			String id=String.valueOf(dataRecord.get("id"));
 			
-			MindNode mindNode = tryCatchMindMapService.
-					getMindNodeObject("nodeid", "userid", id, userid);
+			MindNode mindNode=this.tryCatchMindMapService.getMindNodeObject("nodeid", "userid", id, userid);
 			
-			List<UploadFile> listUploadFiles = null;
+			System.out.println("这他妈就是节点"+mindNode);
+			
+			List<UploadFile> listUploadFile=null;
 			try {
-				listUploadFiles = tryCatchUploadFileService.getUploadeFile("userid", userid, "zsdid", id);
-				if(listUploadFiles.size() <= 0){
+				listUploadFile=this.tryCatchUploadFileService.getUploadeFile("userid", userid, "zsdid", id);
+				if(listUploadFile.size()<=0){
 					return statusMap.a("3");
-				}		
+				}
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
 			
+			
+			//内循环(将一个节点上的所有文件斩草除根)
+			try {
+				
+			for(int i=0;i<listUploadFile.size();i++){
+				UploadFile uploadFile = null;
+				FileShare fileShare = null;
+				FileCollection fileCollection = null;
+				String realPath = null;
+				String firstStatus=null;
+				String zlid=null;
+				System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				
+			//Step1.获取节点上关于文件的信息
+			try {
+				uploadFile=listUploadFile.get(i);
+				System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				zlid=uploadFile.getFiles();
+				System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+zlid);
+				firstStatus=uploadFile.getFirstStatus();
+				System.out.println("小样》》》"+firstStatus);
+				
+				if( !( zlid.equals(null)||zlid.equals("null")) ){
+					uploadFile = this.tryCatchUploadFileService.getUploadFile("zsdid",
+							"files", id, zlid);
+					fileShare = this.tryCatchFileShareService.getFileShare("nodeid",
+							 id, "f_id", zlid);
+					fileCollection = this.tryCatchFileCollectionService
+							.getFileCollection1("nodeid", id, "f_id", zlid);
+					realPath = uploadFile.getFileroot();
+				}
+				
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
+			
+			
+		//Step2.将节点上的文件相关资料删除
+		try {
+				
+			if(firstStatus.equals("1")){
+				
+				File file = new File(realPath);
+
+				System.out.println(file + "进入了呢");
+
+				if (!file.exists()) {
+					System.out.println("文件不存在");
+				} else {
+					System.out.println("文件存在");
+					System.out.println("即将删除文件");
+					file.delete();
+					System.out.println("成功,已将文件删除");
+				}
+
+				// 修改回收站状态
+				try {
+					FileStream fileStream = tryCatchFileStreamService
+							.getFileStream1("userid", "f_id", userid, zlid);
+
+					if (!fileStream.equals("null")) {
+						fileStream.setDelStatus("1");
+						tryCatchFileStreamService.updateFileStream(fileStream);
+					}
+
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+
+				if ((tryCatchUploadFileService.delAllUploadFile("userid", "files",
+						userid, zlid))
+						&& (tryCatchFileShareService.delAllFileShare("userid",
+								userid, "f_id", zlid))
+						&& (tryCatchFileCollectionService.delAllFileCollection(
+								"userid", userid, "f_id", zlid))) {
+					System.out.println("大清洗式的删除");
+					
+				   }
+				
+			}else{
+				
+				if ((tryCatchUploadFileService.deleteUploadFile(uploadFile))
+						&& (tryCatchFileShareService.delShareFile(fileShare))
+						&& (tryCatchFileCollectionService
+								.delFileCollection(fileCollection))) {
+					System.out.println("只删除节点上的文件");
+				}
+				
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
-		
-		
+			
+			}    //内循环结尾
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}        //内循环异常抛出      
 			
 			
 			
-		return null;
-	}
+			//Step3.将节点上的知识点删除
+			/*try {
+				zsd zsd=tryCatchZsdService.getZsd1("userid", "zsdid", userid, id);
+				this.tryCatchZsdService.deleteZsd(zsd);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
+			//step4.若是删除整个图(将分享过的思维导图也一并删除掉)
+			try {
+				
+				if( mindNode.getParentid().equals( "00100" )  ) {
+					Share share=this.tryCatchShareService.getshare("userid", userid, "zsdid", mindNode.getNodeid());
+					System.out.println("删除分享过的思维导图"+share);
+					this.tryCatchShareService.delShare(share);
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}*/
+			
+			
+			//将节点删除
+			this.tryCatchMindMapService.deleteMindNodeObject(mindNode);
+			
+		}
+    	    
+    	return null;
+    }
 	
 	
 	
