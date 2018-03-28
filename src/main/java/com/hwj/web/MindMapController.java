@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.hwj.entity.FileCollection;
 import com.hwj.entity.FileShare;
@@ -817,6 +819,39 @@ public class MindMapController {
     	    
     	return null;
     }
+	
+	
+	
+	@RequestMapping({ "/setUpload.do" })
+	@ResponseBody
+	public String setUpload(MindNodeTool mindNodeTool,
+			@RequestParam("fileToUpload") MultipartFile file,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		
+		String nodeid = mindNodeTool.getNodeid();
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+		String uploadtima = df.format(new Date());
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		
+		String useridBefore = tryCatchMindMapService
+				.getMindNode("nodeid", nodeid).get(0).getUserid();
+		
+		if (userid.equals("null") || userid.equals(null)) {
+			return statusMap.a("2");
+		}
+		
+		//禁止非本节点用户在节点上传文件
+		if (! (userid.equals(useridBefore)) ){
+			System.out.println("到这里了");
+			return statusMap.a("5");
+		}
+		
+		
+		
+		return null;
+	}
 	
 	
 	
