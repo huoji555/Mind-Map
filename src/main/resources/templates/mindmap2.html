@@ -15,6 +15,8 @@
 <link rel="stylesheet" href="mindmap/ace.min.css" />
 <link rel="stylesheet" type="text/css" href="mindmap/style.css" />
 <link rel="stylesheet" type="text/css" href="mindmap/noJS.css" />
+<link rel="stylesheet" type="text/css" href="css/index/mindMap.css" />
+
 
 </head>
 <body>
@@ -25,9 +27,9 @@
 	<div class="page-header">
 	<h1>
 	<i class="icon-th-large" style="color:orange"></i> &nbsp;知识图谱
-	<small style="margin-left:770px">								
+	<small style="float: right;letter-spacing: 8px;">							
 	<i class="icon-hand-right"></i>
-	&nbsp;&nbsp;知&nbsp;识&nbsp;图&nbsp;谱&nbsp;帮&nbsp;你&nbsp;理&nbsp;清&nbsp;思&nbsp;路&nbsp;，&nbsp;开&nbsp;阔&nbsp;大&nbsp;脑&nbsp;思&nbsp;维&nbsp;！
+	知识图谱帮你理清思路，开阔大脑思维！
 	</small>
 	</h1>
 	</div><!-- /.page-header -->
@@ -36,7 +38,7 @@
     <!-- 页面上的操作标题 -->
     <div class="row">
     <div class="align-left">
-    <div style="margin-left:10px;margin-top:10px">
+    <div style="margin-left:35px;margin-top:10px">
 
 	<span class="green middle bolder" onclick="xinjian();"><i class="icon-edit blue bigger-120"></i>&nbsp;新建</span> &nbsp; 
 	<!-- <span class="green middle bolder" id="savemymindmap"><i class="icon-save blue bigger-120"></i>&nbsp;保存</span> &nbsp;  -->
@@ -329,7 +331,7 @@
 			clear();
 		    document.getElementById('nodeid').value=kcmc;
 			$('#mapid').attr("value",1);
-			var da={"nodeid":kcmc};
+			var da={"kcmc":kcmc};
 			    $.ajax({
 					type : "POST",
 					url : "getNodeData.do", //获取属于自己的某个思维导图
@@ -378,6 +380,7 @@
 			function sharemindmapButton(nodeid){
 		    	
 				var da={"nodeid":nodeid};
+				
 				        $.ajax({
 					        type : "POST",
 							url : "setShare.do",
@@ -387,6 +390,8 @@
 									$.messager.alert("操作提示", "分享成功！", "info");			  
 								}else if(json.a=="3"){
 									$.messager.alert("操作失败","已分享过该知识图谱","info");
+								}else if(json.a=="5"){
+									$.messager.alert("操作提示", "不是您的知识图谱", "info");
 								} else{
 									$.messager.alert("操作提示", "请选择知识图谱！", "info");
 								}
@@ -517,22 +522,34 @@
         /* 新建思维导图 ???出来一个固定的新建思维导图*/
 		function xinjian() {
         	clear();
-			     $.ajax({
-					type : "POST",
-					url : "getNodeDatexinjian.do",
+        	
+        	$.messager.prompt('新建图谱', '请输入知识图谱名称', function(r) {
+				if (r) {
+					jm.enable_edit();
+				    
+					var da = {"nodeName":r};
 					
-					success : function(json) {
-						if(json.a=="2"){
-							$.messager.alert("操作提示", "您还没有登陆！", "info");
+					$.ajax({
+						type : "POST",
+						data : da,
+						url : "getNodeDatexinjian.do",
+						
+						success : function(json) {
+							if(json.a=="2"){
+								$.messager.alert("操作提示", "您还没有登陆！", "info");
+							}
+							else if(json.state == 1) {
+								datas=eval('(' + json.datas + ')');
+			        			jm.show(datas);
+							}else {
+								$.messager.alert("操作提示", "找不到对应的知识图谱！", "info");
+							}
 						}
-						else if(json.state == 1) {
-							datas=eval('(' + json.datas + ')');
-		        			jm.show(datas);
-						}else {
-							$.messager.alert("操作提示", "找不到对应的知识图谱！", "info");
-						}
-					}
-				});
+					});
+					
+				}
+        	});	
+        	
 				
 		}
 		
@@ -898,16 +915,56 @@
 		/* 根据点击获取子节点的type，显示不同的菜单  */
 		$("jmnode").live('click', function(e) {
 			var selected_id = get_selected_nodeid();
-			
-			$('#showbiji').attr('src', $('#showbiji').attr('src'));
-				$('#biji').menu();
-				$('#biji').menu('show', { //菜单EasyUI
-					left : e.pageX,
-					top : e.pageY - 250,
-					hideOnUnhover : false
-				});
-					
-                                      
+			$('#nodeid').attr("value", selected_id);
+			var da = {
+				"mapid" : $("#mapid").val(),
+				"nodeid" : selected_id
+			       };
+			$.ajax({
+				type : "POST",
+				url : "getMapDetail.do",    //点击出现可以进行编辑的框框
+				data : da,
+				success : function(json) {
+					if (json.type == 1) {
+					    $('#showkecheng').attr('src', $('#showkecheng').attr('src'));
+						$('#kecheng').menu();
+						$('#kecheng').menu('show', { //菜单EasyUI
+							left : e.pageX,
+							top : e.pageY - 250,
+							hideOnUnhover : false
+						});
+					} else if (json.type == 2) {
+					$('#showzhangjie').attr('src', $('#showzhangjie').attr('src'));
+						$('#zhangjie').menu();
+						$('#zhangjie').menu('show', { //菜单EasyUI
+							left : e.pageX,
+							top : e.pageY - 250,
+							hideOnUnhover : false
+						});
+					} else if (json.type == 3) {
+					$('#showzsd').attr('src', $('#showzsd').attr('src'));
+						$('#zsd').menu();
+						$('#zsd').menu('show', { //菜单EasyUI
+							left : e.pageX,
+							top : e.pageY - 250,
+							hideOnUnhover : false
+						});
+					} 
+				        else if (json.type == 4) {
+					$('#showbiji').attr('src', $('#showbiji').attr('src'));
+						$('#biji').menu();
+						$('#biji').menu('show', { //菜单EasyUI
+							left : e.pageX,
+							top : e.pageY - 250,
+							hideOnUnhover : false
+						});
+					} 
+                                        else {
+						$.messager.alert("操作提示", "暂无相关介绍！", "info");
+					}
+				}
+			});
+
 		});
 		
 		
@@ -984,8 +1041,8 @@
 									 html+="<tr><td>"+a.nodename+"</td>";
 									 html+="<td>"+a.userid+"</td>";
 									 html+="<td>"+a.sharetime+"</td>";
-									 html+="<td><span onclick='open_ajax("+a.nodeid+",\""+a.userid+"\");'>"+"查看"+"</span></td>";
-									 html+="<td><span onclick='delteShareMindMap("+a.nodeid+",\""+a.userid+"\",\""+currentPage+"\");'>"+"删除"+"</span></td>";
+									 html+="<td><span class='link-style' onclick='open_ajax("+a.nodeid+",\""+a.userid+"\");'>"+"查看"+"</span></td>";
+									 html+="<td><span class='link-style' onclick='delteShareMindMap("+a.nodeid+",\""+a.userid+"\",\""+currentPage+"\");'>"+"删除"+"</span></td>";
 									 html+="</tr>";
 							 
 						 });
@@ -1043,7 +1100,11 @@
 	 					
 	 					if(data<=showPage){
 	 						for(var i=1;i<=data;i++){
-	 							html+="<li><span onclick='getShareMindMap("+i+")'>"+i+"</span></li>";
+	 							if(currentPage==i){
+	 								html+="<li class='active'><span onclick='getShareMindMap("+i+")'>"+i+"</span></li>";
+	 							} else{
+	 								html+="<li><span onclick='getShareMindMap("+i+")'>"+i+"</span></li>";
+	 							}
 	 						}
 	 					}else{
 	 						index=currentPage+showPage;
@@ -1054,7 +1115,11 @@
 	 						}
 	 						
 	 						for(var i=x;i<index;i++){
-	 							html+="<li><span onclick='getShareMindMap("+i+")'>"+i+"</span></li>";
+	 							if(currentPage==i){
+	 								html+="<li class='active'><span onclick='getShareMindMap("+i+")'>"+i+"</span></li>";
+	 							} else{
+	 								html+="<li><span onclick='getShareMindMap("+i+")'>"+i+"</span></li>";
+	 							}
 	 						}
 	 					} 
 	 					
@@ -1148,9 +1213,9 @@
 						    html+="<tr><td>"+a.nodename+"</td>";
 						    html+="<td>"+a.userid+"</td>";
 						    html+="<td>"+a.nodeid+"</td>";
-						    html+="<td><span onclick='open_ajax2("+a.nodeid+");'>"+"查看"+"</span></td>";
-						    html+="<td><span onclick='sharemindmapButton("+a.nodeid+")'>"+"分享"+"</span></td>";
-						    html+="<td><span onclick='deleteNodeByBatchButton("+a.nodeid+","+currentPage+")'>"+"删除"+"</span></td>";
+						    html+="<td><span class='link-style' onclick='open_ajax2("+a.nodeid+");'>"+"查看"+"</span></td>";
+						    html+="<td><span class='link-style' onclick='sharemindmapButton("+a.nodeid+")'>"+"分享"+"</span></td>";
+						    html+="<td><span class='link-style' onclick='deleteNodeByBatchButton("+a.nodeid+","+currentPage+")'>"+"删除"+"</span></td>";
 						    html+="</tr>"; 
 					});
 					
@@ -1209,7 +1274,11 @@
 					
 					if(data<=showPage){
 						for(var i=1;i<=data;i++){
-							html+="<li><span onclick='getMyMindMap("+i+")'>"+i+"</span></li>";
+							if(currentPage == i){
+								html+="<li class='active'><span onclick='getMyMindMap("+i+")'>"+i+"</span></li>";
+							} else {
+								html+="<li><span onclick='getMyMindMap("+i+")'>"+i+"</span></li>";
+							}
 						}
 					}else{
 						index=currentPage+showPage;
@@ -1220,7 +1289,11 @@
 						}
 						
 						for(var i=x;i<index;i++){
-							html+="<li><span onclick='getMyMindMap("+i+")'>"+i+"</span></li>";
+							if(currentPage == i){
+								html+="<li class='active'><span onclick='getMyMindMap("+i+")'>"+i+"</span></li>";
+							} else {
+								html+="<li><span onclick='getMyMindMap("+i+")'>"+i+"</span></li>";
+							}
 						}
 					} 
 					
