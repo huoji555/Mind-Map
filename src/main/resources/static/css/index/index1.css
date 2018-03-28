@@ -1,0 +1,29 @@
+@CHARSET "UTF-8";
+
+<!-- 首页用到的css -->
+
+#toggle{
+   	height: 30px;
+    margin: 10px;
+    width: 50px;
+    padding: 0;
+    line-height: 30px;
+    background: transparent;
+}
+#navigation a{
+    text-decoration: none;
+}
+.module{
+	height: 425px;
+	background: #d8d0ba;
+}
+.module h2{
+   	font-family: "宋体";
+    font-size: 30px;
+    color: #5b544d;
+    font-style: normal;
+    text-align: center;
+}
+.module1{
+	margin-top:50px;
+}
