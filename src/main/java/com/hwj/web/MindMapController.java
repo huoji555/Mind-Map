@@ -196,7 +196,8 @@ public class MindMapController {
 	 */
 	@RequestMapping("/getNodeDatexinjian.do")
 	@ResponseBody
-	public String getNodeDatexinjian(HttpServletRequest request) throws IOException{
+	public String getNodeDatexinjian(@RequestParam String nodeName,
+			HttpServletRequest request) throws IOException{
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		Map<String, Object> map2 = new HashMap<String, Object>();
@@ -213,7 +214,7 @@ public class MindMapController {
 		}
 		
 		map.put("id", id);
-		map.put("topic", "新建思维导图");
+		map.put("topic", nodeName);
 		map2.put("author", "hizzgdev@163.com");
 		map2.put("name", "jsMindremote");
 		map2.put("version", "0.2");
@@ -239,7 +240,7 @@ public class MindMapController {
 		mindNode.setParentid("00100");
 		mindNode.setType(id);
 		mindNode.setUserid(userid);
-		mindNode.setNodename("知识图谱");
+		mindNode.setNodename(nodeName);
 		
 		if (tryCatchMindMapService.savaMindNodeObject(mindNode)){
 			return jsonAnalyze.map2Json(map4);
