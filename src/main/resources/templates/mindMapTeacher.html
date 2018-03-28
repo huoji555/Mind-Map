@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="mindmap/ace.min.css" />
 <link rel="stylesheet" type="text/css" href="mindmap/style.css" />
 <link rel="stylesheet" type="text/css" href="mindmap/noJS.css" />
+<link rel="stylesheet" type="text/css" href="css/index/mindMap.css" />
 
 <link rel="stylesheet" href="css/bootstrap.min.css">  
 </head>
@@ -27,9 +28,9 @@
 	<div class="page-header">
 	<h1>
 	<i class="icon-th-large" style="color:orange"></i> &nbsp;知识图谱(教师端)
-	<small style="margin-left:770px">								
+	<small style="float: right;letter-spacing: 8px;">								
 	<i class="icon-hand-right"></i>
-	&nbsp;&nbsp;知&nbsp;识&nbsp;图&nbsp;谱&nbsp;帮&nbsp;你&nbsp;理&nbsp;清&nbsp;思&nbsp;路&nbsp;，&nbsp;开&nbsp;阔&nbsp;大&nbsp;脑&nbsp;思&nbsp;维&nbsp;！
+	知识图谱帮你理清思路，开阔大脑思维！
 	</small>
 	</h1>
 	</div><!-- /.page-header -->
@@ -39,16 +40,16 @@
     <!-- 页面上的操作标题 -->
     <div class="row">
     <div class="align-left">
-    <div style="margin-left:10px;margin-top:10px">
+    <div style="margin-left:35px;margin-top:10px">
 
 	<span class="green middle bolder" onclick="xinjian();"><i class="icon-edit blue bigger-120"></i>&nbsp;新建</span> &nbsp; 
 	<span class="green middle bolder"  onclick="BrowseFolder();"><i class="icon-folder-open blue bigger-120"></i>&nbsp;打开文件</span> &nbsp; 
 	<input type="file" id="file_input" onchange="open_file();" style="display:none;"  accept=".jm">
 	<span class="green middle bolder" onclick="save_file();"><i class="icon-folder-close blue bigger-120"></i>&nbsp;生成文件</span> &nbsp; 
 	<span class="green middle bolder" onclick="screen_shot();"><i class="icon-camera blue bigger-120"></i>&nbsp;生成图片</span> &nbsp; 
-	<span class="green middle bolder" onclick="getShareMindMap(1);"><i class="icon-time blue bigger-120"></i>&nbsp;查找知识图谱</span> &nbsp; 
+	<span class="green middle bolder" onclick="getShareMindMap(1);"><i class="icon-time blue bigger-120"></i>&nbsp;分享的图谱</span> &nbsp; 
 	<span class="green middle bolder" onclick="getMyMindMap(1);"><i class="icon-group blue bigger-120"></i>&nbsp;我的知识图谱</span> &nbsp; 
-	<span class="green middle bolder" onclick="sharemindmap();"><i class="icon-share blue bigger-120"></i>&nbsp;分享知识图谱</span> &nbsp; 
+	<span class="green middle bolder" onclick="sharemindmap();"><i class="icon-share blue bigger-120"></i>&nbsp;分享图谱</span> &nbsp; 
 	<span class="green middle bolder align-right" id="shezhi" ><i class="icon-cog blue bigger-120"></i>&nbsp;设置主题</span> &nbsp;&nbsp; 
 	<span class="green middle bolder" onclick="showAll(1);" ><i class="icon-cog blue bigger-120"></i>&nbsp;查询</span> &nbsp;&nbsp; 
 				               
@@ -865,8 +866,8 @@
 									 html+="<tr><td>"+a.nodename+"</td>";
 									 html+="<td>"+a.userid+"</td>";
 									 html+="<td>"+a.sharetime+"</td>";
-									 html+="<td><span onclick='open_ajax("+a.nodeid+",\""+a.userid+"\");'>"+"知识图谱"+"</span></td>";
-									 html+="<td><span onclick='delteShareMindMap("+a.nodeid+",\""+a.userid+"\",\""+currentPage+"\");'>"+"删除"+"</span></td>";
+									 html+="<td><span class='link-style' onclick='open_ajax("+a.nodeid+",\""+a.userid+"\");'>"+"知识图谱"+"</span></td>";
+									 html+="<td><span class='link-style' onclick='delteShareMindMap("+a.nodeid+",\""+a.userid+"\",\""+currentPage+"\");'>"+"删除"+"</span></td>";
 									 html+="</tr>";
 							 
 						 });
@@ -923,7 +924,11 @@
 		 					
 		 					if(data<=showPage){
 		 						for(var i=1;i<=data;i++){
-		 							html+="<li><span onclick='getShareMindMap("+i+")'>"+i+"</span></li>";
+		 							if(currentPage==i){
+		 								html+="<li class='active'><span onclick='getShareMindMap("+i+")'>"+i+"</span></li>";
+		 							} else {
+		 								html+="<li><span onclick='getShareMindMap("+i+")'>"+i+"</span></li>";
+		 							}
 		 						}
 		 					}else{
 		 						index=currentPage+showPage;
@@ -934,7 +939,11 @@
 		 						}
 		 						
 		 						for(var i=x;i<index;i++){
-		 							html+="<li><span onclick='getShareMindMap("+i+")'>"+i+"</span></li>";
+		 							if(currentPage==i){
+		 								html+="<li class='active'><span onclick='getShareMindMap("+i+")'>"+i+"</span></li>";
+		 							} else {
+		 								html+="<li><span onclick='getShareMindMap("+i+")'>"+i+"</span></li>";
+		 							}
 		 						}
 		 					} 
 		 					
@@ -1027,9 +1036,9 @@
 						    html+="<tr><td>"+a.nodename+"</td>";
 						    html+="<td>"+a.userid+"</td>";
 						    html+="<td>"+a.nodeid+"</td>";
-						    html+="<td><span onclick='open_ajax2("+a.nodeid+");'>"+"知识图谱"+"</span></td>";
-						    html+="<td><span onclick='sharemindmapButton("+a.nodeid+")'>"+"分享"+"</span></td>";
-						    html+="<td><span onclick='deleteNodeByBatchButton("+a.nodeid+","+currentPage+")'>"+"删除"+"</span></td>";
+						    html+="<td><span class='link-style' onclick='open_ajax2("+a.nodeid+");'>"+"知识图谱"+"</span></td>";
+						    html+="<td><span class='link-style' onclick='sharemindmapButton("+a.nodeid+")'>"+"分享"+"</span></td>";
+						    html+="<td><span class='link-style' onclick='deleteNodeByBatchButton("+a.nodeid+","+currentPage+")'>"+"删除"+"</span></td>";
 						    html+="</tr>"; 
 					});
 					
@@ -1089,7 +1098,11 @@
 					
 					if(data<=showPage){
 						for(var i=1;i<=data;i++){
-							html+="<li><span onclick='getMyMindMap("+i+")'>"+i+"</span></li>";
+							if(currentPage==i){
+								html+="<li class='active'><span onclick='getMyMindMap("+i+")'>"+i+"</span></li>";
+							} else {
+								html+="<li><span onclick='getMyMindMap("+i+")'>"+i+"</span></li>";
+							}
 						}
 					}else{
 						index=currentPage+showPage;
@@ -1100,7 +1113,11 @@
 						}
 						
 						for(var i=x;i<index;i++){
-							html+="<li><span onclick='getMyMindMap("+i+")'>"+i+"</span></li>";
+							if(currentPage==i){
+								html+="<li class='active'><span onclick='getMyMindMap("+i+")'>"+i+"</span></li>";
+							} else {
+								html+="<li><span onclick='getMyMindMap("+i+")'>"+i+"</span></li>";
+							}
 						}
 					} 
 					
@@ -1197,7 +1214,7 @@
 				html+="</form>";
 				html+="</div>";
 				html+="<table class='table table-hover'>";
-				html+="<thead><tr><th>名称</th><th>用户</th><th>查看</th></tr></thead>";
+				html+="<thead><tr><th>名称</th><th>用户</th><th>操作</th></tr></thead>";
 				html+="<tbody>"; 
 				
 				$.each(
@@ -1205,7 +1222,7 @@
 					function(i,a){
 					    html+="<tr><td>"+a.nodename+"</td>";
 					    html+="<td>"+a.realName+"</td>";
-					    html+="<td><span onclick='open_ajax("+a.nodeid+",\""+a.userid+"\");'>"+"知识图谱"+"</span></td>";
+					    html+="<td><span class='link-style' onclick='open_ajax("+a.nodeid+",\""+a.userid+"\");'>"+"查看"+"</span></td>";
 					    html+="</tr>"; 
 				});
 				
@@ -1262,7 +1279,11 @@
  					
  					if(data<=showPage){
  						for(var i=1;i<=data;i++){
- 							html+="<li><span onclick='showAll("+i+")'>"+i+"</span></li>";
+ 							if(currentPage==i){
+ 								html+="<li class='active'><span onclick='showAll("+i+")'>"+i+"</span></li>";
+ 							} else{
+ 								html+="<li><span onclick='showAll("+i+")'>"+i+"</span></li>";
+ 							}
  						}
  					}else{
  						index=currentPage+showPage;
@@ -1273,7 +1294,11 @@
  						}
  						
  						for(var i=x;i<index;i++){
- 							html+="<li><span onclick='showAll("+i+")'>"+i+"</span></li>";
+ 							if(currentPage==i){
+ 								html+="<li class='active'><span onclick='showAll("+i+")'>"+i+"</span></li>";
+ 							} else{
+ 								html+="<li><span onclick='showAll("+i+")'>"+i+"</span></li>";
+ 							};
  						}
  					} 
  					
@@ -1351,7 +1376,7 @@
 				html+="</form>";
 				html+="</div>";
 				html+="<table class='table table-hover'>";
-				html+="<thead><tr><th>名称</th><th>用户</th><th>查看</th></tr></thead>";
+				html+="<thead><tr><th>名称</th><th>用户</th><th>操作</th></tr></thead>";
 				html+="<tbody>";
 				
 				$.each(
@@ -1359,7 +1384,7 @@
 					function(i,a){
 					    html+="<tr><td>"+a.nodename+"</td>";
 					    html+="<td>"+a.realName+"</td>";
-					    html+="<td><span onclick='open_ajax("+a.nodeid+",\""+a.userid+"\");'>"+"知识图谱"+"</span></td>";
+					    html+="<td><span class='link-style' onclick='open_ajax("+a.nodeid+",\""+a.userid+"\");'>"+"查看"+"</span></td>";
 					    html+="</tr>";
 				});
 				
@@ -1415,7 +1440,11 @@
  					
  					if(data<=showPage){
  						for(var i=1;i<=data;i++){
- 							html+="<li><span onclick='findTeacherMind("+i+",\""+selectContent+"\")'>"+i+"</span></li>";
+ 							if (currentPage==i){
+ 								html+="<li class='active'><span onclick='findTeacherMind("+i+",\""+selectContent+"\")'>"+i+"</span></li>";
+ 							} else {
+ 								html+="<li><span onclick='findTeacherMind("+i+",\""+selectContent+"\")'>"+i+"</span></li>";
+ 							}
  						}
  					}else{
  						index=currentPage+showPage;
@@ -1426,7 +1455,11 @@
  						}
  						
  						for(var i=x;i<index;i++){
- 							html+="<li><span onclick='findTeacherMind("+i+",\""+selectContent+"\")'>"+i+"</span></li>";
+ 							if (currentPage==i){
+ 								html+="<li class='active'><span onclick='findTeacherMind("+i+",\""+selectContent+"\")'>"+i+"</span></li>";
+ 							} else {
+ 								html+="<li><span onclick='findTeacherMind("+i+",\""+selectContent+"\")'>"+i+"</span></li>";
+ 							}
  						}
  					} 
  					
