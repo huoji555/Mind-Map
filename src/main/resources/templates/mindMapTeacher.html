@@ -391,23 +391,35 @@
 		
 		<!-- 新建思维导图  -->
 		function xinjian() {
-			clear();
-			     $.ajax({
-					type : "POST",
-					url : "getNodeDatexinjian.do",
+        	clear();
+        	
+        	$.messager.prompt('新建图谱', '请输入知识图谱名称', function(r) {
+				if (r) {
+					jm.enable_edit();
+				    
+					var da = {"nodeName":r};
 					
-					success : function(json) {
-						if(json.a=="2"){
-							$.messager.alert("操作提示", "您还没有登陆！", "info");
+					$.ajax({
+						type : "POST",
+						data : da,
+						url : "getNodeDatexinjian.do",
+						
+						success : function(json) {
+							if(json.a=="2"){
+								$.messager.alert("操作提示", "您还没有登陆！", "info");
+							}
+							else if(json.state == 1) {
+								datas=eval('(' + json.datas + ')');
+			        			jm.show(datas);
+							}else {
+								$.messager.alert("操作提示", "找不到对应的知识图谱！", "info");
+							}
 						}
-						else if(json.state == 1) {
-							datas=eval('(' + json.datas + ')');
-		        			jm.show(datas);
-						}else {
-							$.messager.alert("操作提示", "找不到对应的知识图谱！", "info");
-						}
-					}
-				});
+					});
+					
+				}
+        	});	
+        	
 				
 		}
 	
