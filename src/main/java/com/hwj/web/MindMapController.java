@@ -2,6 +2,8 @@ package com.hwj.web;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.sql.Blob;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,13 +30,16 @@ import com.hwj.entity.FileShare;
 import com.hwj.entity.FileStream;
 import com.hwj.entity.MindNode;
 import com.hwj.entity.UploadFile;
+import com.hwj.entityUtil.BeSaveFileUitl;
 import com.hwj.entityUtil.MindMapUtil;
 import com.hwj.entityUtil.MindNode2Util;
 import com.hwj.entityUtil.MindNodeTool;
 import com.hwj.entityUtil.MindNodeUtil;
 import com.hwj.entityUtil.Node2;
 import com.hwj.json.JsonAnalyze;
+import com.hwj.tools.FileUpload;
 import com.hwj.tools.StatusMap;
+import com.hwj.tools.StreamToBlob;
 import com.hwj.tools.TryCatchFileCollectionService;
 import com.hwj.tools.TryCatchFileShareService;
 import com.hwj.tools.TryCatchFileStreamService;
@@ -58,6 +63,10 @@ public class MindMapController {
 	private TryCatchFileCollectionService tryCatchFileCollectionService;
 	@Autowired
 	private TryCatchFileShareService tryCatchFileShareService;
+	@Autowired
+	private StreamToBlob streamToBlob;
+	@Autowired
+	private FileUpload fileUpload;
 	
 	
 	
@@ -821,7 +830,17 @@ public class MindMapController {
     }
 	
 	
-	
+	/**
+	 * @author Ragty
+	 * @param  节点上上传文件接口
+	 * @serialData 2018.3.28
+	 * @param mindNodeTool
+	 * @param file
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping({ "/setUpload.do" })
 	@ResponseBody
 	public String setUpload(MindNodeTool mindNodeTool,
@@ -848,9 +867,191 @@ public class MindMapController {
 			return statusMap.a("5");
 		}
 		
+		SimpleDateFormat df2 = new SimpleDateFormat("yyyyMMddHHmmss");
+		String files = df2.format(new Date());
+		String filename = file.getOriginalFilename();
+		
+		String zsdid = null;
+		String zlid = null;
+		try {
+			UploadFile uploadFile = tryCatchUploadFileService.getUploadFile(
+					"userid", "filename", "firstStatus", userid, filename, "1");
+			zsdid = uploadFile.getZsdid();
+			zlid = uploadFile.getFiles();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		//判断资源页面有无上传过，没上传过的话（直接上传），否则直接添加数据
+		if (tryCatchUploadFileService.haveUploadFile("userid", "filename",
+				userid, filename)) {
+			
+			if(zsdid == null){
+				UploadFile uploadFile = tryCatchUploadFileService.getUploadFile(
+						"userid", "filename", "firstStatus", userid, filename, "1");
+				
+				uploadFile.setZsdid(nodeid);
+				uploadFile.setFirstStatus("0");
+				
+				UploadFile uploadFile1 = tryCatchUploadFileService
+						.getUploadFile("userid", "filename", "firstStatus",
+								userid, filename, "1");
+				uploadFile1.setZsdid("1");
+				
+			} else if (zsdid != nodeid) {
+
+				UploadFile uploadFile = tryCatchUploadFileService
+						.getUploadFile("userid", "filename", userid, filename);
+				uploadFile.setZsdid(nodeid);
+				uploadFile.setFirstStatus("0");
+
+				if (tryCatchUploadFileService.haveUploadFile("files", "zsdid",
+						zlid, nodeid)) {
+					System.out.println("防止在该节点重复上传文件");
+					return statusMap.a("3");
+				}
+
+				if (tryCatchUploadFileService.saveUploadFile(uploadFile)) {
+					System.out.println("在新节点上传该文件");
+					return statusMap.a("1");
+				} else {
+					return statusMap.a("2");
+				}
+
+			}
+			
+		}
 		
 		
-		return null;
+		//直接上传文件
+		String type = "";
+
+		String fileExtension = file.getOriginalFilename().substring(
+				file.getOriginalFilename().lastIndexOf(".") + 1,
+				file.getOriginalFilename().length());
+		if ((fileExtension.equals("bmp")) || (fileExtension.equals("drw"))
+				|| (fileExtension.equals("dxf"))
+				|| (fileExtension.equals("eps"))
+				|| (fileExtension.equals("gif"))
+				|| (fileExtension.equals("jpg"))
+				|| (fileExtension.equals("png"))
+				|| (fileExtension.equals("pcd"))
+				|| (fileExtension.equals("pcx"))) {
+			type = "picture";
+		} else if ((fileExtension.equals("avi"))
+				|| (fileExtension.equals("mpeg"))
+				|| (fileExtension.equals("mpg"))
+				|| (fileExtension.equals("dat"))
+				|| (fileExtension.equals("ra")) || (fileExtension.equals("rm"))
+				|| (fileExtension.equals("wmv"))
+				|| (fileExtension.equals("mp4"))
+				|| (fileExtension.equals("swf"))
+				|| (fileExtension.equals("f4v"))) {
+			type = "video";
+		} else if ((fileExtension.equals("cd"))
+				|| (fileExtension.equals("ogg"))
+				|| (fileExtension.equals("mp3"))
+				|| (fileExtension.equals("asf"))
+				|| (fileExtension.equals("wma"))
+				|| (fileExtension.equals("wav"))
+				|| (fileExtension.equals("rm"))
+				|| (fileExtension.equals("midi"))
+				|| (fileExtension.equals("ape"))) {
+			type = "doc";
+		} else {
+			type = "other";
+		}
+		byte[] newsPageByte = file.getBytes();
+		String realPath = request.getSession().getServletContext()
+				.getRealPath("/");
+
+		String fileURL = realPath + "upload";
+		String trueURL = "upload";
+
+		BeSaveFileUitl be = new BeSaveFileUitl();
+		be.setFileExtension(fileExtension);
+		be.setFilesByte(newsPageByte);
+		be.setFileURL(fileURL);
+
+		BeSaveFileUitl be1 = new BeSaveFileUitl();
+		be1.setFileExtension(fileExtension);
+		be1.setFilesByte(newsPageByte);
+		be1.setFileURL(trueURL);
+
+		String ip = InetAddress.getLocalHost().getHostAddress();
+		System.out.println("ip" + ip);
+
+		String Url = "";
+		String Url2 = "";
+		String Url3 = "";
+		String[] string = this.fileUpload.saveFile(be);
+		String[] string1 = this.fileUpload.saveFile(be1);
+		if ("1".equals(string[0])) {
+			String URL = string[1];
+			String url = URL.replaceAll("\\\\", "/") + "." + fileExtension;
+
+			String URL1 = string1[1];
+			String url1 = URL1.replaceAll("\\\\", "/") + "." + fileExtension;
+
+			String url2 = "";
+
+			if (type == "video") {
+				url2 = URL1.replaceAll("\\\\", "/") + "." + fileExtension;
+			}
+			if (type == "doc") {
+				url2 = URL1.replaceAll("\\\\", "/") + "." + fileExtension;
+			}
+			if (type == "picture") {
+				url2 = URL1.replaceAll("\\\\", "/") + "." + fileExtension;
+			}
+			if (type == "other") {
+				url2 = URL1.replaceAll("\\\\", "/") + "." + fileExtension;
+			}
+
+			Url2 = "http://" + ip + ":8080/upload"
+					+ url2.substring(url1.indexOf("/"));// 文件的输出路劲
+			Url = "http://" + ip + ":8080" + url.substring(url1.indexOf("/"));// 文件的输入路径
+			Url3 = url;
+			System.out.println(Url2);
+		}
+
+		Blob blob = streamToBlob.toBlob(file.getInputStream());
+
+		// 数据备份
+		FileStream fileStream = new FileStream();
+		fileStream.setFilename(filename);
+		fileStream.setF_id(files);
+		fileStream.setFileExtension(fileExtension);
+		fileStream.setParentid("0");
+		fileStream.setUserid(userid);
+		fileStream.setTrueUrl(Url2);
+		fileStream.setFileStream(blob);
+		fileStream.setFileType(type);
+		fileStream.setDelStatus("0");
+		fileStream.setNodeid(nodeid);
+		fileStream.setUploadTime(uploadtima);
+
+		tryCatchFileStreamService.saveFileStream(fileStream);
+
+		UploadFile uploadFile = new UploadFile();
+		uploadFile.setFilename(filename);
+		uploadFile.setFiles(files); // 文件id
+		uploadFile.setFilepath(Url2); // 文件的输出路径（在服务器上的访问路径）
+		uploadFile.setFileroot(Url3); // 文件在pc上的实际路径
+		uploadFile.setOldfilepath(Url);// 文件在实际中的路径(没用)
+		uploadFile.setZlms("该资料现在没有描述");
+		uploadFile.setFiletype(type);
+		uploadFile.setUploadtime(uploadtima);
+		uploadFile.setZsdid(nodeid);
+		uploadFile.setUserid(userid);
+		uploadFile.setF_parentid("0");
+		uploadFile.setFirstStatus("1");
+		if (this.tryCatchUploadFileService.saveUploadFile(uploadFile)) {
+			System.out.println("第一次在节点上传该文件");
+			return statusMap.a("1");
+		}
+		return statusMap.a("2");
+		
 	}
 	
 	
