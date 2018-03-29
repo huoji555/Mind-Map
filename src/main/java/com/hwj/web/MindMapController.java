@@ -29,6 +29,7 @@ import com.hwj.entity.FileCollection;
 import com.hwj.entity.FileShare;
 import com.hwj.entity.FileStream;
 import com.hwj.entity.MindNode;
+import com.hwj.entity.Share;
 import com.hwj.entity.UploadFile;
 import com.hwj.entityUtil.BeSaveFileUitl;
 import com.hwj.entityUtil.MindMapUtil;
@@ -44,6 +45,7 @@ import com.hwj.tools.TryCatchFileCollectionService;
 import com.hwj.tools.TryCatchFileShareService;
 import com.hwj.tools.TryCatchFileStreamService;
 import com.hwj.tools.TryCatchMindMapService;
+import com.hwj.tools.TryCatchShareService;
 import com.hwj.tools.TryCatchUploadFileService;
 
 @Controller
@@ -63,6 +65,8 @@ public class MindMapController {
 	private TryCatchFileCollectionService tryCatchFileCollectionService;
 	@Autowired
 	private TryCatchFileShareService tryCatchFileShareService;
+	@Autowired
+	private TryCatchShareService tryCatchShareService;
 	@Autowired
 	private StreamToBlob streamToBlob;
 	@Autowired
@@ -1228,6 +1232,61 @@ public class MindMapController {
         }
 		
 	}
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  分享知识图谱接口
+	 * @param nodeid
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("/setShare.do")
+	@ResponseBody
+	public String setShare(@RequestParam String nodeid,
+			HttpServletRequest request) throws IOException{
+		
+		String type = tryCatchMindMapService.getMindNode("nodeid", nodeid).get(0).getType(); 
+		String mindUser = tryCatchMindMapService.getMindNode("nodeid", nodeid).get(0).getUserid();
+		
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		
+		//防止分享别人的知识图谱
+		if (!userid.equals(mindUser)){
+			System.out.println("执行到了这里");
+			return statusMap.a("5");
+		}
+		
+		//防止同一图谱重复分享
+		try {
+			Share share = tryCatchShareService.getshare("userid", userid, "zsdid", type);
+			if(!share.equals("null")){
+				return statusMap.a("3");  //将状态3设置为防止重复上传
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		Share share = new Share();
+		share.setMindName(tryCatchMindMapService.getMindNode("nodeid", type)
+				.get(0).getNodename());
+		share.setUserid(userid);
+		share.setSharetype("mindnode");
+		share.setZsdid(type);       //用来识别是否为同一知识图谱
+		
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+		share.setSharetime(df.format(new Date()));
+		
+		if(tryCatchShareService.setShaer(share)){
+			return statusMap.a("1");  
+		}
+		
+		return statusMap.a("2");
+		
+	}
+	
 	
 	
 	
