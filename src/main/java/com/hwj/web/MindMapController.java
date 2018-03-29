@@ -1059,7 +1059,7 @@ public class MindMapController {
 	/**
 	 * @author Ragty
 	 * @serialData 2018.3.29
-	 * @param  节点上获取文件接口 
+	 * @param  节点上获取上传文件接口 
 	 * @param mindNodeUtil
 	 * @param request
 	 * @return
@@ -1130,6 +1130,105 @@ public class MindMapController {
 		
 		return jsonAnalyze.map2Json(map2);
 	}
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  删除节点上的上传文件接口 
+	 * @serialData 2018.3.29
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("/delUpload.do")
+	@ResponseBody
+	public String delUpload(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		String zlid = String.valueOf(map.get("zlid"));
+		String nodeid = String.valueOf(map.get("nodeid"));
+		
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		
+		if (userid.equals("") || userid == null){
+			return statusMap.a("2");
+		}
+		
+		UploadFile uploadFile = null;
+		FileShare fileShare = null;
+		FileCollection fileCollection = null;
+		String realPath = null;
+		
+		try {
+			uploadFile = this.tryCatchUploadFileService.getUploadFile("zsdid",
+					"files", nodeid, zlid);
+			fileShare = this.tryCatchFileShareService.getFileShare("nodeid",
+					nodeid, "f_id", zlid);
+			fileCollection = this.tryCatchFileCollectionService
+					.getFileCollection1("nodeid", nodeid, "f_id", zlid);
+			realPath = uploadFile.getFileroot();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		// 状态是1，真实删除所有文件，状态是0或者null就删除节点上的
+        if(uploadFile.getFirstStatus().equals("1")){
+        	
+        	File file = new File(realPath);
+        	
+        	if(!file.exists()){
+        		System.out.println("文件不存在");
+        	} else{
+        		System.out.println("即将删除文件");
+        		file.delete();
+        		System.out.println("已删除文件");
+        	}
+        	
+        	//修改回收站状态
+        	try {
+				FileStream fileStream = tryCatchFileStreamService.getFileStream1(
+						"userid", "f_id", userid, zlid);
+				
+				if (!fileStream.equals("null")) {
+					fileStream.setDelStatus("1");
+					tryCatchFileStreamService.updateFileStream(fileStream);
+				}
+				
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+        	
+        	//清空相关数据
+        	if ((tryCatchUploadFileService.delAllUploadFile("userid", "files",
+					userid, zlid))
+					&& (tryCatchFileShareService.delAllFileShare("userid",
+							userid, "f_id", zlid))
+					&& (tryCatchFileCollectionService.delAllFileCollection(
+							"userid", userid, "f_id", zlid))) {
+				System.out.println("大清洗式的删除");
+				return statusMap.a("1");
+			}
+			return statusMap.a("3");
+        	
+        } else {
+        	
+        	//只删除与该节点上传文件有关的数据
+        	if ((tryCatchUploadFileService.deleteUploadFile(uploadFile))
+					&& (tryCatchFileShareService.delShareFile(fileShare))
+					&& (tryCatchFileCollectionService
+							.delFileCollection(fileCollection))) {
+				System.out.println("只删除节点上的文件");
+				return statusMap.a("1");
+			}
+			return statusMap.a("3");
+        }
+		
+	}
+	
 	
 	
 	
