@@ -1056,5 +1056,81 @@ public class MindMapController {
 	}
 	
 	
+	/**
+	 * @author Ragty
+	 * @serialData 2018.3.29
+	 * @param  节点上获取文件接口 
+	 * @param mindNodeUtil
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("/getUploadfile.do")
+	@ResponseBody
+	public String getUploadfile(MindNodeUtil mindNodeUtil,
+			HttpServletRequest request) throws IOException{
+		
+		String nodeid = mindNodeUtil.getNodeid();
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		
+		if (userid.equals("null") || userid.equals(null)) {
+			return statusMap.a("2");
+		}
+		
+		String uploadzl = "success";
+		String state = null;
+		
+		List<UploadFile> list = tryCatchUploadFileService.getUploadeFile(
+				 "userid", userid, "zsdid", nodeid);
+		List<Map<String, String>> list2 = new ArrayList<Map<String,String>>();
+		
+		if ((list == null) || (list.equals(null))) {
+			state = "1";
+		} else {
+			for(int i = 0; i < list.size(); i++){
+				UploadFile uploadFile = list.get(i);
+				Map<String, String> map = new HashMap<String, String>();
+				
+				String type = uploadFile.getFiletype();
+				String tubiao = "";
+				if (type.equals("doc")) {
+					tubiao = "/assets/avatars/word.jpg";
+				} else if (type.equals("video")) {
+					tubiao = "/assets/avatars/shipin.jpg";
+				} else if (type.equals("picture")) {
+					tubiao = "/assets/avatars/tupian.jpg";
+				} else if (type.equals("other")) {
+					tubiao = "/assets/avatars/tuzhi.jpg";
+				} else if (type.equals("5")) {
+					tubiao = "/assets/avatars/yinpin.jpg";
+				}
+				
+				map.put("zlmc", uploadFile.getFilename());
+				map.put("tubiao", tubiao);
+				map.put("zlms", uploadFile.getZlms()); // 资料描述
+				map.put("zlid", String.valueOf(uploadFile.getFiles()));
+				map.put("filepath", uploadFile.getFilepath());
+				map.put("time", uploadFile.getUploadtime());
+				map.put("fileType", uploadFile.getFiletype());
+				
+				if (list2.size() < list.size()){
+					list2.add(map);
+				}
+				
+			}   //<!-- for -->
+			
+		}    //<!-- else -->
+		
+		Map<String, Object> map2 = new HashMap<String, Object>();
+		map2.put("uploadzl", uploadzl);
+		map2.put("state", state);
+		map2.put("list2", list2);
+		map2.put("nodeid", nodeid);
+		
+		return jsonAnalyze.map2Json(map2);
+	}
+	
+	
 	
 }
