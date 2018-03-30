@@ -264,7 +264,8 @@
 					type : "POST",
 					url : "getmindJson2.action",
 			
-					success : function(json) {
+					success : function(data) {
+						var json = $.parseJSON(data);
 					
 						if (json.state == 1) {
 							datas=eval('(' + json.datas + ')'); //转换为json对象,加两个括号是为了转换为对象
@@ -290,7 +291,8 @@
 			type : "POST",
 			url : "getShareMindNodeObject.do",  //打开具体的思维导图
 			data : da,
-			success : function(json) {
+			success : function(data) {
+				var json = $.parseJSON(data);
 				if (json.state == 1) {
 					datas=eval('(' + json.datas + ')'); 
 			        jm.show(datas);
@@ -331,12 +333,14 @@
 			clear();
 		    document.getElementById('nodeid').value=kcmc;
 			$('#mapid').attr("value",1);
-			var da={"kcmc":kcmc};
+			var da={"nodeid":kcmc};
 			    $.ajax({
 					type : "POST",
 					url : "getNodeData.do", //获取属于自己的某个思维导图
 					data : da,
-					success : function(json) {
+					success : function(data) {
+						var json = $.parseJSON(data);
+						
 						if (json.state == 1) {
 							datas=eval('(' + json.datas + ')'); 
 					        jm.show(datas);
@@ -361,7 +365,9 @@
 					        type : "POST",
 							url : "setShare.do",
 							data : da,
-							success : function(json) {
+							success : function(data) {
+								var json = $.parseJSON(data);
+								
 								if (json.a == "1") {
 									$.messager.alert("操作提示", "分享成功！", "info");			  
 								}else if(json.a=="3"){
@@ -385,7 +391,8 @@
 					        type : "POST",
 							url : "setShare.do",
 							data : da,
-							success : function(json) {
+							success : function(data) {
+								var json = $.parseJSON(data);
 								if (json.a == "1") {
 									$.messager.alert("操作提示", "分享成功！", "info");			  
 								}else if(json.a=="3"){
@@ -469,7 +476,8 @@
 					type : "POST",
 					url : "getMindNode2.do",
 					data : da,
-					success : function(json) {
+					success : function(data) {
+						var json = $.parseJSON(data);
 						if (json.a=="2"){
 							$.messager.alert("操作提示", "您没有登陆！", "info");
 						}
@@ -496,7 +504,8 @@
 					type : "POST",
 					url : "getMindNode3.do",   //根据某个id获取整个mindNode树
 					data : da,
-					success : function(json) {
+					success : function(data) {
+						var json = $.parseJSON(data);
 						if (json.a=="2"){
 							$.messager.alert("操作提示", "您没有登陆！", "info");
 						}
@@ -534,11 +543,12 @@
 						data : da,
 						url : "getNodeDatexinjian.do",
 						
-						success : function(json) {
+						success : function(data) {
+							var json = $.parseJSON(data);
 							if(json.a=="2"){
 								$.messager.alert("操作提示", "您还没有登陆！", "info");
 							}
-							else if(json.state == 1) {
+							else if(json.state == "1") {
 								datas=eval('(' + json.datas + ')');
 			        			jm.show(datas);
 							}else {
@@ -694,7 +704,8 @@
 						type : "POST",
 						url : "updateMindNode.do",
 						data : da,
-						success : function(json) {
+						success : function(data) {
+							var json = $.parseJSON(data);
 							if(json.a=="2"){
 								$.messager.alert("操作提示", "您没有登陆！", "error");
 							}else
