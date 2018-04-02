@@ -1367,6 +1367,40 @@ public class MindMapController {
 	
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  获取分享的思维导图的总页数
+	 * @serialData 2018.4.2
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping ("/getShareMindNodeTotal.do")
+	@ResponseBody
+	public Long getShareMindNodeTotal(@RequestBody String requestJsonBody, 
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		String sharetype=String.valueOf(map.get("sharetype"));
+		
+		Integer pageSize=12;
+		Long total;
+		try {
+			total=this.tryCatchShareService.countShareByOne("sharetype", sharetype);
+			total=(total-1)/pageSize+1;
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+		
+		if( total.equals("null")||total.equals(null) ){
+			return null;
+		}
+		
+		return total;
+	}
+	
 	
 	
 	
