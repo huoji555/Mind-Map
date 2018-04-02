@@ -1253,6 +1253,66 @@ public class MindMapController {
 	}
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  分享知识图谱的接口
+	 * @serialData 2018.4.2
+	 * @param nodeid
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("setShare.do")
+	@ResponseBody
+	public String setShare(@RequestParam String nodeid,
+			HttpServletRequest request) throws IOException{
+		
+		String type = tryCatchMindMapService.getMindNode("nodeid", nodeid)
+				.get(0).getType();
+		String mindUser = tryCatchMindMapService.getMindNode("nodeid", nodeid)
+				.get(0).getUserid();
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		
+		if (userid == null || userid.equals("")) {
+			return statusMap.a("2");
+		}
+		
+		//防止分享别人的知识图谱
+		if (!userid.equals(mindUser)){
+			System.out.println("执行到了这里");
+			return statusMap.a("5");
+		}
+		
+		try {
+			Share share=this.tryCatchShareService.getshare("userid", userid, "zsdid",type);
+			System.out.println("%%%%%Share"+share);
+			if(!share.equals("null")){
+				return statusMap.a("3");  //将状态3设置为防止重复上传
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		Share share = new Share();
+		share.setMindName(tryCatchMindMapService.getMindNode("nodeid", type)
+				.get(0).getNodename());
+		share.setUserid(userid);
+		share.setSharetype("mindnode");
+		share.setZsdid(type);
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+
+		share.setSharetime(df.format(new Date()));
+		if (tryCatchShareService.saveShare(share)) {
+
+			return statusMap.a("1"); // 分享成功
+		}
+		return statusMap.a("2"); // 分享失败
+		
+	}
+	
+	
+	
 	
 	
 	

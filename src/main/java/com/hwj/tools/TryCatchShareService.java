@@ -63,7 +63,7 @@ public class TryCatchShareService {
 		return list;
 	}
 
-	public boolean setShaer(Share share) {
+	public boolean saveShare(Share share) {
 		try {
 			this.iShareService.save(share);
 		} catch (Exception e) {

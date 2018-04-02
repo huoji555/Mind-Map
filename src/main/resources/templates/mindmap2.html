@@ -372,7 +372,9 @@
 									$.messager.alert("操作提示", "分享成功！", "info");			  
 								}else if(json.a=="3"){
 									$.messager.alert("操作失败","已分享过该知识图谱","info");
-								} else{
+								} else if(json.a=="2"){
+									$.messager.alert("操作失败","请登录后再操作","info");
+								} else {
 									$.messager.alert("操作提示", "请选择知识图谱！", "info");
 								}
 							},
