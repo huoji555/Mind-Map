@@ -41,7 +41,6 @@
     <div style="margin-left:35px;margin-top:10px">
 
 	<span class="green middle bolder" onclick="xinjian();"><i class="icon-edit blue bigger-120"></i>&nbsp;新建</span> &nbsp; 
-	<!-- <span class="green middle bolder" id="savemymindmap"><i class="icon-save blue bigger-120"></i>&nbsp;保存</span> &nbsp;  -->
 	<span class="green middle bolder"  onclick="BrowseFolder();"><i class="icon-folder-open blue bigger-120"></i>&nbsp;打开文件</span> &nbsp; 
 	<input type="file" id="file_input" onchange="open_file();" style="display:none;"  accept=".jm">
 	<span class="green middle bolder" onclick="save_file();"><i class="icon-folder-close blue bigger-120"></i>&nbsp;生成文件</span> &nbsp; 
@@ -297,26 +296,6 @@
 					datas=eval('(' + json.datas + ')'); 
 			        jm.show(datas);
 			        expand_to_level2();  //调整为显示主节点后的三层  
-			        
-				     $('#savemymindmap').live('click',function(e){
-				    		e.preventDefault();
-				    		var da={"nodeid":mapid,"userid":name};
-				    		
-				    		$.ajax({
-				    		type : "POST",
-				    		url : "saveShareMindNodeObject.do",//保存思维导图的节点
-				    		data : da,
-				    		success : function(json) {
-						    	if(json.a=="1"){
-						    		$.messager.alert("操作提示", "保存成功！", "info");
-						    	}else {
-						    		$.messager.alert("操作提示", "保存失败！", "info");
-						    	}
-			    			 },
-			    			
-			    				   });
-				    		  		
-			    		});
 			    	
 				}else if(json.a=="2"){
 					$.messager.alert("操作提示", "请登录后再操作！", "info");

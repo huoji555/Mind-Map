@@ -1312,6 +1312,60 @@ public class MindMapController {
 	}
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  获取到思维导图分享的列表信息
+	 * @serialData 2018.4.2
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping ("/getShareMindNode.do")
+	@ResponseBody
+	public String getShareMindNode(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map1 = jsonAnalyze.json2Map(requestJsonBody);
+		String sharetype=String.valueOf(map1.get("sharetype"));
+		Integer currentPage=(Integer) map1.get("currentPage");
+		Integer pageSize=12;
+		
+		List<Share> list = null;
+		try {
+			list = tryCatchShareService.getSharePageByOne(
+					currentPage, pageSize, "sharetype", sharetype);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		
+		if(userid.equals("null")||userid.equals(null)){
+			return statusMap.a("2");    //未登录用户
+		}
+		
+		if (list.equals("null")||list.equals(null)) {
+			return statusMap.a("1");     //没有获取到分享的思维导图
+		}
+		
+		List<Map<String, String>> list2 = new ArrayList<Map<String,String>>();
+		
+		for(int i=0; i<list.size(); i++){
+			Share share = list.get(i);
+		    Map<String, String> map = new HashMap<String, String>();
+		    map.put("nodeid", share.getZsdid());        // 获取分享的思维导图根节点id
+			map.put("nodename", share.getMindName());   // 获取分享的思维导图的名字
+			map.put("userid", share.getUserid());       // 获取分享的思维导图的拥有者
+			map.put("sharetime", share.getSharetime()); // 获取分享思维导图的时间
+			list2.add(map);
+		}
+		
+		return jsonAnalyze.list2Json(list2);
+	}
+	
+	
 	
 	
 	
