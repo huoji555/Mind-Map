@@ -1504,7 +1504,7 @@ public class MindMapController {
 
 		data.put("data", root.toString());
 
-		String datas = this.jsonAnalyze.object2Json(data).toString();
+		String datas = this.jsonAnalyze.object2Json(data).toString();  //调用底层封装的两个方法
 
 		System.out.println("datatatat:" + datas);
 		datas = datas.replace("\"", "'");
@@ -1519,6 +1519,54 @@ public class MindMapController {
 	}
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  保存各个节点的知识点
+	 * @serialData 2018.4.3
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("/saveZsd.do")
+	@ResponseBody
+	public String saveZsd(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		String zsdid = String.valueOf(map.get("zsdid"));
+		String zsdmc = String.valueOf(map.get("zsdmc"));
+		String zsdms = String.valueOf(map.get("zsdms"));
+		
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		
+		Zsd zsd= new Zsd();
+		zsd.setZsdid(zsdid);
+		zsd.setZsdmc(zsdmc);
+		zsd.setZsdms(zsdms);
+		zsd.setUserid(userid);
+		
+		if(tryCatchZsdService.getZsd1("userid", "zsdid", userid, zsdid) == null){
+			
+			if(tryCatchZsdService.saveZsd(zsd)){
+				return statusMap.a("1");
+			} else {
+				return statusMap.a("2");
+			}
+			
+		} else {
+			
+			if(tryCatchZsdService.update(zsd)){
+				return statusMap.a("1");
+			} else {
+				return statusMap.a("2");
+			}
+			
+		}
+		
+	}
 	
 	
 	
