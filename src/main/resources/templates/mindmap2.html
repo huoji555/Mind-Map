@@ -108,58 +108,10 @@
 			</select>
 		</div>
 		
-		
-		
-    <!-- 学习记录思维导图下拉(历史记录) -->
-	<div id='mymind' class='easyui-menu' style='width: 150px; z-index: 99999'></div>
-	
-	
-	<!-- 显示课程的小窗口  -->
-	<div id="kecheng" style="width:400px;height:250px">
-		<iframe src="kecheng.html" id="showkecheng" marginwidth="0" marginheight="0"
-			frameborder="0" width="100%" scrolling="no" height="100%"></iframe>
-	</div>
-	
-	<!-- 增添课程的小窗口  -->
-	<div id="addkecheng" style="width:500px;height:250px">
-		<iframe id="addkc" src="addkecheng.html" marginwidth="0" marginheight="0"
-			frameborder="0" width="100%" scrolling="no" height="100%"></iframe>
-	</div>
-	
-	
-	<!-- 查看章节的小窗口 -->
-	<div id="zhangjie" style="width:400px;height:250px">
-		<iframe id="showzhangjie" src="zhangjie.html" marginwidth="0" marginheight="0"
-			frameborder="0" width="100%" scrolling="no" height="100%"></iframe>
-	</div>
-	
-	
-	<!-- 增加章节的小窗口 -->
-	<div id="addzhangjie" style="width:370px;height:250px">
-		<iframe id="addzj" src="addzhangjie.html?a=Math.random()"
-			marginwidth="0" marginheight="0" frameborder="0" width="100%"
-			scrolling="no" height="100%"></iframe>
-	</div>
-	
-	
-	<!-- 显示知识点的小窗口 -->
-	<div id="zsd" style="width:690px;height:550px">
-		<iframe id="showzsd" src="zsd.html" marginwidth="0" marginheight="0"
-			frameborder="0" width="100%" scrolling="no" height="100%"></iframe>
-	</div>
-	
-	
-	<!--  增加知识点的小窗口 -->
-	<div id="addzsd" style="width:600px;height:400px">
-		<iframe id="addzsd2" src="addzsd.html" marginwidth="0"
-			marginheight="0" frameborder="0" width="100%" scrolling="no"
-			height="100%"></iframe>
-	</div>
-	
 	
 	<!-- 显示笔记的小窗口（点击后加载右侧的框） -->
     <div id="biji" style="width:703px;height:450px">
-		<iframe id="showbiji" src="biji.do" marginwidth="0" marginheight="0"
+		<iframe id="showbiji" src="" marginwidth="0" marginheight="0"
 			frameborder="0" width="100%" scrolling="yes" height="100%"></iframe>
 	</div>
 	
@@ -906,57 +858,15 @@
 		
 		/* 根据点击获取子节点的type，显示不同的菜单  */
 		$("jmnode").live('click', function(e) {
-			var selected_id = get_selected_nodeid();
-			$('#nodeid').attr("value", selected_id);
-			var da = {
-				"mapid" : $("#mapid").val(),
-				"nodeid" : selected_id
-			       };
-			$.ajax({
-				type : "POST",
-				url : "getMapDetail.do",    //点击出现可以进行编辑的框框
-				data : da,
-				success : function(json) {
-					if (json.type == 1) {
-					    $('#showkecheng').attr('src', $('#showkecheng').attr('src'));
-						$('#kecheng').menu();
-						$('#kecheng').menu('show', { //菜单EasyUI
-							left : e.pageX,
-							top : e.pageY - 250,
-							hideOnUnhover : false
-						});
-					} else if (json.type == 2) {
-					$('#showzhangjie').attr('src', $('#showzhangjie').attr('src'));
-						$('#zhangjie').menu();
-						$('#zhangjie').menu('show', { //菜单EasyUI
-							left : e.pageX,
-							top : e.pageY - 250,
-							hideOnUnhover : false
-						});
-					} else if (json.type == 3) {
-					$('#showzsd').attr('src', $('#showzsd').attr('src'));
-						$('#zsd').menu();
-						$('#zsd').menu('show', { //菜单EasyUI
-							left : e.pageX,
-							top : e.pageY - 250,
-							hideOnUnhover : false
-						});
-					} 
-				        else if (json.type == 4) {
-					$('#showbiji').attr('src', $('#showbiji').attr('src'));
-						$('#biji').menu();
-						$('#biji').menu('show', { //菜单EasyUI
-							left : e.pageX,
-							top : e.pageY - 250,
-							hideOnUnhover : false
-						});
-					} 
-                                        else {
-						$.messager.alert("操作提示", "暂无相关介绍！", "info");
-					}
-				}
-			});
-
+				       
+			$('#showbiji').attr('src', "biji.do");
+				$('#biji').menu();
+				$('#biji').menu('show', { //菜单EasyUI
+					left : e.pageX,
+					top : e.pageY - 250,
+					hideOnUnhover : false
+				});
+				
 		});
 		
 		
