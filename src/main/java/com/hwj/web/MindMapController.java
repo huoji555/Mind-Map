@@ -1548,6 +1548,13 @@ public class MindMapController {
 		zsd.setZsdms(zsdms);
 		zsd.setUserid(userid);
 		
+        String mindUser = tryCatchMindMapService.getMindNode("nodeid", zsdid).get(0).getUserid();
+		
+		//禁止在别人的知识图谱里添加知识点
+		if( !(userid.equals(mindUser)) ){
+			return statusMap.a("3");
+		}
+		
 		if(tryCatchZsdService.getZsd1("userid", "zsdid", userid, zsdid) == null){
 			
 			if(tryCatchZsdService.saveZsd(zsd)){
@@ -1568,8 +1575,44 @@ public class MindMapController {
 		
 	}
 	
-	
-	
+	/**
+	 * @author Ragty
+	 * @param  知识图谱每个节点获取该节点的知识点内容
+	 * @serialData 2018.4.3
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("/getZsd.do")
+	@ResponseBody
+	public String getZsd(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map3 = jsonAnalyze.json2Map(requestJsonBody);
+		String nodeid = String.valueOf(map3.get("nodeid"));
+		
+		String mindUser = tryCatchMindMapService.getMindNode("nodeid", nodeid).get(0).getUserid();
+		
+		Map<String, String> map = new HashMap<String, String>();
+		Map<String, Object> map2 = new HashMap<String, Object>();
+		
+		Zsd zsd=null;
+		
+		try {
+			zsd = tryCatchZsdService.getZsd1("userid", "zsdid", mindUser, nodeid);
+			map.put("zsdmc", zsd.getZsdmc());
+			map.put("zsdms", zsd.getZsdms());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		map2.put("zsdid", nodeid);
+		map2.put("userid", mindUser);
+		map2.put("map", map);
+		
+		return jsonAnalyze.map2Json(map2);
+	}
 	
 	
 	
