@@ -1653,6 +1653,66 @@ public class MindMapController {
 	
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  获取所有用户的知识图谱(用于教师端查看所有用户的知识图谱)
+	 * @serialData 2018.4.4
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("/teacherMind.do")
+	@ResponseBody
+	public String teacherMind(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String,Object> map=jsonAnalyze.json2Map(requestJsonBody);
+		String parentid=String.valueOf(map.get("parentid"));
+		Integer currentPage=(Integer) map.get("currentPage");
+		
+		HttpSession session=request.getSession();
+		String userid=String.valueOf(session.getAttribute("username"));
+		
+		if (userid.equals("null") || userid.equals(null)) {
+			return statusMap.a("2");
+		}
+		
+		Integer pageSize=12;
+		List<MindNode> list=tryCatchMindMapService.getMindNodeByPage(currentPage, pageSize, "parentid", parentid);
+		
+		if(list.equals(null) || list.equals("null")){
+			return statusMap.a("3");
+		}
+		
+		
+		List<Map<String, String>> list2 = new ArrayList<Map<String,String>>();
+		
+		try {
+			
+			for(int i=0; i<list.size(); i++){
+				MindNode mindNode = list.get(i);
+				String realName = tryCatchUserService.getOneLoginUser("nickName", mindNode.getUserid()).getRealName();
+		        
+				Map<String, String> map1 = new HashMap<String, String>();
+				map1.put("nodename",mindNode.getNodename() );
+	        	map1.put("userid",mindNode.getUserid() );
+	        	map1.put("nodeid",mindNode.getNodeid() );
+	        	map1.put("realName",realName );
+                list2.add(map1);
+                
+			}
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return jsonAnalyze.list2Json(list2);
+	}
+	
+	
+	
 	
 	
 	
