@@ -187,7 +187,7 @@ public class LoginController {
 	
 	/**
 	 * @author Ragty
-	 * @param  用户注册接口
+	 * @param  用户注册接口（增加注册后即登录）
 	 * @serialData 2018.3.5
 	 * @param requestJsonBody
 	 * @param request
@@ -235,10 +235,13 @@ public class LoginController {
 		loginUser.setRealName(realName);
 		loginUser.setRoleId(2);  //默认权限设置为2
 		
-		System.out.println("@@@@@@@@@"+loginUser);
+		HttpSession session = request.getSession();
 		
+		//保存注册信息并登录
 		if (this.tryCatchUserService.saveUser(loginUser)) {
 			System.out.println("成功保存注册信息");
+			session.setAttribute("username", nickName);
+			session.setMaxInactiveInterval(6*60*60);
 			return this.statusMap.a("3");
 		}
 		
