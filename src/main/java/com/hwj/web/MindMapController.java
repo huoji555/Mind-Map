@@ -1748,6 +1748,122 @@ public class MindMapController {
 	
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  获取教师端搜索到的个人思维导图的列表(可以写一个深度搜索)
+	 * @serialData 2018.4.4
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("/findTeacherMind.do")
+	@ResponseBody
+	public String findTeacherMind(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map =jsonAnalyze.json2Map(requestJsonBody);
+		String realName =  String.valueOf(map.get("realName"));
+		Integer currentPage  = (Integer) map.get("currentPage");
+		Integer pageSize = 12;
+		
+		String userid=null;
+		try {
+			userid=this.tryCatchUserService.getOneLoginUser("realName", realName).getNickName();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		HttpSession session=request.getSession();
+		String username=String.valueOf(session.getAttribute("username"));
+		
+		if( (username.equals("null"))||(username.equals(null)) ){
+			return statusMap.a("2");
+		}
+		
+		List<MindNode> list = tryCatchMindMapService.getMindNodeByPage(
+				currentPage, pageSize, "userid", userid, "parentid", "00100");
+		
+		if( list.equals("null")||list.equals(null) ){
+			return statusMap.a("3");
+		}
+		
+		List<Map<String, String>> list2 = new ArrayList<Map<String,String>>();
+		
+		
+		try {
+			
+			for(int i=0; i< list.size(); i++){
+				MindNode mindNode = list.get(i);
+				Map<String, String> map2 = new HashMap<String, String>();
+				LoginUser loginUser=this.tryCatchUserService.getOneLoginUser("nickName", mindNode.getUserid());
+	        	String realName1=loginUser.getRealName();
+				
+				map2.put("nodename",mindNode.getNodename() );
+	        	map2.put("userid",mindNode.getUserid() );
+	        	map2.put("nodeid",mindNode.getNodeid() );
+	        	map2.put("realName",realName1 );
+				list2.add(map2);
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		
+		return jsonAnalyze.list2Json(list2);
+	}
+	
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  获取搜索后的知识图谱总页数
+	 * @serialData 2018.4.4
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("/findTeacherMindTotal.do")
+	@ResponseBody
+	public Long findTeacherMindTotal(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		String realName=String.valueOf(map.get("realName"));
+		
+		Integer pageSize=12;
+		String userid=null;
+		try {
+			userid=this.tryCatchUserService.getOneLoginUser("realName", realName).getNickName();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		if( (userid.equals("null"))||(userid.equals(null)) ){
+			return null;        
+		}
+		
+		Long total=null;
+		try {
+			total=this.tryCatchMindMapService.countByTwoMind("userid", "parentid", userid, "00100");
+			total=(total-1)/pageSize+1; 
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+		
+		if( total.equals("null")||total.equals(null) ){
+			return null;
+		}
+		return total;
+		
+	}
+	
+	
+	
+	
 	
 	
 	
