@@ -12,7 +12,7 @@ body{background:#f8f8f8;font-family:"Microsoft YaHei","Microsoft JhengHei",STHei
 	.login-container {margin: 8% auto 0 auto;}
 }
 h1{font-size:30px;font-weight:700;text-shadow:0 1px 4px rgba(0,0,0,.2)}
-form{position:relative;width:305px;margin:15px auto 0 auto;text-align:center}
+form{position:relative;width:305px;margin:0px auto 0 auto;text-align:center}
 input{width:270px;height:42px;line-height:42px;margin-top:25px;padding:0 15px;background:#2d2d2d;background:rgba(45,45,45,.15);-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;border:1px solid #3d3d3d;border:1px solid rgba(255,255,255,.15);-moz-box-shadow:0 2px 3px 0 rgba(0,0,0,.1) inset;-webkit-box-shadow:0 2px 3px 0 rgba(0,0,0,.1) inset;box-shadow:0 2px 3px 0 rgba(0,0,0,.1) inset;font-family:"Microsoft YaHei",Helvetica,Arial,sans-serif;font-size:14px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.1);-o-transition:all .2s;-moz-transition:all .2s;-webkit-transition:all .2s;-ms-transition:all .2s}
 input:-moz-placeholder{color:#fff}
 input:-ms-input-placeholder{color:#fff}
@@ -48,3 +48,5 @@ img{border:none}
 .box-line{height: 0; overflow: hidden; border-top: 1px #c2c2c2 solid; margin-top: 20px;}
 .register-tis {line-height: 42px; margin: 15px auto 0px; padding: 0 15px; border: 1px solid rgba(255, 255, 255, 0.38); background: rgba(45, 45, 45, 0.33); border-radius: 6px;}
 label.error{display: block; -webkit-transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out; transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out; border-radius: 0px 0px 5px 5px; width: 300px; height: 34px; border: 1px solid rgba(255,255,255,.15); line-height: 31px; box-shadow: 0 2px 3px 0 rgba(0,0,0,.1) inset; text-shadow: 0 1px 2px rgba(0,0,0,.1); background: rgba(245, 26, 26, 0.81); -moz-border-radius: 6px; margin: 0 auto;}
+.tip{margin-top: 20px; color:red; height:16px;}
+#nickName{margin-top: 15px;}

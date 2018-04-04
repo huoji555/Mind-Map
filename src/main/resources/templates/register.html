@@ -14,52 +14,109 @@
 
 
 
-<!--  注册数据提交与接收  -->
+	<!--  注册数据提交与接收  -->
+	<script type="text/javascript">
+	
+	   $(function(){
+	       $("#register").click(function(){
+	       	Register();
+	       });
+	   });
+	   
+	</script> 
+	
+	
+	
+	<!-- 回车注册 -->
+	<script type="text/javascript">
+	
+	function EnterPress(){
+    	
+    	if(event.keyCode == 13){
+    		Register();
+    	}
+    	
+    }
+	
+	</script>
+    
+    
+    <!-- 用户注册函数Register -->
     <script type="text/javascript">
-        $(function(){
-            $("#register").click(function(){
-                var adata={
-                    "nickName":$("#nickName").val(),
-                    "password":$("#password").val(),
-                    "phoneNumber":$("#phoneNumber").val(),
-                    "email":$("#Email").val(),
-                    "realName":$("#realName").val(),
-                    "verifyImage":$("#verifyCode").val(),
-                    "role":"2"
-                };
-              
-               
-                var data=JSON.stringify(adata);
+    
+    function Register(){
+    	
+    	if($("#nickName").val() == ""){
+    		$("#tip").text("用户名不能为空");
+    		$("#nickName").focus();
+    		return false;
+    	} else if($("#password").val() == ""){
+    		$("#tip").text("密码不能为空");
+    		$("#password").focus();
+    		return false;
+    	} else if($("#phoneNumber").val() == ""){
+    		$("#tip").text("电话号码不能为空");
+    		$("#phoneNumber").focus();
+    		return false;
+    	} else if($("#email").val() == ""){
+    		$("#tip").text("邮箱地址不能为空");
+    		$("#email").focus();
+    		return false;
+    	}  else if($("#realName").val() == ""){
+    		$("#tip").text("真实姓名不能为空");
+    		$("#realName").focus();
+    		return false;
+    	} else if($("#verifyImage").val() == ""){
+    		$("#tip").text("验证码不能为空");
+    		$("#verifyImage").focus();
+    		return false;
+    	} 
+    	
+    	
+    	var adata={
+                "nickName":$("#nickName").val(),
+                "password":$("#password").val(),
+                "phoneNumber":$("#phoneNumber").val(),
+                "email":$("#Email").val(),
+                "realName":$("#realName").val(),
+                "verifyImage":$("#verifyCode").val(),
+                "role":"2"
+            };
+          
+           
+            var data=JSON.stringify(adata);
 
-                $.ajax({
-                    type:"POST",
-                    contentType:"application/json",
-                    dataType:"json",
-                    data:data,
-                    url:"register2.do",
-                    success:function(data){
-                        if(data.a=="2"){
-                            alert("用户名已经被注册了！");
-                            $(".verifyImage").attr("src","getVerifyCode.do");
-                        }else if(data.a=="1"){
-                            alert("验证码不正确");
-                            $(".verifyImage").attr("src","getVerifyCode.do");
-                        }else if(data.a=="3"){
-                        	alert("注册成功！");
-                            location.href="index1.do";
-                        }else if(data.a=="4"){
-                            alert("未知的错误");
-                            $(".verifyImage").attr("src","getVerifyCode.do");
-                        }
-                    },
-                    error:function(e){
-                        alert("网络连接失败");
-
+            $.ajax({
+                type:"POST",
+                contentType:"application/json",
+                dataType:"json",
+                data:data,
+                url:"register2.do",
+                success:function(data){
+                    if(data.a=="2"){
+                        alert("用户名已经被注册了！");
+                        $(".verifyImage").attr("src","getVerifyCode.do");
+                    }else if(data.a=="1"){
+                        alert("验证码不正确");
+                        $(".verifyImage").attr("src","getVerifyCode.do");
+                    }else if(data.a=="3"){
+                    	alert("注册成功！");
+                        location.href="index1.do";
+                    }else if(data.a=="4"){
+                        alert("未知的错误");
+                        $(".verifyImage").attr("src","getVerifyCode.do");
                     }
-                });
+                },
+                error:function(e){
+                    alert("网络连接失败");
+
+                }
             });
-        });
-    </script> 
+            
+    }
+    
+
+    </script>
     
     
     
@@ -82,7 +139,7 @@
 
 
 
-<body>
+<body onkeydown="EnterPress()">
 
 <div class="register-container">
 	<h1>毛线头</h1>
@@ -90,6 +147,7 @@
 	<div class="connect">
 		<p>毛线头，帮你理清学习思路.</p>
 	</div>
+	<div id="tip" class="tip"></div>
 	
 	<!-- 注册部分 -->
 	<form action="" method="post" id="registerForm">
