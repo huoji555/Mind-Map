@@ -1911,5 +1911,50 @@ public class MindMapController {
     }
 	
 	
+    
+	/**
+	 * @author Ragty
+	 * @param  保存节点拖拽移动后的位置(draggale.js中写脚本)
+	 * @serialData 2018.4.4
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("/saveNodePostion.do")
+	@ResponseBody
+	public String saveNodePostion(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		String beforeid=String.valueOf(map.get("beforeId"));
+    	String afterid=String.valueOf(map.get("afterId"));
+    	
+    	HttpSession session=request.getSession();
+    	String userid=String.valueOf(session.getAttribute("username"));
+    	
+    	if( userid.equals("null")||userid.equals(null) ){
+    		return statusMap.a("2");
+    	}
+    	
+    	MindNode mindNode=this.tryCatchMindMapService.getMindNodeObject(beforeid);   //获取到拖动的节点
+    	
+    	//添加权限，不是自己的不能拖
+    	String userName=String.valueOf(mindNode.getUserid());
+    	if(!userName.equals(userid)){
+    		return statusMap.a("4");
+    	}
+    	
+    	mindNode.setParentid(afterid);
+    	
+    	if(this.tryCatchMindMapService.updateMindNodeObject(mindNode)){
+    		return statusMap.a("1");
+    	}
+
+    	return statusMap.a("3");
+		
+	}
+	
+	
 	
 }
