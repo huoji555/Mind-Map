@@ -219,6 +219,12 @@ public class LoginController {
 			return this.statusMap.a("2");
 		}
 		
+		//后台限制注册数据，使之不为空
+		if(nickName.equals("")||password.equals("")||phoneNumber.equals("")||email.equals("")||
+				realName.equals("")||verifyImage.equals("")){
+           return statusMap.a("5");			
+		}
+		
 		//将注册信息写入数据库
 		LoginUser loginUser = new LoginUser();
 		System.out.println("@@@@@@@@@   这里是注册接口    @@@@@@@@@");

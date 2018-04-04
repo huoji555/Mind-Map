@@ -105,6 +105,9 @@
                     }else if(data.a=="4"){
                         alert("未知的错误");
                         $(".verifyImage").attr("src","getVerifyCode.do");
+                    }else if(data.a=="5"){
+                    	alert("数据不完整，请重新注册");
+                    	$(".verifyImage").attr("src","getVerifyCode.do");
                     }
                 },
                 error:function(e){
