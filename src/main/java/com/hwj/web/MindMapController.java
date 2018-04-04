@@ -1712,6 +1712,40 @@ public class MindMapController {
 	}
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  获取总共的知识图谱的页数（一页12条，服务于教师端）
+	 * @serialData 2018.4.4
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("/teacherMindTotal.do")
+	@ResponseBody
+	public Long teacherMindTotal(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map =jsonAnalyze.json2Map(requestJsonBody);
+		String parentid = String.valueOf(map.get("parentid"));
+		
+		Integer pageSize = 12;
+		Long total=null;
+		
+		try {
+			total = tryCatchMindMapService.countByOneMind("parentid", parentid);
+			total = (total-1)/pageSize+1;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		if( total.equals("null")||total.equals(null) ){
+			return null;
+		}
+		
+		return total;
+	}
+	
 	
 	
 	
