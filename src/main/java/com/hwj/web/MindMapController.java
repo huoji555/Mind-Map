@@ -1862,8 +1862,53 @@ public class MindMapController {
 	}
 	
 	
-	
-	
+	/**
+	 * @author Ragty
+	 * @param  删除分享知识图谱列表中的知识图谱
+	 * @serialData 2018.4.4
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("/deleteShareMindMap.do")
+    @ResponseBody
+    public String deleteShareMindMap(@RequestBody String requestJsonBody,HttpServletRequest request) throws IOException{
+		
+        Map<String, Object> map=jsonAnalyze.json2Map(requestJsonBody);
+        String nodeid=String.valueOf(map.get("nodeid"));
+        String deleteUser=String.valueOf(map.get("deleteUser"));
+        
+        HttpSession session=request.getSession();
+        String userid=String.valueOf(session.getAttribute("username"));
+        
+        if( userid.equals("null")|| userid.equals(null) ){
+        	return statusMap.a("2");           //尚未登录的
+        }
+        
+        if( !userid.equals(deleteUser) ){
+        	return statusMap.a("3");           //没有删除权限的
+        }
+        
+        Share share=null;
+        try {
+			share=this.tryCatchShareService.getshare("userid", userid, "zsdid", nodeid);
+			
+			if(share!=null){
+              
+				if(this.tryCatchShareService.delShare(share)){
+					return statusMap.a("1");      //删除成功
+				}else{
+					return statusMap.a("5");      //删除失败
+				}
+				
+			}
+        	
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+        return null;
+    }
 	
 	
 	
