@@ -16,10 +16,27 @@
 
 <!--  登录数据提交与接收  -->
 <script type="text/javascript">
+
         $(function(){
             $("#login2").click(function(){
-            	
-                var adata={
+            	login();
+            }); 
+        });
+        
+        /* 空格登录 */
+        function EnterPress(){
+        	
+        	if(event.keyCode == 13){
+        		login();
+        	}
+        	
+        	
+        }
+        
+        /* 登录函数 */
+        function login(){
+        	
+        	var adata={
                     "user":$("#input").val(),
                     "password":$("#password").val(),
                     "verifyImage":$("#verifyCode").val(),
@@ -54,8 +71,9 @@
 
                     }
                 });
-            }); 
-        });
+        	
+        }
+        
     </script>
     
     
@@ -77,7 +95,7 @@
 
 
 
-<body>
+<body onkeydown="EnterPress()">
 
 <div class="login-container">
 	<h1>毛线头</h1>
@@ -100,7 +118,7 @@
             <img class="verifyImage"  src="getVerifyCode.do"  align="left" style="cursor:pointer;"
                  onclick="reloadVerifyCode();" title="点击更换验证码" alt="看不清，换一张" />
         </div>
-		<button id="login2" type="button">登 陆</button>
+		<button id="login2" type="button" >登 陆</button>
 	    </form>
 
 	<a href="register.do">
