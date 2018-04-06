@@ -398,8 +398,10 @@ public class CollectionController {
 		String states = null;
 		
 		if((list == null )|| (list.equals(null))){
+			states = "1";
 			return statusMap.a("3");
 		} else {
+			states = "0";
 			
 			for(int i = 0; i < list.size(); i++){
 				

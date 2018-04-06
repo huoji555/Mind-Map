@@ -32,7 +32,9 @@
 					type : "POST",
 					url : "getUploadfile.do",
 					data : da,
-					success : function(json) {
+					success : function(data) {
+						
+						var json = $.parseJSON(data);
 						
 						if(json.state=='0'){
 					

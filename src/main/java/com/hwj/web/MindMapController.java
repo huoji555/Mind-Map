@@ -1124,6 +1124,7 @@ public class MindMapController {
 		if ((list == null) || (list.equals(null))) {
 			state = "1";
 		} else {
+			state = "0";
 			for(int i = 0; i < list.size(); i++){
 				UploadFile uploadFile = list.get(i);
 				Map<String, String> map = new HashMap<String, String>();
