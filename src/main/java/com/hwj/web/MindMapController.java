@@ -1359,7 +1359,7 @@ public class MindMapController {
 			return statusMap.a("2");    //未登录用户
 		}
 		
-		if (list.equals("null")||list.equals(null)) {
+		if (list == null) {
 			return statusMap.a("1");     //没有获取到分享的思维导图
 		}
 		
