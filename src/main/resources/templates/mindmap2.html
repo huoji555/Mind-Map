@@ -592,6 +592,16 @@
 			}
 		}
 		
+		<!-- 判断选中的节点是否为根节点 -->
+		function selected_ifRoot(){
+			var selected_node = jm.get_selected_node();
+			if (!!selected_node) {   //两个叹号是为了将之数据类型转换为布朗型的
+				return selected_node.isroot;
+			} else {
+				return null;
+			}
+		}
+		
 		
 		/* 扩张??? */
 		function expand_all() {
@@ -678,10 +688,10 @@
 						dataType:"json",
 						data : data,
 						success : function(data) {
-							if (data.a == "2") {
-								$.messager.alert("操作提示", "尚未登录", "error");
-							}else if(data.a == "1"){
-								$.messager.alert("操作提示", "删除成功", "success");
+							if(data.a == "1"){
+								if(selected_ifRoot()){
+									freshenMyMindMap(1);
+								}
 							} else {
 								$.messager.alert("操作提示", "操作失败！", "error");
 							}
