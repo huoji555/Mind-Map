@@ -684,6 +684,7 @@ public class MindMapController {
     	
     	Map<String, Object> map=jsonAnalyze.json2Map(requestJsonBody);
     	String nodeid=String.valueOf(map.get("nodeid"));
+    	
     	HttpSession session=request.getSession();
     	String userid=String.valueOf(session.getAttribute("username"));
     	
@@ -823,11 +824,15 @@ public class MindMapController {
 		}        //内循环异常抛出      
 			
 			
-			
+			System.out.println("!!!!!!!!!!!!!!!!删除知识点");
 			//Step3.将节点上的知识点删除
 			try {
+				
 				Zsd zsd=tryCatchZsdService.getZsd1("userid", "zsdid", userid, id);
-				this.tryCatchZsdService.deleteZsd(zsd);
+				if( !(zsd == null) ){
+					this.tryCatchZsdService.deleteZsd(zsd);
+				}
+				
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
@@ -836,9 +841,13 @@ public class MindMapController {
 			try {
 				
 				if( mindNode.getParentid().equals( "00100" )  ) {
+					
 					Share share=this.tryCatchShareService.getshare("userid", userid, "zsdid", mindNode.getNodeid());
-					System.out.println("删除分享过的思维导图"+share);
-					this.tryCatchShareService.delShare(share);
+					if( !(share == null) ){
+						System.out.println("删除分享过的思维导图"+share);
+						this.tryCatchShareService.delShare(share);
+					}
+					
 				}
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -846,7 +855,11 @@ public class MindMapController {
 			
 			
 			//将节点删除
-			this.tryCatchMindMapService.deleteMindNodeObject(mindNode);
+			if(tryCatchMindMapService.deleteMindNodeObject(mindNode)){
+				return statusMap.a("1");
+			} else{
+				return statusMap.a("3");
+			}
 			
 		}
     	    

@@ -21,7 +21,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
   * @Description: 对web请求进行日志记录
   * @Create Date: 2017年5月11日下午9:45:00
   * @Version: V1.00 
-  * @Author: 赵良臣
   */
 @Aspect
 @Component
