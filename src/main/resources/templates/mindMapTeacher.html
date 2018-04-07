@@ -116,7 +116,7 @@
 	
 	<!-- 显示笔记的小窗口（点击后加载右侧的框） -->
     <div id="biji" style="width:703px;height:450px">
-		<iframe id="showbiji" src="biji.do" marginwidth="0" marginheight="0"
+		<iframe id="showbiji" src="#" marginwidth="0" marginheight="0"
 			frameborder="0" width="100%" scrolling="yes" height="100%"></iframe>
 	</div>
 	
@@ -148,12 +148,6 @@
     <!-- 加载页面时隐藏在屏幕右侧弹出的框及内容 -->	
 	<script type="text/javascript">
 		$(function() {
-			$("#addkecheng").hide();
-			$("#kecheng").hide();
-			$("#zhangjie").hide();
-			$("#zsd").hide();
-			$("#addzhangjie").hide();
-			$("#addzsd").hide();
 			$("#zhutiyanse").hide();
 			$("#biji").hide();
 			
@@ -508,6 +502,16 @@
 		}
 	}
 	
+	<!-- 判断选中的节点是否为根节点 -->
+	function selected_ifRoot(){
+		var selected_node = jm.get_selected_node();
+		if (!!selected_node) {   //两个叹号是为了将之数据类型转换为布朗型的
+			return selected_node.isroot;
+		} else {
+			return null;
+		}
+	}
+	
 	
 	<!-- 修改节点信息 -->
 	function modify_node() {
@@ -605,10 +609,10 @@
 					dataType:"json",
 					data : data,
 					success : function(data) {
-						if (data.a == "2") {
-							$.messager.alert("操作提示", "尚未登录", "error");
-						}else if(data.a == "1"){
-							$.messager.alert("操作提示", "删除成功", "success");
+						if(data.a == "1"){
+							if(selected_ifRoot()){
+								freshenMyMindMap(1);
+							}
 						} else {
 							$.messager.alert("操作提示", "操作失败！", "error");
 						}
@@ -703,57 +707,14 @@
 	
 	<!--根据点击获取子节点的type，显示不同的菜单  -->
 	$("jmnode").live('click', function(e) {
-		var selected_id = get_selected_nodeid();
-		$('#nodeid').attr("value", selected_id);
-		var da = {
-			"mapid" : $("#mapid").val(),
-			"nodeid" : selected_id
-		       };
-		$.ajax({
-			type : "POST",
-			url : "getMapDetail.do",    //点击出现可以进行编辑的框框
-			data : da,
-			success : function(data) {
-				var json = $.parseJSON(data);
-				if (json.type == 1) {
-				    $('#showkecheng').attr('src', $('#showkecheng').attr('src'));
-					$('#kecheng').menu();
-					$('#kecheng').menu('show', { //菜单EasyUI
-						left : e.pageX,
-						top : e.pageY - 250,
-						hideOnUnhover : false
-					});
-				} else if (json.type == 2) {
-				$('#showzhangjie').attr('src', $('#showzhangjie').attr('src'));
-					$('#zhangjie').menu();
-					$('#zhangjie').menu('show', { //菜单EasyUI
-						left : e.pageX,
-						top : e.pageY - 250,
-						hideOnUnhover : false
-					});
-				} else if (json.type == 3) {
-				$('#showzsd').attr('src', $('#showzsd').attr('src'));
-					$('#zsd').menu();
-					$('#zsd').menu('show', { //菜单EasyUI
-						left : e.pageX,
-						top : e.pageY - 250,
-						hideOnUnhover : false
-					});
-				} 
-			        else if (json.type == 4) {
-				$('#showbiji').attr('src', $('#showbiji').attr('src'));
-					$('#biji').menu();
-					$('#biji').menu('show', { //菜单EasyUI
-						left : e.pageX,
-						top : e.pageY - 250,
-						hideOnUnhover : false
-					});
-				} 
-                                    else {
-					$.messager.alert("操作提示", "暂无相关介绍！", "info");
-				}
-			}
-		});
+		
+		$('#showbiji').attr('src', "biji.do");
+			$('#biji').menu();
+			$('#biji').menu('show', { //菜单EasyUI
+				left : e.pageX,
+				top : e.pageY - 250,
+				hideOnUnhover : false
+			});
 
 	});
 	

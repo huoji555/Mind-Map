@@ -1798,7 +1798,8 @@ public class MindMapController {
 		List<MindNode> list = tryCatchMindMapService.getMindNodeByPage(
 				currentPage, pageSize, "userid", userid, "parentid", "00100");
 		
-		if( list.equals("null")||list.equals(null) ){
+		System.out.println(list == null);
+		if( list == null ){
 			return statusMap.a("3");
 		}
 		
