@@ -20,15 +20,15 @@ public class Functions implements Serializable {
 
 	private static final long serialVersionUID = 7878635190411726875L;
 	
-	private String resourceName;
-	private String resourceID;
-	private String resourceGrade;
-	private String accessPath;
+	private String resourceName;         //模块具体名字
+	private String resourceID;           //模块具体名字ID
+	private String resourceGrade;        //
+	private String accessPath;           //访问该模块的具体地址
 	private String parentName;
 	private String parentID;
 	private String forder;
-	private String grandparentName;
-	private String grandparentId;
+	private String grandparentName;      //侧栏模块名称
+	private String grandparentId;        //侧栏模块id
 	private String limits;
 
 	@Id
