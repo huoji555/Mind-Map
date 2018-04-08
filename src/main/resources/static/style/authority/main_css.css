@@ -22,13 +22,19 @@ html,body {
 
 #top_logo {
 	width: 300px;
-	float: left;
-	vertical-align: middle;
-	height: 65px;
-	line-height: 65px;
-	padding: 1px 1px 1px 40px;
+    float: left;
+    vertical-align: middle;
+    height: 65px;
+    line-height: 65px;
+    padding: 1px 1px 1px 40px;
+    color: #B8ADAD;
+    font-weight: 550;
+    font-size: 25px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    font-family: fantasy;
+	
 }
-
 #top_links {
 	width: 480px;
 	height: 65px;

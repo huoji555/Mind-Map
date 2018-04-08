@@ -79,6 +79,19 @@ public class TryCatchFunctionsService {
 		}
 		return true;
 	}
+	
+	
+	public List<Functions> getFunctionList(String propertyName,Object value){
+		
+		List<Functions> list = null;
+		try {
+			list = iFunctionsService.getAll(propertyName, value);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+		return list;
+	}
 
 	/*
 	 * 生成一个随机数，要求数据库里不存在
