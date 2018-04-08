@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>知识图谱管理系统</title>
+
+<script type="text/javascript" src="scripts/jquery/jquery-1.7.1.js"></script>
+<script type="text/javascript" src="scripts/zTree/jquery.ztree.core-3.2.js"></script>
+<script type="text/javascript" src="scripts/authority/commonAll.js"></script>
+
+<link href="style/authority/main_css.css" rel="stylesheet" type="text/css" />
+<link href="style/authority/zTreeStyle.css" rel="stylesheet" type="text/css">
+
+
+    <!-- 退出本系统 -->
+	<script type="text/javascript">
+	
+	
+	
+	</script>
+
+
+
+
+
+</head>
+<body>
+  
+  <!-- head -->
+  <div id="top">
+     <div id="top_logo"> 知识图谱管理系统</div>      <!-- logo部分 -->
+     
+     <!-- 日期及退出按钮部分 -->
+     <div id="top_links">
+         <div id="top_op">
+			<ul>
+				<li>
+					<img alt="当前用户" src="images/common/user.jpg">：
+					<span id="admin"></span>
+				</li>
+				<li>
+					<img alt="事务月份" src="images/common/month.jpg">：
+					<span id="yue_fen"></span>
+				</li>
+				<li>
+					<img alt="今天是" src="images/common/date.jpg">：
+					<span id="day_day"></span>
+				</li>
+			</ul> 
+	     </div>
+	     
+	     <!-- 退出按钮 -->
+	     <div id="top_close">
+				<a href="javascript:void(0);" onclick="logout();" target="_parent">
+					<img alt="退出系统" title="退出系统" src="images/common/close.jpg" style="position: relative; top: 10px; left: 25px;">
+				</a>
+		 </div>
+     
+     </div>
+     
+  </div>
+
+
+  <!-- slide(image contact) -->
+  <div id="side">
+  
+       <div id="left_menu">
+       
+            <!-- 侧边5个菜单 -->
+            <ul id="TabPage2" style="height:200px; margin-top:50px;">
+                <li id="left_tab1" class="selected" onClick="javascript:switchTab('TabPage2','left_tab1');" title="教育">
+					<img alt="教育" title="教育" src="images/common/1_hover.jpg" width="33" height="31">
+				</li>
+				<li id="left_tab2" onClick="javascript:switchTab('TabPage2','left_tab2');" title="笔记">
+					<img alt="笔记" title="笔记" src="images/common/2.jpg" width="33" height="31">
+				</li>		
+				<li id="left_tab3" onClick="javascript:switchTab('TabPage2','left_tab3');" title="资源">
+					<img alt="资源" title="资源" src="images/common/3.jpg" width="33" height="31">
+				</li>
+				<li id="left_tab4" onClick="javascript:switchTab('TabPage2','left_tab4');" title="消息">
+					<img alt="消息" title="消息" src="images/common/4.jpg" width="33" height="31">
+				</li>
+				<li id="left_tab5" onClick="javascript:switchTab('TabPage2','left_tab5');" title="工作">
+					<img alt="工作" title="工作" src="images/common/5.jpg" width="33" height="31">
+				</li>
+            </ul>
+       
+            <!-- 显示/隐藏菜单按钮 -->
+            <div id="nav_show" style="position:absolute; bottom:0px; padding:10px;">
+				<a href="javascript:;" id="show_hide_btn">
+					<img alt="显示/隐藏" title="显示/隐藏" src="images/common/nav_hide.png" width="35" height="35">
+				</a>
+			</div>
+			
+			<!-- 显示左侧菜单栏在上的标题和下拉的树菜单 -->
+	        <div id="left_menu_cnt">
+			    <div id="nav_module">
+			 		<img src="images/common/module_1.png" width="210" height="58"/>
+			 	</div>
+			 	<div id="nav_resource">
+			 		<ul id="dleft_tab1" class="ztree"></ul>
+			 	</div>
+			 </div>
+       
+       </div>           <!-- left_menu end -->
+       
+  </div>                <!-- slide menu end -->
+
+
+
+
+  <!-- side menu start -->
+  <div id="top_nav">
+ 	 <span id="here_area">当前位置：系统&nbsp;>&nbsp;系统介绍</span>
+  </div>
+  <!-- 漫天乱飘的小字儿 -->
+  <div id="main">
+     <iframe name="right" id="rightMain" src="introduce.do" frameborder="no" scrolling="auto" width="100%" height="100%" allowtransparency="true"/>
+  </div>          
+
+
+
+
+
+</body>
+</html>
