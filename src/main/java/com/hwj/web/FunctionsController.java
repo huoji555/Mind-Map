@@ -29,7 +29,6 @@ public class FunctionsController {
 	private TryCatchFunctionsService tryCatchFunctionsService;
 	
 	
-	
 	/**
 	 * @author Ragty
 	 * @param  映射后台模块管理界面
@@ -84,6 +83,31 @@ public class FunctionsController {
 	    return jsonAnalyze.list2Json(list2);
 	}
 	
+	
+	/**
+	 * @author Ragty
+	 * @param  根据菜单等级id获取相应等级下的所有菜单
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("/getModuleList.do")
+	@ResponseBody
+	public String getModuleList(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		String resourceGrade = String.valueOf(map.get("resourceGrade"));
+		
+		List<Functions> list = tryCatchFunctionsService.getFunctionList("resourceGrade", resourceGrade);
+		
+		if(list == null){
+			return statusMap.a("2");
+		}
+		
+		return null;
+	}
 	
 	
 	
