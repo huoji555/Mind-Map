@@ -87,6 +87,7 @@ public class FunctionsController {
 	/**
 	 * @author Ragty
 	 * @param  根据菜单等级id获取相应等级下的所有菜单
+	 * @serialData 2018.4.9
 	 * @param requestJsonBody
 	 * @param request
 	 * @return
@@ -109,6 +110,42 @@ public class FunctionsController {
 		return null;
 	}
 	
+	
+	/**
+	 * @author Ragty
+	 * @param  后台管理系统增加二级菜单
+	 * @serialData 2018.4.9
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("/addModule.do")
+	public String addModule(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		String resourceName = String.valueOf(map.get("resourceName"));
+		String grandparentId = String.valueOf(map.get("grandparentId"));
+		String grandparentName = tryCatchFunctionsService.getInt(grandparentId);
+		
+		String resourceID = tryCatchFunctionsService.random();
+		String resourceGrade = "2";
+		
+		Functions functions = new Functions();
+		functions.setParentId("1");
+		functions.setGrandparentId(grandparentId);
+		functions.setResourceId(resourceID);
+		functions.setResourceName(resourceName);
+		functions.setResourceGrade(resourceGrade);
+		functions.setGrandparentName(grandparentName);
+
+	    if(tryCatchFunctionsService.saveAll(functions)){
+	    	return statusMap.a("1");
+	    }
+		
+	    return statusMap.a("2");
+	}
 	
 	
 	
