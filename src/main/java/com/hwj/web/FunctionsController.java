@@ -61,7 +61,6 @@ public class FunctionsController {
 		List<Functions> list = new ArrayList<Functions>();
 		
 		list = tryCatchFunctionsService.getFunctionList("grandparentId", grandparentId);
-		System.out.println(list+"&*&*&*&&*&*");
 		
 		if(list == null){
 			return statusMap.a("5");
@@ -113,7 +112,7 @@ public class FunctionsController {
 	
 	/**
 	 * @author Ragty
-	 * @param  后台管理系统增加二级菜单
+	 * @param  后台管理系统增加二级菜单(增加模块)
 	 * @serialData 2018.4.9
 	 * @param requestJsonBody
 	 * @param request
@@ -147,6 +146,46 @@ public class FunctionsController {
 	    return statusMap.a("2");
 	}
 	
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  删除模块接口（删除时级联删除模块下的功能）
+	 * @serialData 2018.4.9
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("/deleteModule.do")
+	@ResponseBody
+	public String deleteModule(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map =jsonAnalyze.json2Map(requestJsonBody);
+		String resourceName = String.valueOf(map.get("resourceName"));
+		
+		Functions functions = tryCatchFunctionsService.get("resourceName", resourceName);
+		String resourceGrade = functions.getResourceGrade();
+		
+		//级联删除下面的模块
+		if(resourceGrade == "2"){
+			String resourceId = functions.getResourceId();
+			List<Functions> list = tryCatchFunctionsService.getFunctionList("parentId", resourceId);
+			
+			for(int i=0; i<list.size(); i++){
+				Functions functions2 = list.get(i);
+			    tryCatchFunctionsService.delete(functions2);	
+			}
+			
+		}
+		
+		if(tryCatchFunctionsService.delete(functions)){
+			return statusMap.a("1");
+		} 
+		
+		return statusMap.a("2");
+	}
 	
 	
 	

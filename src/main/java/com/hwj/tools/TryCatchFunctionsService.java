@@ -84,8 +84,9 @@ public class TryCatchFunctionsService {
 	
 	public List<Functions> getFunctionList(String propertyName,Object value){
 		
-		List<Functions> list = null;
+		List<Functions> list;
 		try {
+			System.out.println("到这里了");
 			list = iFunctionsService.getAll(propertyName, value);
 		} catch (Exception e) {
 			// TODO: handle exception
