@@ -3,6 +3,7 @@ package com.hwj.tools;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
 import org.springframework.stereotype.Component;
 
 import com.hwj.entity.Functions;
@@ -106,7 +107,32 @@ public class TryCatchFunctionsService {
 		} while (!iFunctionsService.get("resourceID", i).equals(null));
 		return i;
 	}
-	/*
-	 * 
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  根据id获取五大版块名称
+	 * @serialData 2018.4.9
+	 * @param grandparentName
+	 * @return
 	 */
+	public String getInt(String grandparentName) {
+		if (grandparentName.equals("1")) {
+			return "教育";
+		} else if (grandparentName.equals("2")) {
+			return "笔记";
+		} else if (grandparentName.equals("3")) {
+			return "资源";
+
+		} else if (grandparentName.equals("4")) {
+			return "消息";
+		} else if (grandparentName.equals("5")) {
+			return "工作";
+		} else {
+			return "0";
+		}
+	}
+	
+	
+	
 }

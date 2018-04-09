@@ -29,6 +29,19 @@ public class FunctionsController {
 	private TryCatchFunctionsService tryCatchFunctionsService;
 	
 	
+	
+	/**
+	 * @author Ragty
+	 * @param  映射后台模块管理界面
+	 * @serialData 2018.4.9
+	 * @return
+	 */
+	@RequestMapping("/module.do")
+	public String  getMoudle(){
+		return "module";
+	}
+	
+	
 	/**
 	 * @author Ragty
 	 * @param  获取后台功能树的方法(根据五大板块id)
@@ -70,6 +83,11 @@ public class FunctionsController {
 		
 	    return jsonAnalyze.list2Json(list2);
 	}
+	
+	
+	
+	
+	
 	
 	
 }

@@ -22,7 +22,7 @@ public class Functions implements Serializable {
 	
 	private String resourceName;         //模块具体名字
 	private String resourceID;           //模块具体名字ID
-	private String resourceGrade;        //
+	private String resourceGrade;        //模块等级(一般分为2，3)
 	private String accessPath;           //访问该模块的具体地址
 	private String parentName;
 	private String parentID;
