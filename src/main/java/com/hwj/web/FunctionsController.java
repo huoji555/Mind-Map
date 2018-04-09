@@ -188,6 +188,37 @@ public class FunctionsController {
 	}
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  修改模块位置
+	 * @serialData 2018.4.9
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("/updateModule.do")
+	@ResponseBody
+	public String updateModule(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		String grandparentId = String.valueOf(map.get("grandparentId"));
+		String resourceName = String.valueOf(map.get("resourceName"));
+		String grandparentName = tryCatchFunctionsService.getInt(grandparentId);
+		
+		Functions functions = tryCatchFunctionsService.get("resourceName", resourceName);
+		functions.setGrandparentId(grandparentId);
+		functions.setGrandparentName(grandparentName);
+		functions.setResourceName(resourceName);
+		
+		if(tryCatchFunctionsService.update(functions)){
+			return statusMap.a("1");
+		}
+		
+		return statusMap.a("2");
+	}
+	
 	
 	
 }
