@@ -6,7 +6,8 @@
 	<groupId>com.hwj</groupId>
 	<artifactId>demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
+	
 
 	<name>Mind_Map</name>
 	<description>Demo project for Spring Boot</description>
@@ -59,18 +60,13 @@
 			<artifactId>HikariCP</artifactId>
 			<!-- <scope>runtime</scope> -->
 		</dependency> 
-		<!-- 因为配置了thymeleaf 模板，可以将此注释
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency> -->
 		<!-- thymeleaf 模板   默认包含spring-boot-starter-web-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
-		<!-- 到出为war需要的相关依赖--> 
-		<dependency>  
+		<!-- 导出为war需要的相关依赖--> 
+		<!-- <dependency>  
             <groupId>org.springframework.boot</groupId>  
             <artifactId>spring-boot-starter-thymeleaf</artifactId> 
             <exclusions>
@@ -90,7 +86,7 @@
   			<artifactId>tomcat-servlet-api</artifactId>
   			<version>8.0.36</version>
   			<scope>provided</scope>
-		  </dependency>
+		  </dependency> -->
 		<!-- 连接mysql数据库驱动 -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -164,10 +160,18 @@
 			<scope>test</scope>
 		</dependency>
 		
+		<!-- 后台验证码相关包（之后可去掉） -->
 		<dependency>
-		    <groupId>org.springframework.boot</groupId>
-		    <artifactId>spring-boot-autoconfigure</artifactId>
-		    <version>1.5.6.RELEASE</version>
+		    <groupId>nl.captcha</groupId>
+	 		<artifactId>simplecaptcha</artifactId>
+			<version>1.2.1</version>
+	    </dependency>
+	
+	    <!-- 狗皮药膏(打包时起作用) -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>2.15.0</version>
 		</dependency>
 		
 		
@@ -181,8 +185,8 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<fork>true</fork>
-        			<source>1.7</source>  
-       				<target>1.7</target>
+        			<source>1.8</source>  
+       				<target>1.8</target>
 				</configuration>
 			</plugin>
 			<!-- maven 打包时跳过测试 -->
@@ -205,6 +209,15 @@
 	                </dependency>
 	            </dependencies>
 	        </plugin>
+	        <!-- 打包成war包所需的依赖(无web.xml文件) -->
+	        <!-- <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin> -->
 
 		</plugins>
 	</build>

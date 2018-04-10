@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import net.sf.json.JSON;
-import nl.captcha.Captcha;
+import nl.captcha.Captcha;	
 import nl.captcha.backgrounds.TransparentBackgroundProducer;
 import nl.captcha.gimpy.DropShadowGimpyRenderer;
 import nl.captcha.servlet.CaptchaServletUtil;
