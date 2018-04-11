@@ -392,7 +392,8 @@
 		function xinjian() {
         	clear();
         	
-        	$.messager.prompt('新建图谱', '请输入知识图谱名称', function(r) {
+        	$.messager.prompt('新建图谱', '请输入知识图谱名称', function(options) {
+        		var r = loap(options);
 				if (r) {
 					jm.enable_edit();
 				    
@@ -518,7 +519,8 @@
 		var selected_id = get_selected_nodeid();
 		var selected_name=get_selected_nodeName();
 		
-		$.messager.prompt('编辑标签', '请输入新的标签名', function(r) {
+		$.messager.prompt('编辑标签', '请输入新的标签名', function(options) {
+			var r = loap(options);
 			if (r) {
 				jm.enable_edit();
 				jm.update_node(selected_id, r);   //上面这一部分的作用是改了之后马上显示出来，跟后台保存无关
