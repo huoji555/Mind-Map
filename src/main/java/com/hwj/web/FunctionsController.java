@@ -41,6 +41,13 @@ public class FunctionsController {
 	}
 	
 	
+	
+	@RequestMapping("/introduce.do")
+	public String introduce(){
+		return "introduce";
+	}
+	
+	
 	/**
 	 * @author Ragty
 	 * @param  获取后台功能树的方法(根据五大板块id)
