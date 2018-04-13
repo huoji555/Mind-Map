@@ -19,11 +19,9 @@ import javax.sql.DataSource;
 import java.util.Map;
 
 /**
-  * <p>Company: B505信息技术研究所 </p> 
   * @Description: 第一个数据源的配置类
   * @Create Date: 2017年5月11日下午9:22:12
   * @Version: V1.00 
-  * @Author: 赵良臣
   */
 @Configuration
 @EnableTransactionManagement

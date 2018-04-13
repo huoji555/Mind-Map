@@ -144,7 +144,7 @@ public class UploadFile implements Serializable{
 		this.f_parentid = f_parentid;
 	}
 	
-	@Column(name = "fileStatus")
+	@Column(name = "firstStatus")
 	public String getFirstStatus() {
 		return firstStatus;
 	}
