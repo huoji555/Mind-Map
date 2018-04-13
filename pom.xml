@@ -86,7 +86,7 @@
   			<artifactId>tomcat-servlet-api</artifactId>
   			<version>8.0.36</version>
   			<scope>provided</scope>
-		  </dependency> -->
+		  </dependency> --> 
 		<!-- 连接mysql数据库驱动 -->
 		<dependency>
 			<groupId>mysql</groupId>
