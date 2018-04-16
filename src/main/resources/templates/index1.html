@@ -54,6 +54,7 @@
             success: function(data){
             	
                 if(data.nickname!=null){
+                	sessionStorage.setItem('username', data.nickname);
                     arr = "<img src='images/index/2242.png' style='width:15px;height:15px'>&nbsp;"+data.nickname+"&nbsp;&nbsp;<button id='btn3' onclick='quit()'>退出</button>"
                     $("#log").hide();
                     $("#nickname").html(arr);
@@ -80,6 +81,7 @@
           success: function(data){
           	
           	if(data.a=="1"){
+          		sessionStorage.clear();
           		location.href = "index1.do";	
           	}
           	},
@@ -147,11 +149,6 @@
             $(".verifyImage").attr("src","getVerifyCode.do");
             
         }
-
-        /* jQuery(document).ready(function(){
-            //每次加载页面后重新加载验证码
-            reloadVerifyCode();
-        }); */
     </script>
 
 
@@ -162,7 +159,10 @@
         $(function(){
             //点击超链接局部刷新页面
             $(".head a").click(function(){
-
+            	if(sessionStorage.getItem("username") == null){
+            		alert("请先登录");
+            		return false;
+            	}
                 $("#view").load(this.href);
                 return false;
             });
@@ -319,7 +319,7 @@
                                                 </a></div>
                                             </td>
                                             <td width="25%">
-                                                <div class="head"><a href='####' class="mind">
+                                                <div class="head"><a href='view.do' class="mind">
                                                 <table align="center" width="90%" border="0">
                                                     <tr><td align="center"><img src="images/aType/d2.png" style="width:90px;height:90px" alt="图片加载失败"></td></tr>
                                                     <tr><td>&nbsp;</td></tr>
@@ -328,7 +328,7 @@
                                                 </a></div>
                                             </td>
                                             <td width="25%">
-                                                <div class="head"><a href='stuinfo.do' class="mind">
+                                                <div class="head"><a href='#' class="mind">
                                                 <table width="90%" border="0" align="center">
                                                     <tr><td align="center"><img src="images/aType/d3.png" style="width:90px;height:90px" alt="图片加载失败"></td></tr>
                                                     <tr><td>&nbsp;</td></tr>
@@ -337,7 +337,7 @@
                                                 </a></div>
                                             </td>
                                             <td width="25%">
-                                                <div class="head"><a href='####' class="mind">
+                                                <div class="head"><a href='#' class="mind">
                                                 <table width="90%" border="0" align="center">
                                                     <tr><td align="center"><img src="images/aType/d4.png" style="width:90px;height:90px" alt="图片加载失败"></td></tr>
                                                    <tr><td>&nbsp;</td></tr>
@@ -348,7 +348,7 @@
                                         </tr>
                                         <tr valign="top" class="aa006" height="200px" class="mind">
                                             <td width="25%">
-                                                <div class="head"><a href='####' class="mind">
+                                                <div class="head"><a href='#' class="mind">
                                                 <table width="90%" border="0" align="center">
                                                     <tr><td align="center"><img src="images/aType/d5.png" style="width:90px;height:90px" alt="图片加载失败"></td></tr>
                                                     <tr><td>&nbsp;</td></tr>
@@ -357,7 +357,7 @@
                                                 </a></div>
                                             </td>
                                             <td width="25%">
-                                                <div class="head"><a href='mindmap.do' class="mind">
+                                                <div class="head"><a href='mindmap2.do' class="mind">
                                                 <table width="90%" border="0" align="center">
                                                     <tr><td align="center"><img src="images/aType/d6.png" style="width:90px;height:90px" alt="图片加载失败"></td></tr>
                                                     <tr><td>&nbsp;</td></tr>
