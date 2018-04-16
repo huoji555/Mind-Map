@@ -914,7 +914,8 @@
 	    	 
 	    	 var html="";
 	    	 var adata={"sharetype":"mindnode",
-	    			    "currentPage":currentPage
+	    			    "currentPage":currentPage,
+	    			    "pageSize":12
 	    	           };
 	    	 var data=JSON.stringify(adata);
 	    	 
@@ -974,7 +975,9 @@
 	 		var showPage=4;      //每次显示的页数
 	 		var index;
 	 		var x;               //定义后面页数固定
-	 		var adata={"sharetype":"mindnode"};
+	 		var adata={"sharetype":"mindnode",
+	 				   "pageSize":12
+	 		           };
 	 		var data=JSON.stringify(adata);
 	 		
 	 		$.ajax({
@@ -1058,7 +1061,9 @@
     <script type="text/javascript">
     
      function  freshenShareMindMap(currentPage){
-    	 var adata={"sharetype":"mindnode"};
+    	 var adata={"sharetype":"mindnode",
+    			    "pageSize":12
+    			 };
 	 	 var data=JSON.stringify(adata);
 	 	 
 	 	 $.ajax({
@@ -1088,7 +1093,8 @@
 		
 		var html="";
 		var adata={"parentid":"00100",
-				   "currentPage":currentPage
+				   "currentPage":currentPage,
+				   "pageSize":12
 		          };
 		var data=JSON.stringify(adata);
 		
@@ -1147,7 +1153,9 @@
 		var showPage=4;      //每次显示的页数
 		var index;
 		var x;               //定义后面页数固定
-		var adata={"parentid":"00100"};
+		var adata={"parentid":"00100",
+			       "pageSize":12	
+		    };
 		var data=JSON.stringify(adata);
 		
 		$.ajax({
@@ -1232,7 +1240,9 @@
 	<script type="text/javascript">
 	
 	function freshenMyMindMap(currentPage){
-		var adata={"parentid":"00100"};
+		var adata={"parentid":"00100",
+				   "pageSize":12
+		          };
 		var data=JSON.stringify(adata);
 		
 		$.ajax({

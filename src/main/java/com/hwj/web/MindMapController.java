@@ -177,7 +177,7 @@ public class MindMapController {
 		HttpSession session = request.getSession();
 		String userid = String.valueOf(session.getAttribute("username"));
 		Integer currentPage=(Integer) map.get("currentPage");
-		Integer pageSize=12;
+		Integer pageSize = (Integer) map.get("pageSize");
 		
 		System.out.println("要看看当前页数"+currentPage);
 		
@@ -1342,8 +1342,8 @@ public class MindMapController {
 		
 		Map<String, Object> map1 = jsonAnalyze.json2Map(requestJsonBody);
 		String sharetype=String.valueOf(map1.get("sharetype"));
-		Integer currentPage=(Integer) map1.get("currentPage");
-		Integer pageSize=12;
+		Integer currentPage= (Integer) map1.get("currentPage");
+		Integer pageSize= (Integer) map1.get("pageSize");
 		
 		List<Share> list = null;
 		try {
@@ -1398,7 +1398,7 @@ public class MindMapController {
 		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
 		String sharetype=String.valueOf(map.get("sharetype"));
 		
-		Integer pageSize=12;
+		Integer pageSize= (Integer) map.get("pageSize");
 		Long total;
 		try {
 			total=this.tryCatchShareService.countShareByOne("sharetype", sharetype);
@@ -1650,7 +1650,7 @@ public class MindMapController {
 		String userid = String.valueOf(session.getAttribute("username"));
 		
 		Long total=null;
-    	Integer pageSize=12;
+    	Integer pageSize=(Integer) map.get("pageSize");
     	try {
     		total=this.tryCatchMindMapService.countByTwoMind("userid", "parentid", userid, parentid);
     		total=(total-1)/pageSize+1;   
@@ -1692,7 +1692,7 @@ public class MindMapController {
 			return statusMap.a("2");
 		}
 		
-		Integer pageSize=12;
+		Integer pageSize= (Integer) map.get("pageSize");
 		List<MindNode> list=tryCatchMindMapService.getMindNodeByPage(currentPage, pageSize, "parentid", parentid);
 		
 		if(list.equals(null) || list.equals("null")){
@@ -1743,7 +1743,7 @@ public class MindMapController {
 		Map<String, Object> map =jsonAnalyze.json2Map(requestJsonBody);
 		String parentid = String.valueOf(map.get("parentid"));
 		
-		Integer pageSize = 12;
+		Integer pageSize = (Integer) map.get("pageSize");
 		Long total=null;
 		
 		try {
@@ -1779,7 +1779,7 @@ public class MindMapController {
 		Map<String, Object> map =jsonAnalyze.json2Map(requestJsonBody);
 		String realName =  String.valueOf(map.get("realName"));
 		Integer currentPage  = (Integer) map.get("currentPage");
-		Integer pageSize = 12;
+		Integer pageSize = (Integer) map.get("pageSize");
 		
 		String userid=null;
 		try {
@@ -1848,7 +1848,7 @@ public class MindMapController {
 		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
 		String realName=String.valueOf(map.get("realName"));
 		
-		Integer pageSize=12;
+		Integer pageSize = (Integer) map.get("pageSize");
 		String userid=null;
 		try {
 			userid=this.tryCatchUserService.getOneLoginUser("realName", realName).getNickName();
