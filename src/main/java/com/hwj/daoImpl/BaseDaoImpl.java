@@ -109,6 +109,7 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 		String hql = " from " + entityClass.getName()
 				+ " as model where model." + propertyName1 + " = :name"
 				+ " and " + " model." + propertyName2 + " = :pd";
+		System.out.println("#######"+hql);
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("name", value1);
 		query.setParameter("pd", value2);

@@ -285,6 +285,25 @@ public class TryCatchMindMapService {
 		return total;
 	}
 	
+	/**
+	 * @author Ragty
+	 * @param  模糊匹配多个字段
+	 * @serialData 2018.4.16
+	 * @param value1
+	 * @return
+	 */
+	public List<MindNode> queryMindNode(Object value1, Integer currentPage, Integer pageSize){
+		
+		List<MindNode> list = null;
+		try {
+			list = iMindNodeService.selectMindNode(value1, currentPage, pageSize);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+		return list;
+	}
+	
 	
 	/**
 	 * @author Ragty
