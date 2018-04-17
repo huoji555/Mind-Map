@@ -387,10 +387,6 @@
 	function searchMindmap(currentPage) {
 		var searchText = $("#searchText").val();
 		
-		if(searchText == ""){
-			return false;
-		}
-	
 	    var html="";
 	    var adata={"sharetype":"mindnode",
 	        "currentPage":currentPage,
@@ -404,7 +400,7 @@
 	        dataType:"json",
 	        contentType:"application/json",
 	        data:data,
-	        url:"getShareMindNodeByName.do",
+	        url:"getSearchMindByName.do",
 	
 	        success:function(data){
 	            if(data.a=="3"){
@@ -431,7 +427,7 @@
 	                    });
 	
 	                $("#jsmind_container").html(html);
-	                getShareMindMapPage(currentPage);
+	                getSearchPage(currentPage);
 	            }
 	
 	        },
@@ -448,6 +444,7 @@
 	    
 	function getSearchPage(currentPage){
 		
+		var searchText = $("#searchText").val();
 		var html="";
 		var lastPage;
 		var nextPage;
@@ -455,7 +452,8 @@
 		var index;
 		var x;               //定义后面页数固定
 		var adata={"sharetype":"mindnode",
-			       "pageSize":9	
+			       "pageSize":9,
+			       "searchMessage":searchText
 		          };
 		var data=JSON.stringify(adata);
 	
@@ -464,7 +462,7 @@
 			contentType:"application/json",
 			dataType:"json",
 			data:data,
-			url:"getShareMindNodeTotal.do",
+			url:"getSearchMindPage.do",
 	
 			success:function(data){
 				if(data==null){
@@ -472,7 +470,7 @@
 				}else{
 					html+="<div align='center'>";
 					html+="<ul class='pagination'>";
-					html+="<li><span onclick='getShareMindMap(1)'>首页</span></li>";
+					html+="<li><span onclick='searchMindmap(1)'>首页</span></li>";
 	
 					lastPage=currentPage;
 					if(lastPage<=1){
@@ -481,14 +479,14 @@
 						lastPage--;
 					}
 	
-					html+="<li><span onclick='getShareMindMap("+lastPage+")'>上一页</span></li>";
+					html+="<li><span onclick='searchMindmap("+lastPage+")'>上一页</span></li>";
 	
 					if(data<=showPage){
 						for(var i=1;i<=data;i++){
 	                        if(currentPage==i){
-	                            html+="<li class='active'><span onclick='getShareMindMap("+i+")'>"+i+"</span></li>";
+	                            html+="<li class='active'><span onclick='searchMindmap("+i+")'>"+i+"</span></li>";
 	                        } else{
-	                            html+="<li><span onclick='getShareMindMap("+i+")'>"+i+"</span></li>";
+	                            html+="<li><span onclick='searchMindmap("+i+")'>"+i+"</span></li>";
 	                        }
 						}
 					}else{
@@ -500,7 +498,7 @@
 						}
 	
 						for(var i=x;i<index;i++){
-							html+="<li><span onclick='getShareMindMap("+i+")'>"+i+"</span></li>";
+							html+="<li><span onclick='searchMindmap("+i+")'>"+i+"</span></li>";
 						}
 					}
 	
@@ -512,8 +510,8 @@
 						nextPage=data;
 					}
 	
-					html+="<li><span onclick='getShareMindMap("+nextPage+")'>下一页</span></li>";
-					html+="<li><span onclick='getShareMindMap("+data+")'>尾页</span></li>";
+					html+="<li><span onclick='searchMindmap("+nextPage+")'>下一页</span></li>";
+					html+="<li><span onclick='searchMindmap("+data+")'>尾页</span></li>";
 					html+="</ul>";
 					html+="</div>";
 					$("#jsmind_container").append(html);

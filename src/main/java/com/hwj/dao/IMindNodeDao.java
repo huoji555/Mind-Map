@@ -9,4 +9,6 @@ public interface IMindNodeDao extends IBaseDao<MindNode> {
 	List<MindNode> queryMindMap(Object value1, Integer currentPage,
 			Integer pageSize);
 
+	Long searchMindPage(Object value1);
+
 }

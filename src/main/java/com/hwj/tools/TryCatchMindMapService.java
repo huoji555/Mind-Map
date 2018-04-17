@@ -307,6 +307,26 @@ public class TryCatchMindMapService {
 	
 	/**
 	 * @author Ragty
+	 * @param  获得查询后获取到的总页数
+	 * @serialData 2018.4.17
+	 * @param value1
+	 * @return
+	 */
+	public Long queryMindPage(Object value1){
+
+		Long total = null;
+		try {
+			total = iMindNodeService.searchMindPage(value1);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+		return total;
+	}
+	
+	
+	/**
+	 * @author Ragty
 	 * @param 获取到点击节点之后的所有子节点
 	 * @serialData 2018.3.6
 	 * @param nodeid

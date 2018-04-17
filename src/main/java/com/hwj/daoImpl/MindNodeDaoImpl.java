@@ -1,5 +1,7 @@
 package com.hwj.daoImpl;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -8,12 +10,9 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.hwj.dao.IMindNodeDao;
-import com.hwj.entity.LoginUser;
 import com.hwj.entity.MindNode;
 
 @Repository("IMindNodeDao")
@@ -55,5 +54,29 @@ public class MindNodeDaoImpl extends BaseDaoImpl<MindNode> implements
 			return null;
 		}
 	}
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  根据查询的信息获取到的总页数
+	 * @serialData 2018.4.17
+	 */
+	@Override
+	public Long searchMindPage(Object value1){
+		// TODO Auto-generated method stub
+		String hql = "select count(*) from  MindNode as model where model.nodename like '%" + value1
+				+ "%'";
+		hql += " or model.userid = (select name from User as model2 where model2.real_name like '%"+value1+"%')";
+		hql += " or model.userid like '%"+value1+"%'";
+		
+		System.out.println(getCurrentSession().createSQLQuery(hql));
+		
+		Query query = getCurrentSession().createSQLQuery(hql);
+		BigInteger big = (BigInteger) query.uniqueResult();
+		Long total = big.longValue();
+		return total;
+	}
+	
+	
 	
 }

@@ -49,6 +49,19 @@ public class MindNodeServiceImpl extends BaseServiceImpl<MindNode> implements
 		}
 		return list;
 	}
+
+	
+	/**
+	 * @author Ragty
+	 * @param  获取查询后的总页数
+	 * @serialData 2018.4.17
+	 */
+	@Override
+	public Long searchMindPage(Object value1) {
+		// TODO Auto-generated method stub
+		Long total = this.iMindNodeDao.searchMindPage(value1);
+		return total;
+	}
 	
 
 	

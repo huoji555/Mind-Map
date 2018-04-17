@@ -32,10 +32,18 @@ public class StudyController {
     private TryCatchMindMapService tryCatchMindMapService;
 	
 	
+    
+    /**
+     * @author Ragty
+     * @param  映射学习首页面
+     * @serialData 2018.4.17
+     * @return
+     */
 	@RequestMapping("study.do")
 	public String study(){
 		return "study";
 	}
+	
 	
 	/**
 	 * @author Ragty
@@ -46,7 +54,7 @@ public class StudyController {
 	 * @return
 	 * @throws IOException
 	 */
-	@RequestMapping("/getShareMindNodeByName.do")
+	@RequestMapping("/getSearchMindByName.do")
 	@ResponseBody
 	public String getShareMindNodeByName(@RequestBody String requestJsonBody,
 			HttpServletRequest request) throws IOException{
@@ -92,5 +100,34 @@ public class StudyController {
 		
 	}
 	
+	
+	/**
+	 * @author Ragty
+	 * @param  获取查询信息后的总页数
+	 * @serialData 2018.4.17
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("/getSearchMindPage.do")
+	@ResponseBody
+	public Long getSearchMindPage(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		String queryMessage = String.valueOf(map.get("searchMessage"));
+		
+		Integer pageSize = (Integer) map.get("pageSize");
+		
+		Long total = tryCatchMindMapService.queryMindPage(queryMessage);
+		total=(total-1)/pageSize+1;
+		
+		if( total.equals("null")||total.equals(null) ){
+			return null;
+		}
+		
+		return total;
+	}
 	
 }
