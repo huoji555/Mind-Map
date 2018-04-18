@@ -209,15 +209,6 @@
 	                </dependency>
 	            </dependencies>
 	        </plugin>
-	        <!-- 打包成war包所需的依赖(无web.xml文件) -->
-	        <!-- <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.0.0</version>
-                <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                </configuration>
-            </plugin> -->
 
 		</plugins>
 	</build>

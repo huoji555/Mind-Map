@@ -222,6 +222,7 @@
 		/* 获取分享过的思维导图 */ //存在一个很大的弊端就是分享后其它用户也可操纵它，不为只读状态,右键菜单的锅
 		function open_ajax(mapid,name) {
 		clearShare();
+		document.getElementById('nodeid').value = mapid;
 		$('#mapid').attr("value",mapid);
 		var da={"nodeid":mapid,
 				"userid":name
@@ -280,7 +281,7 @@
 			function sharemindmap(){
 		    	
 		    	var nodeid=document.getElementById('nodeid').value; //从打开历史记录里直接获取
-				var da={"nodeid":nodeid};
+		    	var da={"nodeid":nodeid};
 				        $.ajax({
 					        type : "POST",
 							url : "setShare.do",
@@ -294,6 +295,8 @@
 									$.messager.alert("操作失败","已分享过该知识图谱","info");
 								} else if(json.a=="2"){
 									$.messager.alert("操作失败","请登录后再操作","info");
+								} else if(json.a=="5"){
+									$.messager.alert("操作失败","不是您的知识图谱","info");
 								} else {
 									$.messager.alert("操作提示", "请选择知识图谱！", "info");
 								}
@@ -472,7 +475,8 @@
 							}
 							else if(json.state == "1") {
 								datas=eval('(' + json.datas + ')');
-			        			jm.show(datas);
+								document.getElementById('nodeid').value = datas.data.id;
+								jm.show(datas);
 							}else {
 								$.messager.alert("操作提示", "找不到对应的知识图谱！", "info");
 							}
