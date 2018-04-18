@@ -226,6 +226,7 @@
 	    <!-- 存在一个很大的弊端就是分享后其它用户也可操纵它，不为只读状态,右键菜单的锅 -->
 	    function open_ajax(mapid,name) {
 	    	 clearShare();
+	    	 document.getElementById('nodeid').value = mapid;
 		     $('#mapid').attr("value",mapid);
 		     var da={"nodeid":mapid,
 				     "userid":name
@@ -396,7 +397,6 @@
         		var r = loap(options);
 				if (r) {
 					jm.enable_edit();
-				    
 					var da = {"nodeName":r};
 					
 					$.ajax({
@@ -411,6 +411,7 @@
 							}
 							else if(json.state == 1) {
 								datas=eval('(' + json.datas + ')');
+								document.getElementById('nodeid').value = datas.data.id;
 			        			jm.show(datas);
 							}else {
 								$.messager.alert("操作提示", "找不到对应的知识图谱！", "info");
@@ -661,8 +662,9 @@
 					url : "saveMindNode2.do",
 					data : da,
 					
-					success : function(json) {
-						
+					success : function(data){
+						alert("2323");
+						var json = $.parseJSON(data);
 						if (json.a == "1") {
 							$('#mapid').attr("value", json.mapid);
 						} else if(json.a=="2"){
@@ -1491,7 +1493,18 @@
  	
 	</script>
 		
-		
+	<!-- 解决输入特殊字符的问题（标签转换传送门） -->
+	<script type="text/javascript">
+	   
+	  function loap(pee){
+		  var str = pee;
+		  var str1 = str.replace(/&/g,"&amp;");
+		  var str2 = str1.replace(/>/g,"&gt;");
+		  var str3 = str2.replace(/</g,"&lt;");	
+		  return str3;
+	  }
+	
+	</script>	
 	
 		
     <!-- 打开文件-->
