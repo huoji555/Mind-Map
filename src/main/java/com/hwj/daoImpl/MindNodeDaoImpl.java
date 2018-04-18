@@ -40,10 +40,11 @@ public class MindNodeDaoImpl extends BaseDaoImpl<MindNode> implements
 	@Override
 	public List<MindNode> queryMindMap(Object value1, Integer currentPage, Integer pageSize) {
 		// TODO Auto-generated method stub
-		String hql = "select * from  MindNode as model where model.nodename like '%" + value1
+		String hql = "select * from  MindNode as model where (model.nodename like '%" + value1
 				+ "%'";
 		hql += " or model.userid = (select name from User as model2 where model2.real_name like '%"+value1+"%')";
 		hql += " or model.userid like '%"+value1+"%'";
+		hql += " )and model.parentid = '00100'";
 		Query query = ((SQLQuery) getCurrentSession().createSQLQuery(hql).setFirstResult((currentPage-1)*pageSize).setMaxResults(pageSize)).addEntity(MindNode.class);
 				/*.addEntity(MindNode.class);*/
 		@SuppressWarnings("unchecked")
@@ -64,10 +65,11 @@ public class MindNodeDaoImpl extends BaseDaoImpl<MindNode> implements
 	@Override
 	public Long searchMindPage(Object value1){
 		// TODO Auto-generated method stub
-		String hql = "select count(*) from  MindNode as model where model.nodename like '%" + value1
+		String hql = "select count(*) from  MindNode as model where (model.nodename like '%" + value1
 				+ "%'";
 		hql += " or model.userid = (select name from User as model2 where model2.real_name like '%"+value1+"%')";
 		hql += " or model.userid like '%"+value1+"%'";
+		hql += " )and model.parentid = '00100'";
 		
 		System.out.println(getCurrentSession().createSQLQuery(hql));
 		
