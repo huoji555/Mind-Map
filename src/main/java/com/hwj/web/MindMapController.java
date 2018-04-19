@@ -1777,16 +1777,9 @@ public class MindMapController {
 			HttpServletRequest request) throws IOException{
 		
 		Map<String, Object> map =jsonAnalyze.json2Map(requestJsonBody);
-		String realName =  String.valueOf(map.get("realName"));
+		String queryMessage =  String.valueOf(map.get("queryMessage"));
 		Integer currentPage  = (Integer) map.get("currentPage");
 		Integer pageSize = (Integer) map.get("pageSize");
-		
-		String userid=null;
-		try {
-			userid=this.tryCatchUserService.getOneLoginUser("realName", realName).getNickName();
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
 		
 		HttpSession session=request.getSession();
 		String username=String.valueOf(session.getAttribute("username"));
@@ -1795,10 +1788,8 @@ public class MindMapController {
 			return statusMap.a("2");
 		}
 		
-		List<MindNode> list = tryCatchMindMapService.getMindNodeByPage(
-				currentPage, pageSize, "userid", userid, "parentid", "00100");
+		List<MindNode> list = tryCatchMindMapService.queryMindNode(queryMessage, currentPage, pageSize);
 		
-		System.out.println(list == null);
 		if( list == null ){
 			return statusMap.a("3");
 		}
@@ -1846,28 +1837,14 @@ public class MindMapController {
 			HttpServletRequest request) throws IOException{
 		
 		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
-		String realName=String.valueOf(map.get("realName"));
+		String queryMessage = String.valueOf(map.get("queryMessage"));
 		
 		Integer pageSize = (Integer) map.get("pageSize");
-		String userid=null;
-		try {
-			userid=this.tryCatchUserService.getOneLoginUser("realName", realName).getNickName();
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		
-		if( (userid.equals("null"))||(userid.equals(null)) ){
-			return null;        
-		}
 		
 		Long total=null;
-		try {
-			total=this.tryCatchMindMapService.countByTwoMind("userid", "parentid", userid, "00100");
-			total=(total-1)/pageSize+1; 
-		} catch (Exception e) {
-			// TODO: handle exception
-			return null;
-		}
+		
+		total= tryCatchMindMapService.queryMindPage(queryMessage);
+		total=(total-1)/pageSize+1; 
 		
 		if( total.equals("null")||total.equals(null) ){
 			return null;
