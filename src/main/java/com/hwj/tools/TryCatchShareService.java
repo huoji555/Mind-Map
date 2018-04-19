@@ -127,4 +127,46 @@ public class TryCatchShareService {
 	}
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  获取学习界面搜索后的知识图谱
+	 * @serialData 2018.4.19
+	 * @param value
+	 * @param currentPage
+	 * @param pageSize
+	 * @return
+	 */
+	public List<Share> queryShareMind(Object value,Integer currentPage,Integer pageSize){
+		
+		List<Share> list = null;
+		try {
+			list = iShareService.queryShareMind(value, currentPage, pageSize);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+		return list;
+	}
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  获取到学习界面查询条件后得到的总页数
+	 * @serialData  2018.4.19
+	 * @param value
+	 * @return
+	 */
+	public Long queryShareMindPage(Object value){
+		
+		Long total = null;
+		try {
+			total = iShareService.searchShareMindPage(value);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+		return total;
+	}
+	
+	
 }

@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hwj.entity.LoginUser;
 import com.hwj.entity.MindNode;
+import com.hwj.entity.Share;
 import com.hwj.json.JsonAnalyze;
 import com.hwj.tools.StatusMap;
 import com.hwj.tools.TryCatchMindMapService;
+import com.hwj.tools.TryCatchShareService;
 
 @Controller
 public class StudyController {
@@ -30,6 +32,8 @@ public class StudyController {
 	private StatusMap statusMap;
     @Autowired
     private TryCatchMindMapService tryCatchMindMapService;
+    @Autowired
+    private TryCatchShareService tryCatchShareService;
 	
 	
     
@@ -71,7 +75,7 @@ public class StudyController {
 			return statusMap.a("2");
 		}
 		
-		List<MindNode> list = tryCatchMindMapService.queryMindNode(queryMessage, currentPage, pageSize);
+		List<Share> list = tryCatchShareService.queryShareMind(queryMessage, currentPage, pageSize);
 		
 		if( list == null ){
 			return statusMap.a("3");
@@ -82,13 +86,13 @@ public class StudyController {
 		try {
 			
 			for(int i=0; i< list.size(); i++){
-				MindNode mindNode = list.get(i);
+				Share share = list.get(i);
 				Map<String, String> map2 = new HashMap<String, String>();
 				
-				map2.put("nodename",mindNode.getNodename() );
-	        	map2.put("userid",mindNode.getUserid() );
-	        	map2.put("nodeid",mindNode.getNodeid() );
-	        	map2.put("realName",mindNode.getUserid() );
+				map2.put("nodename",share.getMindName() );
+	        	map2.put("userid",share.getUserid() );
+	        	map2.put("nodeid",share.getZsdid() );
+	        	map2.put("realName",share.getUserid() );
 				list2.add(map2);
 			}
 			
@@ -120,7 +124,7 @@ public class StudyController {
 		
 		Integer pageSize = (Integer) map.get("pageSize");
 		
-		Long total = tryCatchMindMapService.queryMindPage(queryMessage);
+		Long total = tryCatchShareService.queryShareMindPage(queryMessage);
 		total=(total-1)/pageSize+1;
 		
 		if( total.equals("null")||total.equals(null) ){

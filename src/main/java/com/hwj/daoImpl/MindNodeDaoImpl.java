@@ -1,6 +1,5 @@
 package com.hwj.daoImpl;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -71,14 +70,12 @@ public class MindNodeDaoImpl extends BaseDaoImpl<MindNode> implements
 		hql += " or model.userid like '%"+value1+"%'";
 		hql += " )and model.parentid = '00100'";
 		
-		System.out.println(getCurrentSession().createSQLQuery(hql));
-		
 		Query query = getCurrentSession().createSQLQuery(hql);
 		BigInteger big = (BigInteger) query.uniqueResult();
 		Long total = big.longValue();
 		return total;
 	}
 	
-	
+   
 	
 }
