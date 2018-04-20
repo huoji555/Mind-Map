@@ -58,13 +58,13 @@
             $.each(
                 data,
                 function(i,a){
-                	
+                	alert(a.filePath);
                 	html+="<tr>";
                 	html+="<td onclick='feel()' id='qwer'><image src='images/hotai/word.jpg'  width='25px' height='25px'>"+a.f_name+"</image></td>";       
                 	html+="<td onclick='feel()'>"+a.uploadTime+"</td>";
                     html+="<td>"+a.fileType+"</td>";
-                	html+="<td><image src='images/hotai/share.jpg' width='25px' height='25px' data-target='#shareCollection' data-toggle='modal'>";
-                	html+="<image src='images/hotai/delete.png' width='25px' height='25px' onclick='collectionDelete("+a.f_id+","+a.nodeid+")'></td>";
+                	html+="<td><div onclick='demo(\""+a.filePath+"\")'><image src='images/hotai/share.jpg' width='25px' height='25px' data-target='#shareCollection' data-toggle='modal'>";
+                	html+="<image src='images/hotai/delete.png' width='25px' height='25px' onclick='collectionDelete("+a.f_id+","+a.nodeid+")'></div></td>";
                 	html+="</tr>";
                 	window.s=++i;
           	     
@@ -130,31 +130,17 @@
     </script>
     
     
-    
-    
-    <!-- 写一个分享的方法,放在模态框里把 -->
-    <script type="text/javascript">
-    /* wx54a2de6f4d4a187e */
-    
-    
-    
-    </script>
-    
-    
-    
-    
-   
-   
+  <!-- 将拿到的值动态生成分享链接 -->  
   <script type="text/javascript">
   
-   $(function(){
-	   $("#hwj").click(function(){
-		   alert("hwj zuishaui");
-	   });
-   });
-   
-   function  feel(){
-	   alert("baba");
+   function demo(sharePath){
+	   
+	   $("#qzone").attr("href","http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url="+sharePath);
+	   $("#qq").attr("href","https://connect.qq.com/widget/shareqq/index.html?url="+sharePath);
+	   $("#weibo").attr("href","http://service.weibo.com/share/share.php?url="+sharePath);
+	   $("#douban").attr("href","http://shuo.douban.com/!service/share?href="+sharePath);
+	   $("#facebook").attr("href","https://www.facebook.com/sharer/sharer.php?u="+sharePath);
+	   $("#google").attr("href","https://plus.google.com/share?url="+sharePath);
    }
    
    </script> 
@@ -180,7 +166,14 @@
 					<h4 class="modal-title" id="newlabel">分享功能</h4>
 					<div class="modal-body">
 				          
-				    <div class="social-share" data-sites="weibo,qq,qzone,tencent,wechat,douban,diandian,linkedin" align="center"></div>
+				    <!-- <div class="social-share" data-sites="weibo,qq,qzone,tencent,wechat,douban,diandian,linkedin" align="center"></div> -->
+					<div class="social-share" data-initialized="true">
+					<a id="weibo" href="#" class="social-share-icon icon-weibo" target="_blank"></a> 
+					<a id="qq"    href="#" class="social-share-icon icon-qq" target="_blank"></a>
+					<a id="qzone" href="#" class="social-share-icon icon-qzone" target="_blank"></a> 
+					<a id="douban" href="#" class="social-share-icon icon-douban" target="_blank"></a> 
+					<a id="facebook" href="#" class="social-share-icon icon-facebook" target="_blank"></a> 
+					<a id="google" href="#" class="social-share-icon icon-google" target="_blank"></a> </div>
 						
 					</div>
 					<div class="modal-footer">
