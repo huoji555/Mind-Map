@@ -137,45 +137,36 @@ public class FileStreamController {
 		String realPath = request.getSession().getServletContext()
 				.getRealPath("/");
 		String fileURL = realPath + "upload";
-		String trueURL = "upload";
 		
 		BeSaveFileUitl be = new BeSaveFileUitl();
 		be.setFileExtension(fileExtension);
 		be.setFilesByte(QN);
 		be.setFileURL(fileURL);
 		
-		BeSaveFileUitl be1 = new BeSaveFileUitl();
-		be1.setFileExtension(fileExtension);
-		be1.setFilesByte(QN);
-		be1.setFileURL(trueURL);
-		
 		String ip = InetAddress.getLocalHost().getHostAddress();
 		
-		String Url = "";
+		
 		String Url2 = "";
 		String Url3 = "";
 		String[] string = this.fileUpload.saveFile(be);
-		String[] string1 = this.fileUpload.saveFile(be1);
 		
-		String URL = string[1];
-		String url = URL.replaceAll("\\\\", "/") + "." + fileExtension;
-		
-		String URL1 = string1[1];
-		String url1 = URL1.replaceAll("\\\\", "/") + "." + fileExtension;
-		
-		String url2 = URL1.replaceAll("\\\\", "/") + "." + fileExtension;
-		
-		Url2 = "http://" + ip + ":8080/upload"
-				+ url2.substring(url1.indexOf("/"));
-		Url = "http://" + ip + ":8080/" + url.substring(url1.indexOf("/"));
-		Url3 = url;
+		//文件上传成功的话
+		if ("1".equals(string[0])) {
+			String URL = string[1];
+			// 文件的真实路径，将之代替截图路径存入
+			String url = URL.replaceAll("\\\\", "/") + "." + fileExtension;
+			String real = realPath.replaceAll("\\\\", "/");
+			
+			Url3 = url; // 文件在服务器中的真实路径，用来删除
+			Url2 = "http://"  + ip + ":8080/"+ url.split(real)[1]; //代表服务器中的地址
+
+		}
 		
 		UploadFile uploadFile = new UploadFile();
 		uploadFile.setFilename(fileStream.getFilename());
 		uploadFile.setFiles(f_id); // 文件id
 		uploadFile.setFilepath(Url2); // 文件的输出路径（在服务器上的访问路径）
 		uploadFile.setFileroot(Url3); // 文件在pc上的实际路径
-		uploadFile.setOldfilepath(Url); // 文件在实际中的路径(没用)
 		uploadFile.setZlms("该资料现在没有描述");
 		uploadFile.setFiletype(fileStream.getFileType());
 		uploadFile.setUploadtime(fileStream.getUploadTime());

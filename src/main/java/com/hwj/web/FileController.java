@@ -362,7 +362,6 @@ public class FileController {
 		uploadFile.setFiles(f_id); // 文件id
 		uploadFile.setFilepath(Url2); // 文件的输出路径（在服务器上的访问路径）
 		uploadFile.setFileroot(Url3); // 文件在pc上的实际路径
-		uploadFile.setOldfilepath(""); // 文件在实际中的路径(没用)
 		uploadFile.setZlms("该资料现在没有描述");
 		uploadFile.setFiletype(fileType);
 		uploadFile.setUploadtime(f_uploadtime);
