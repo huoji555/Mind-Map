@@ -315,7 +315,6 @@ public class FileController {
 				+ "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
 		String fileURL = realPath + "upload";
-		String trueURL = "upload";
 
 		// 存相对路径
 		BeSaveFileUitl be = new BeSaveFileUitl();
@@ -323,45 +322,19 @@ public class FileController {
 		be.setFilesByte(newsPageByte);
 		be.setFileURL(fileURL);
 
-		// 这个用来存绝对路径
-		BeSaveFileUitl be1 = new BeSaveFileUitl();
-		be1.setFileExtension(fileExtension);
-		be1.setFilesByte(newsPageByte);
-		be1.setFileURL(trueURL);
-
-		String Url = "";
 		String Url2 = "";
 		String Url3 = "";
 		String[] string = this.fileUpload.saveFile(be);
-		String[] string1 = this.fileUpload.saveFile(be1);
 
+		//代表文件上传成功
 		if ("1".equals(string[0])) {
 			String URL = string[1];
 			// 文件的真实路径，将之代替截图路径存入
 			String url = URL.replaceAll("\\\\", "/") + "." + fileExtension;
-
-			String URL1 = string1[1];
-			String url1 = URL1.replaceAll("\\\\", "/") + "." + fileExtension;
-
-			String url2 = "";
-
-			if (fileType.equals("video")) {
-				url2 = URL1.replaceAll("\\\\", "/") + "." + fileExtension;
-			}
-			if (fileType.equals("doc")) {
-				url2 = URL1.replaceAll("\\\\", "/") + "." + fileExtension;
-			}
-			if (fileType.equals("other")) {
-				url2 = URL1.replaceAll("\\\\", "/") + "." + fileExtension;
-			}
-			if (fileType.equals("picture")) {
-				url2 = URL1.replaceAll("\\\\", "/") + "." + fileExtension;
-			}
-
-			Url2 = "http://" + ip + ":8080/upload"
-					+ url2.substring(url1.indexOf("/"));// 文件的输出路劲，用来打开文件
-			Url = "http://" + ip + ":8080/" + url.substring(url1.indexOf("/"));// 文件的输入路径
+			String real = realPath.replaceAll("\\\\", "/");
+			
 			Url3 = url; // 文件在服务器中的真实路径，用来删除
+			Url2 = "http://"  + ip + ":8080/"+ url.split(real)[1]; //代表服务器中的地址
 
 		}
 
@@ -389,7 +362,7 @@ public class FileController {
 		uploadFile.setFiles(f_id); // 文件id
 		uploadFile.setFilepath(Url2); // 文件的输出路径（在服务器上的访问路径）
 		uploadFile.setFileroot(Url3); // 文件在pc上的实际路径
-		uploadFile.setOldfilepath(Url); // 文件在实际中的路径(没用)
+		uploadFile.setOldfilepath(""); // 文件在实际中的路径(没用)
 		uploadFile.setZlms("该资料现在没有描述");
 		uploadFile.setFiletype(fileType);
 		uploadFile.setUploadtime(f_uploadtime);
