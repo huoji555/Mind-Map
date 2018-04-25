@@ -9,6 +9,7 @@
 <link rel="stylesheet" type="text/css" href="mindmap/easyui.css">
 <link rel="stylesheet" type="text/css" href="mindmap/icon.css">
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="999/zeroModal.css" >
 
 <link rel="stylesheet" href="assets/css/font-awesome.min.css" />
 <link rel="stylesheet" href="/ifont/css/font-awesome.min.css" />
@@ -122,6 +123,7 @@
 	<script src="mindmap/jsmind.js" type="text/javascript"></script>
 	<script src="mindmap/jsmind.draggable.js" type="text/javascript"></script> 
 	<script type="text/javascript" src="mindmap/jsmind.screenshot.js"></script>
+	<script type="text/javascript" src="999/zeroModal.min.js"></script>
 	
 	<style type="text/css">
 			#jsmind_container {
@@ -864,13 +866,15 @@
 		/* 根据点击获取子节点的type，显示不同的菜单  */
 		$("jmnode").live('click', function(e) {
 				       
-			$('#showbiji').attr('src', "biji.do");
+			/* $('#showbiji').attr('src', "biji.do");
 				$('#biji').menu();
 				$('#biji').menu('show', { //菜单EasyUI
 					left : e.pageX,
 					top : e.pageY - 250,
 					hideOnUnhover : false
-				});
+				}); */
+				var a = "biji.do";
+				_iframe(a);
 				
 		});
 		
@@ -1283,6 +1287,30 @@
 	  }
 	
 	</script>
+	
+	
+	<!-- 动态在小窗口中显示文件的方法-->
+    <script type="text/javascript">
+      
+	  function _iframe(a) {
+	  	  
+	     zeroModal.show({
+            title: '在线预览',
+            iframe: true,
+            url: a,
+            width: '80%',
+            height: '80%',
+            cancel: true,                //允许关闭
+            resize: true,                //允许移动
+            max: true,                   //允许最大化
+            min: true,                   //允许最小化
+            dragHandle: 'container',     //点击任意地方框拖动(旺仔摇滚冻即视感)
+            opacity: 0.8                 //设置遮罩透明度
+	            
+	       });
+	  }
+  
+    </script>
 			
 			
 	<!-- 打开文件-->

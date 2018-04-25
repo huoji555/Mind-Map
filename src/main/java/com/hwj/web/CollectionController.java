@@ -147,8 +147,17 @@ public class CollectionController {
 		HttpSession session = request.getSession();
 		String userid = String.valueOf(session.getAttribute("username"));
 		
+		System.out.println("------------------");
+		System.out.println("Nodeid"+nodeid);
+		System.out.println("f_id"+f_id);
+		System.out.println("--------------------");
+		
 		UploadFile uploadFile = tryCatchUploadFileService.
-				getUploadFile("userid", "zsdid", "files", userid, nodeid, f_id);
+				getUploadFile("userid", "files", userid, f_id);
+		
+		System.out.println("------------------------------");
+		System.out.println(uploadFile);
+		System.out.println("------------------------------");
 		
 		if(tryCatchFileCollectionService.
 				haveFileCollection("userid", userid, "f_id", f_id )){
