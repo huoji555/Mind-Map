@@ -392,6 +392,46 @@
   </script>
   
   
+  <!-- AJAX上传文件 -->
+  <script type="text/javascript">
+  
+	  function upload(){
+		 
+		  var formData = new FormData();
+	  	  var name = $("#wenjian").val();
+	  	  formData.append("wenjian",$("#wenjian")[0].files[0]);
+	  	  formData.append("upload_parentid",$("#upload_hide").val());
+	  	  
+	      $.ajax({
+	          url: '/uploadallfile.do',  
+	          type: 'post',
+	          data : formData, 
+	          processData : false, 
+	          contentType : false,
+	        
+	          success: function (data) {
+	          	var json = $.parseJSON(data);
+	                  if(json.a == "1"){
+	                  	  getAll(0,0);  //上传成功
+	                  } else if(json.a == "2"){
+	                	  alert("用户登录错误");
+	                	  getAll(0,0);
+	                  } else if(json.a == "3"){
+	                	  alert("已上传过该文件");
+	                	  getAll(0,0);
+	                  }
+	          },
+	          error: function (data, status, e) {
+	              alert("服务器向你抛了个异常");
+	              getAll(0,0);
+	          } 
+	      }); 
+		  
+	  }
+  
+  </script>
+  
+  
   
   <!-- 动态在小窗口中显示文件的方法-->
   <script type="text/javascript">
@@ -528,16 +568,14 @@
 						aria-hidden="true">&times;</button>
 					<h4 class="modal-title" id="newlabel" >上传文件</h4>
 					<div class="modal-body">
-				          <form  id="uploadForm"  enctype="multipart/form-data" method="post" name="fileinfo"  action="uploadallfile.do">				        
-		                  <input type="file" id="wenjian1"  style="width:300px;" onchange="this.form.inputs.value=this.value.substr(this.value.lastIndexOf('//')+1);" name="wenjian"><br>
-		                  <input style="display:none" id="upload_hide" name="upload_parentid">
-		                  <input type="submit" value="提交"><br>
-		                  </form>
+		                  
+		                  <input type="file" id="wenjian" name="wenjian" value="" title="上传附件">
+		                  <input style="display:none" id="upload_hide" />
 						
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-						<button type="button" class="btn btn-primary"  data-dismiss="modal">确认</button>
+						<button type="button" class="btn btn-primary"  data-dismiss="modal" onclick="upload()">确认</button>
 					</div>
 				</div>
 			</div>
