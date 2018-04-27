@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="summernote/dist/summernote.css" rel="stylesheet">
+
+<script type="text/javascript" src="js/jquery.min2.1.4.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="summernote/dist/summernote.js"></script>
+<script src="summernote/dist/lang/summernote-zh-CN.js"></script>    <!-- 中文-->
+
+
+
+</head>
+<body>
+
+     <form>
+     <div class="form-group" >
+        <label for="" style = "margin-left: 5%;">知识点名称</label>
+        <input type="email" class="form-control" id="" placeholder="知识点描述" style="width:90%; margin:0 auto; margin-top: 1%;">
+     </div>
+     <ul class="nav nav-pills nav-justified" style="width:90%; margin: 0 auto;">
+	   <li role="presentation" class="active"><a href="#">Home</a></li>
+	   <li role="presentation"><a href="#">Profile</a></li>
+	   <li role="presentation"><a href="#">Messages</a></li>
+	   <li role="presentation"><a href="#">Profile</a></li>
+	   <li role="presentation"><a href="#">Messages</a></li>
+	 </ul>
+     <div style="width:90%; margin:0 auto; margin-top: 1%;">
+        <textarea  class="summernote" id="a_content" name="a_content"></textarea>
+     </div>
+     </form>
+
+     <button type="button" class="btn btn-primary btn-lg" style="display: block; margin: 0 auto;">保存</button>
+ 
+ 
+   <!-- 初始界面加载 -->
+   <script type="text/javascript">
+   
+	   $(function(){
+		   $('#a_content').summernote({
+		          height: 300,
+		          tabsize: 2,
+		          minHeight: 20,
+		          maxHeight: 900,
+		          lang: 'zh-CN',
+		          focus: true
+		      });
+		   
+		    getzsd();
+		  });
+   
+   </script>
+ 
+ 
+  <script>
+ 
+    function getzsd(){
+		  
+		  var html="";
+		  var adata={"nodeid":"20180406202539"};
+		  var data=JSON.stringify(adata);
+		  
+		     $.ajax({
+		    	 type:"POST",
+		    	 contentType:"application/json",
+		    	 dataType:"json",
+		    	 data:data,
+		    	 url:"getZsd.do",
+		    	 
+		    	 success:function(data){
+		    		 	
+			 		
+			 		
+			 		 if(data.map.zsdms==undefined){
+			 			$("#summernote").html("请添加知识描述"); 
+			 			$('#summernote').summernote();
+			 			/* html+="<textarea  clsass='form-control' rows='3' id='zsdms1' placeholder='请添加知识描述'></textarea>"; */
+			 		 }else{
+			 			html = data.map.zsdms;
+			 			$('.summernote').summernote('code',"请添加知识描述");
+			 			//$('#summernote').summernote('code',data.map.zsdms);
+			 			//$('#summernote').summernote();
+			 			/* html+="<textarea  class='form-control' rows='3' id='zsdms1'>"+data.map.zsdms+"</textarea>"; */
+			 		 }
+			 		 
+			 		/*  $("#zsdms").html(html); */
+			 		 
+		    	 },
+		    	 
+		    	 error:function(e){
+		    		 alert("连接显示知识点失败");
+		    	 },
+		    	 
+		     });
+		  
+	  }
+    
+    
+  </script>
+  
+  
+
+
+
+
+
+</body>
+</html>
