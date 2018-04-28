@@ -12,29 +12,47 @@
 <script type="text/javascript" src="summernote/dist/summernote.js"></script>
 <script src="summernote/dist/lang/summernote-zh-CN.js"></script>    <!-- 中文-->
 
-
+<style>
+.tags{
+  width: 90%;
+  background: #f5f5f5;
+  margin: 0 auto;
+}
+</style>
 
 </head>
 <body>
 
-     <form>
+     <form class="knowlegMap">
      <div class="form-group" >
         <label for="" style = "margin-left: 5%;">知识点名称</label>
-        <input type="email" class="form-control" id="" placeholder="知识点描述" style="width:90%; margin:0 auto; margin-top: 1%;">
+        <input type="email" class="form-control" id="zsdmc" placeholder="知识点名称" style="width:90%; margin:0 auto; margin-top: 1%;">
      </div>
-     <ul class="nav nav-pills nav-justified" style="width:90%; margin: 0 auto;">
-	   <li role="presentation" class="active"><a href="#">Home</a></li>
-	   <li role="presentation"><a href="#">Profile</a></li>
-	   <li role="presentation"><a href="#">Messages</a></li>
-	   <li role="presentation"><a href="#">Profile</a></li>
-	   <li role="presentation"><a href="#">Messages</a></li>
+     <div class="tags">
+       <ul class="nav nav-pills nav-justified" style="width:80%;">
+	     <li role="presentation" class="active">
+	       <a href="#">知识点描述</a>
+	     </li>
+	     <li role="presentation">
+	       <a href="#">我的文件</a>
+	     </li>
+	     <li role="presentation">
+	       <a href="#">文件收藏</a>
+	     </li>
+	     <li role="presentation">
+	       <a href="#">文件分享</a>
+	     </li>
+	     <li role="presentation">
+	       <a href="#">上传文件</a>
+	     </li>
 	 </ul>
-     <div style="width:90%; margin:0 auto; margin-top: 1%;">
+	 </div>
+     <div style="width:90%; margin:0 auto;">
         <textarea  class="summernote" id="a_content" name="a_content"></textarea>
      </div>
      </form>
 
-     <button type="button" class="btn btn-primary btn-lg" style="display: block; margin: 0 auto;">保存</button>
+     <button type="button" onclick="savezsd()" class="btn btn-primary btn-lg" style="display: block; margin: 0 auto;">保存</button>
  
  
    <!-- 初始界面加载 -->
@@ -42,12 +60,11 @@
    
 	   $(function(){
 		   $('#a_content').summernote({
-		          height: 300,
+		          height: 280,
 		          tabsize: 2,
 		          minHeight: 20,
 		          maxHeight: 900,
-		          lang: 'zh-CN',
-		          focus: true
+		          lang: 'zh-CN'
 		      });
 		   
 		    getzsd();
@@ -56,51 +73,101 @@
    </script>
  
  
-  <script>
- 
-    function getzsd(){
+      <!-- 获取并显示知识点内容 -->
+	  <script>
+	 
+	    <!-- 获取并显示知识点内容 -->
+	    function getzsd(){
+			  
+			  var html="";
+			  var nodeid=parent.get_selected_nodeid();
+			  var nodeName=parent.get_selected_nodeName();
+			  var adata={"nodeid":nodeid};
+			  var data=JSON.stringify(adata);
+			  
+			     $.ajax({
+			    	 type:"POST",
+			    	 contentType:"application/json",
+			    	 dataType:"json",
+			    	 data:data,
+			    	 url:"getZsd.do",
+			    	 
+			    	 success:function(data){
+			    		 
+			    		 alert(data.map.zsdmc == undefined);
+			    		 if(data.map.zsdmc == undefined){
+			    			 alert(nodeName);
+			    			 $("#zsdmc").attr("placeholder",nodeName);
+			    		 } else{
+			    			 $("#zsdmc").text(data.map.zsdmc);
+			    		 }
+			    		 
+				 		 if(data.map.zsdms == undefined){
+				 			html = "请添加知识描述";
+				 			$('.summernote').summernote('code',html);
+				 		 } else{
+				 			html = data.map.zsdms;
+				 			$('.summernote').summernote('code',html);
+				 		 }
+				 		 
+			    	 },
+			    	 
+			    	 error:function(e){
+			    		 alert("连接显示知识点失败");
+			    	 },
+			    	 
+			     });
+			  
+		   }
+	    
+	    
+	      <!-- 保存节点上的知识点  -->
+		  function savezsd(){
+			  var nodeid=parent.get_selected_nodeid();
+			  var adata={"zsdid":nodeid,
+						 "zsdmc":$("#zsdmc").val(),
+				         "zsdms":$('#a_content').summernote('code')
+				        };
+			  alert($('#a_content').summernote('code'));
+			  var data=JSON.stringify(adata);
+			  
+			  $.ajax({
+		    	  type:"POST",
+		    	  contentType:"application/json",
+		    	  dataType:"json",
+		    	  data:data,
+		    	  url:"saveZsd.do",
+		    	  
+		    	  success:function(data){
+		    		  if(data.a=="1"){
+		    			  alert("修改知识点知识成功");
+		    			  window.location.reload("biji.html");
+		    		  }else if(data.a=="2"){
+		    			  alert("修改知识点知识失败");
+		    			  window.location.reload("biji.html");
+		    		  } else if(data.a=="3"){
+		    			  alert("不是您的知识图谱");
+		    			  window.location.reload("biji.html");
+		    		  }
+		    		  
+		    	  },
 		  
-		  var html="";
-		  var adata={"nodeid":"20180406202539"};
-		  var data=JSON.stringify(adata);
+		    	  error:function(r){
+		    		  alert("连接失败");
+		    	  }, 
 		  
-		     $.ajax({
-		    	 type:"POST",
-		    	 contentType:"application/json",
-		    	 dataType:"json",
-		    	 data:data,
-		    	 url:"getZsd.do",
-		    	 
-		    	 success:function(data){
-		    		 	
-			 		
-			 		
-			 		 if(data.map.zsdms==undefined){
-			 			$("#summernote").html("请添加知识描述"); 
-			 			$('#summernote').summernote();
-			 			/* html+="<textarea  clsass='form-control' rows='3' id='zsdms1' placeholder='请添加知识描述'></textarea>"; */
-			 		 }else{
-			 			html = data.map.zsdms;
-			 			$('.summernote').summernote('code',"请添加知识描述");
-			 			//$('#summernote').summernote('code',data.map.zsdms);
-			 			//$('#summernote').summernote();
-			 			/* html+="<textarea  class='form-control' rows='3' id='zsdms1'>"+data.map.zsdms+"</textarea>"; */
-			 		 }
-			 		 
-			 		/*  $("#zsdms").html(html); */
-			 		 
-		    	 },
-		    	 
-		    	 error:function(e){
-		    		 alert("连接显示知识点失败");
-		    	 },
-		    	 
-		     });
-		  
-	  }
-    
-    
-  </script>
+		      });  
+			  
+		  }	    
+	    
+	    
+	    
+	    
+	    
+	  </script>
+  
+  
+  
   
   
 
