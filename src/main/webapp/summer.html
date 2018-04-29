@@ -31,10 +31,10 @@
      <div class="tags">
        <ul class="nav nav-pills nav-justified" style="width:80%;">
 	     <li role="presentation" class="active">
-	       <a href="#">知识点描述</a>
+	       <a onclick="getzsd()">知识点描述</a>
 	     </li>
 	     <li role="presentation">
-	       <a href="#">我的文件</a>
+	       <a onclick="getUpload()">我的文件</a>
 	     </li>
 	     <li role="presentation">
 	       <a href="#">文件收藏</a>
@@ -48,27 +48,21 @@
 	 </ul>
 	 </div>
      <div style="width:90%; margin:0 auto;">
-        <textarea  class="summernote" id="a_content" name="a_content"></textarea>
+        <div  class="summernote" id="a_content" name="a_content"></div>
      </div>
-     </form>
+     </form>                  <!-- 显示加载模态框的界面 -->
 
-     <button type="button" onclick="savezsd()" class="btn btn-primary btn-lg" style="display: block; margin: 0 auto;">保存</button>
+     <div id="latte"></div>   <!-- 加载显示知识点时的按钮 -->
  
  
    <!-- 初始界面加载 -->
    <script type="text/javascript">
    
 	   $(function(){
-		   $('#a_content').summernote({
-		          height: 280,
-		          tabsize: 2,
-		          minHeight: 20,
-		          maxHeight: 900,
-		          lang: 'zh-CN'
-		      });
 		   
 		    getzsd();
-		  });
+	
+	   });
    
    </script>
  
@@ -79,7 +73,16 @@
 	    <!-- 获取并显示知识点内容 -->
 	    function getzsd(){
 			  
+	    	$('#a_content').summernote({
+		          height: 280,
+		          tabsize: 2,
+		          minHeight: 20,
+		          maxHeight: 900,
+		          lang: 'zh-CN'
+		      });            /* 加载模态框配置 */
+	    	
 			  var html="";
+			  var button = "";
 			  var nodeid=parent.get_selected_nodeid();
 			  var nodeName=parent.get_selected_nodeName();
 			  var adata={"nodeid":nodeid};
@@ -94,12 +97,10 @@
 			    	 
 			    	 success:function(data){
 			    		 
-			    		 alert(data.map.zsdmc == undefined);
-			    		 if(data.map.zsdmc == undefined){
-			    			 alert(nodeName);
+			    		 if(data.map.zsdmc == undefined || data.map.zsdmc == null){
 			    			 $("#zsdmc").attr("placeholder",nodeName);
 			    		 } else{
-			    			 $("#zsdmc").text(data.map.zsdmc);
+			    			 $("#zsdmc").attr("value",data.map.zsdmc);
 			    		 }
 			    		 
 				 		 if(data.map.zsdms == undefined){
@@ -110,6 +111,8 @@
 				 			$('.summernote').summernote('code',html);
 				 		 }
 				 		 
+				 		 button += "<button type='button' onclick='savezsd()' class='btn btn-primary btn-lg' style='display: block; margin: 0 auto;'>保存</button>";
+			    	     $("#latte").html(button);
 			    	 },
 			    	 
 			    	 error:function(e){
@@ -128,7 +131,6 @@
 						 "zsdmc":$("#zsdmc").val(),
 				         "zsdms":$('#a_content').summernote('code')
 				        };
-			  alert($('#a_content').summernote('code'));
 			  var data=JSON.stringify(adata);
 			  
 			  $.ajax({
@@ -161,9 +163,51 @@
 		  }	    
 	    
 	    
-	    
-	    
-	    
+	  </script>
+	  
+	  
+	  <!-- 获取或者删除上传文件(对上传文件的操作)-->
+	  <script type="text/javascript">
+	  
+	     //获取节点上的上传文件
+	     function getUpload(){
+	    	 
+	    	var nodeid = parent.get_selected_nodeid();
+	    	var html = "";
+	    	var da={"nodeid":nodeid};
+	    	
+	    	   $.ajax({
+	    		   type : "POST",
+				   url : "getUploadfile.do",
+				   data : da,
+				   
+				   success: function(data){
+					   $('#a_content').summernote('destroy');
+					   $("#latte").html("");
+					   $('#a_content').html("ss");
+					   /* var json = $.parseJSON(data);
+					   
+					   if(json.state=='0'){
+						
+						   $.each(json.list2,function(){
+							  
+							   html +="";
+							  						   
+						   });
+						   
+						   
+					   } */
+					   
+				   },
+				   
+				   
+	    	   });
+	    	 
+	    	 
+	     }
+	  
+	  
+	  
 	  </script>
   
   
