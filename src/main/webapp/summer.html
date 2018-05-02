@@ -6,11 +6,14 @@
 
 <link href="css/bootstrap.css" rel="stylesheet">
 <link href="summernote/dist/summernote.css" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/font-awesome.min.css" />
+<link rel="stylesheet" href="/ifont/css/font-awesome.min.css" />
 
 <script type="text/javascript" src="js/jquery.min2.1.4.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="summernote/dist/summernote.js"></script>
 <script src="summernote/dist/lang/summernote-zh-CN.js"></script>    <!-- 中文-->
+<script src="js/pdf.js"></script>
 
 <style>
 .tags{
@@ -30,19 +33,19 @@
      </div>
      <div class="tags">
        <ul class="nav nav-pills nav-justified" style="width:80%;">
-	     <li role="presentation" class="active">
+	     <li role="presentation" id="zsdms">
 	       <a onclick="getzsd()">知识点描述</a>
 	     </li>
-	     <li role="presentation">
+	     <li role="presentation" id="myFile">
 	       <a onclick="getUpload()">我的文件</a>
 	     </li>
-	     <li role="presentation">
+	     <li role="presentation" id="myCollect">
 	       <a href="#">文件收藏</a>
 	     </li>
-	     <li role="presentation">
+	     <li role="presentation" id="myShare">
 	       <a href="#">文件分享</a>
 	     </li>
-	     <li role="presentation">
+	     <li role="presentation" id="UploadFile">
 	       <a href="#">上传文件</a>
 	     </li>
 	 </ul>
@@ -80,13 +83,15 @@
 		          maxHeight: 900,
 		          lang: 'zh-CN'
 		      });            /* 加载模态框配置 */
-	    	
+		      
 			  var html="";
 			  var button = "";
 			  var nodeid=parent.get_selected_nodeid();
 			  var nodeName=parent.get_selected_nodeName();
 			  var adata={"nodeid":nodeid};
 			  var data=JSON.stringify(adata);
+			  $("li").removeClass("active");
+			  $("#zsdms").addClass("active");
 			  
 			     $.ajax({
 			    	 type:"POST",
@@ -176,6 +181,7 @@
 	    	var html = "";
 	    	var da={"nodeid":nodeid};
 	    	
+	    	
 	    	   $.ajax({
 	    		   type : "POST",
 				   url : "getUploadfile.do",
@@ -184,19 +190,27 @@
 				   success: function(data){
 					   $('#a_content').summernote('destroy');
 					   $("#latte").html("");
-					   $('#a_content').html("ss");
-					   /* var json = $.parseJSON(data);
+					   $("li").removeClass("active");
+					   $("#myFile").addClass("active");
+					   
+					   var json = $.parseJSON(data);
+					   
+					   //html += "</br></br></br></br></br></br><h1 align='center'>暂无上传文件</h1>";
+					   html += "<div><div><div><div><img class='img-circle' src='images/laba.jpg'/>"
+				                   +"<a class='user'> newbee </a><span style='float:right'><i class='icon-time bigger-110'></i>&nbsp;2018</span><div class='time'><i class='icon-time bigger-110'></i>&nbsp;pic1</div></div>"+
+				                   "<div class='tools action-buttons'><a class='blue'><i class='icon-eye-open bigger-125'></i></a>&nbsp;<a class='red'><i class='icon-remove bigger-125'></i></a></div></div></div></div>"; 
+					   $("#a_content").html(html);
 					   
 					   if(json.state=='0'){
-						
+						   
 						   $.each(json.list2,function(){
-							  
-							   html +="";
+							   
+							   html +="<div>";
 							  						   
 						   });
 						   
 						   
-					   } */
+					   } 
 					   
 				   },
 				   
