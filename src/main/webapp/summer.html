@@ -277,10 +277,26 @@
 	  </script>
   
   
+  
       <!-- 文件上传  -->
       <script type="text/javascript">
       
-      
+         //加载上传文件的页面
+         $("#UploadFile").click(function(){
+        	 
+        	 $('#a_content').summernote('destroy');
+			 $("#latte").html("");
+			 $("li").removeClass("active");
+			 $("#UploadFile").addClass("active");
+			 
+			 var html = "";
+			 html += "<input type='file' id='wenjian' name='wenjian' value='' style='margin:0 auto;' title='上传附件'>";
+        	 html += "<input style='display:none;' id='upload_hide' />";
+        	 html += "<button type='button' onclick='' class='btn btn-primary btn-lg' style='display: block; margin: 0 auto;'>保存</button>"; 
+        	 
+        	 $("#a_content").html(html);
+        	 
+         });
       
       
       </script>
