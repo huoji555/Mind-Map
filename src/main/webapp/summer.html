@@ -129,6 +129,7 @@
 		   }
 	    
 	    
+	    
 	      <!-- 保存节点上的知识点  -->
 		  function savezsd(){
 			  var nodeid=parent.get_selected_nodeid();
@@ -171,16 +172,16 @@
 	  </script>
 	  
 	  
+	  
 	  <!-- 获取或者删除上传文件(对上传文件的操作)-->
 	  <script type="text/javascript">
 	  
-	     //获取节点上的上传文件
+	     <!-- 获取节点上的上传文件 -->
 	     function getUpload(){
 	    	 
 	    	var nodeid = parent.get_selected_nodeid();
 	    	var html = "";
 	    	var da={"nodeid":nodeid};
-	    	
 	    	
 	    	   $.ajax({
 	    		   type : "POST",
@@ -195,46 +196,94 @@
 					   
 					   var json = $.parseJSON(data);
 					   
-					   html += "<div class='box'><div><img src='images/laba.jpg'><a class='name'>laba.jpg</a>"+
-					           "<span class='time'><i class='iconfont icon-shijian' ></i>20180502 09:32:01</span></div>"+ 
-						       "<p class='inc'><i class='iconfont icon-shuqianbookmark29'></i>该资料现在暂时没有描述</p>"+
-						       "<div class='span'>"+
-							   "<i class='iconfont icon-chakan' id='sp' style='color: green;'></i>"+
-							   "<i class='iconfont icon-fenxiang' id='sp'></i>"+
-							   "<i class='iconfont icon-shoucang' id='sp' style='color: red;'></i>"+
-							   "<i class='iconfont icon-shanchu' id='sp' style='color:black;'></i>"+
-						       "</div></div>";
-					   
-					   //html += "</br></br></br></br></br></br><h1 align='center'>暂无上传文件</h1>";
-					   /* html += "<div><div><div><div><img class='img-circle' src='images/laba.jpg'/>"
-				                   +"<a class='user'> newbee </a><span style='float:right'><i class='icon-time bigger-110'></i>&nbsp;2018</span><div class='time'><i class='icon-time bigger-110'></i>&nbsp;pic1</div></div>"+
-				                   "<div class='tools action-buttons'><a class='blue'><i class='icon-eye-open bigger-125'></i></a>&nbsp;<a class='red'><i class='icon-remove bigger-125'></i></a></div></div></div></div>";  */
-					   $("#a_content").html(html);
-					   
 					   if(json.state=='0'){
 						   
-						   $.each(json.list2,function(){
+						   $.each(json.list2,function(index,content){
 							   
-							   html +="<div>";
-							  						   
+							   if(content.fileType=="other"){
+								   html = html+"<div class='box'><div><img src='"+content.tubiao+"'><a class='name' href='pdf/generic/web/viewer.html?file="+content.filepath+"'>"+content.zlmc+"</a>"+
+							           "<span class='time'><i class='iconfont icon-shijian' ></i>"+content.time+"</span></div>"+ 
+								       "<div><p class='inc'><i class='iconfont icon-shuqianbookmark29'></i>"+content.zlms+"</p>"+
+								       "<span class='span'>"+
+									   "<a href='pdf/generic/web/viewer.html?file="+content.filepath+"'><i class='iconfont icon-chakan' id='sp' style='color: green;'></i></a>"+
+									   "<a href='#' onclick='shareUpload("+nodeid+","+content.zlid+");'><i class='iconfont icon-fenxiang' id='sp'></i></a>"+
+									   "<a href='#' onclick='collectUpload("+content.zlid+","+nodeid+")'><i class='iconfont icon-shoucang' id='sp' style='color: red;'></i></a>"+
+									   "<a href='#' onclick='delUpload("+content.zlid+");'><i class='iconfont icon-shanchu' id='sp' style='color:black;'></i></a>"+
+								       "</span></div></div>";
+							   } else {
+								   html = html+"<div class='box'><div><img src='"+content.tubiao+"'><a class='name' href='"+content.filepath+"'>"+content.zlmc+"</a>"+
+							           "<span class='time'><i class='iconfont icon-shijian' ></i>"+content.time+"</span></div>"+ 
+								       "<div><p class='inc'><i class='iconfont icon-shuqianbookmark29'></i>"+content.zlms+"</p>"+
+								       "<span class='span'>"+
+									   "<a href='"+content.filepath+"'><i class='iconfont icon-chakan' id='sp' style='color: green;'></i></a>"+
+									   "<a href='#' onclick='shareUpload("+nodeid+","+content.zlid+");'><i class='iconfont icon-fenxiang' id='sp'></i></a>"+
+									   "<a href='#' onclick='collectUpload("+content.zlid+","+nodeid+")'><i class='iconfont icon-shoucang' id='sp' style='color: red;'></i></a>"+
+									   "<a href='#' onclick='delUpload("+content.zlid+");'><i class='iconfont icon-shanchu' id='sp' style='color:black;'></i></a>"+
+								       "</span></div></div>";
+							   }
+							   
 						   });
 						   
-						   
-					   } 
+					   } else {
+						   html += "</br></br></br></br></br></br><h1 align='center'>暂无上传文件</h1>";
+					   }
+					   
+					   $("#a_content").html(html);
 					   
 				   },
 				   
 				   
 	    	   });
 	    	 
-	    	 
 	     }
 	  
-	  
-	  
+	     
+	    <!-- 删除节点上的文件  -->
+		function delUpload(zlid){
+			
+			var nodeid=parent.get_selected_nodeid();
+			var adata={"zlid":zlid,
+					   "nodeid":nodeid
+			         };
+			var data=JSON.stringify(adata);
+			
+			  $.ajax({
+				  type:"POST",
+				  contentType:"application/json",
+				  dataType:"json",
+				  url:"delUpload.do",
+				  data:data,
+				  
+				  success:function(data){
+					  
+					  if(data.a==1){
+						  alert("删除成功");
+						  window.location.reload("biji.html");
+					  }else if(data.a==2){
+						  alert("非合法操作");
+					  }else{
+						  alert("删除失败");
+					  }
+				  },
+				  
+				  error:function(e){
+					  alert("访问删除接口失败");
+				  }
+				  
+			  });		
+			
+			}	     
+	     
 	  </script>
   
   
+      <!-- 文件上传  -->
+      <script type="text/javascript">
+      
+      
+      
+      
+      </script>
   
   
   
