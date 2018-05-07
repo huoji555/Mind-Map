@@ -7,7 +7,9 @@
 <link href="css/bootstrap.css" rel="stylesheet">
 <link href="summernote/dist/summernote.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_619891_6mbw5r4e984lhaor.css">
+<link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_619891_90973vqmntawcdi.css">
 <link rel="stylesheet" href="css/biji/biji.css" />
+<link rel="stylesheet" href="css/fileUpload/upload.css" />
 
 <script type="text/javascript" src="js/jquery.min2.1.4.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
@@ -46,7 +48,7 @@
 	       <a href="#">文件分享</a>
 	     </li>
 	     <li role="presentation" id="UploadFile">
-	       <a href="#">上传文件</a>
+	       <a onclick='uploadShow()'>上传文件</a>
 	     </li>
 	 </ul>
 	 </div>
@@ -282,28 +284,49 @@
       <script type="text/javascript">
       
          //加载上传文件的页面
-         $("#UploadFile").click(function(){
+         function uploadShow(){
         	 
         	 $('#a_content').summernote('destroy');
 			 $("#latte").html("");
 			 $("li").removeClass("active");
 			 $("#UploadFile").addClass("active");
-			 
-			 var html = "";
-			 html += "<input type='file' id='wenjian' name='wenjian' value='' style='margin:0 auto;' title='上传附件'>";
-        	 html += "<input style='display:none;' id='upload_hide' />";
-        	 html += "<button type='button' onclick='' class='btn btn-primary btn-lg' style='display: block; margin: 0 auto;'>保存</button>"; 
         	 
+			 var html = "";
+			 html += "<div class='box1'>";
+			 html += "<i class='iconfont icon-wendangtianjia' id='wj'></i>";
+			 html += "<input type='file' id='wenjian' name='wenjian' onclick='showButton()' value='' style='margin:0 auto;' title='上传附件'>";
+			 html += "</div><div id='button'></div>";
+			 
         	 $("#a_content").html(html);
         	 
-         });
-      
+         }
+         
+         
+         //若有上传文件，则显示上传按钮
+         function showButton(){
+
+        	 var html = "";
+        	 
+        	 if($("#wenjian").val()== ""){
+        		 html += "<button class='btn btn-success' style ='margin-top:10px; float:right;'>上传</button>";
+        		 $("#button").html(html);
+        	 } else{
+        		 $("#button").html(html);
+        	 }
+        	 
+         }
+         
+         
+         
+         
+         
+         
+         
       
       </script>
   
   
   
-
 
 
 
