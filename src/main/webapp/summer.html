@@ -322,7 +322,6 @@
 	 		 
 			 var formData = new FormData();
 			 var nodeid=parent.get_selected_nodeid();
-		  	 var name = $("#wenjian").val();
 		  	 formData.append("wenjian",$("#wenjian")[0].files[0]);
 		  	 formData.append("nodeid",nodeid);
 		  	  
@@ -334,7 +333,16 @@
 		         contentType : false,
 		        
 		         success: function (data) {
-		            alert("ss");
+		        	 var json = $.parseJSON(data);
+		        	 if(json.a == "1"){
+		        		 alert("上传成功");
+		        	 } else if (json.a == "5"){
+		        		 alert("不是您的知识图谱");
+		        	 } else if (json.a == "3"){
+		        		 alert("已上传过该文件");
+		        	 } else if (json.a == "2"){
+		        		 alert("上传失败");
+		        	 }
 		          },
 		          error: function (data) {
 		              alert("服务器向你抛了个异常");

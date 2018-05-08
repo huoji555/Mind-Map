@@ -880,7 +880,7 @@ public class MindMapController {
 	 */
 	@RequestMapping("/setUpload.do")
 	@ResponseBody
-	public String setUpload(
+	public String setUpload(@RequestParam("nodeid") String nodeid,
 			@RequestParam("wenjian") MultipartFile file,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -890,7 +890,7 @@ public class MindMapController {
 		HttpSession session = request.getSession();
 		String userid = String.valueOf(session.getAttribute("username"));
 		
-		/*String useridBefore = tryCatchMindMapService
+		String useridBefore = tryCatchMindMapService
 				.getMindNode("nodeid", nodeid).get(0).getUserid();
 		
 		if (userid.equals("null") || userid.equals(null)) {
@@ -901,9 +901,9 @@ public class MindMapController {
 		if (! (userid.equals(useridBefore)) ){
 			System.out.println("到这里,,,,,");
 			return statusMap.a("5");
-		}*/
+		}
 		
-		/*SimpleDateFormat df2 = new SimpleDateFormat("yyyyMMddHHmmss");
+		SimpleDateFormat df2 = new SimpleDateFormat("yyyyMMddHHmmss");
 		String files = df2.format(new Date());
 		String filename = file.getOriginalFilename();
 		
@@ -1069,7 +1069,7 @@ public class MindMapController {
 		if (this.tryCatchUploadFileService.saveUploadFile(uploadFile)) {
 			System.out.println("第一次在节点上传该文件");
 			return statusMap.a("1");
-		}*/
+		}
 		return statusMap.a("2");
 		
 	}
