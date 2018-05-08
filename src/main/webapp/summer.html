@@ -308,7 +308,7 @@
         	 var html = "";
         	 
         	 if($("#wenjian").val()== ""){
-        		 html += "<button class='btn btn-success' style ='margin-top:10px; float:right;'>上传</button>";
+        		 html += "<button class='btn btn-success' style ='margin-top:10px; float:right;' onclick='uploadFile()'>上传</button>";
         		 $("#button").html(html);
         	 } else{
         		 $("#button").html(html);
@@ -317,12 +317,33 @@
          }
          
          
+         //节点上传文件
+	   	 function uploadFile(){
+	 		 
+			 var formData = new FormData();
+			 var nodeid=parent.get_selected_nodeid();
+		  	 var name = $("#wenjian").val();
+		  	 formData.append("wenjian",$("#wenjian")[0].files[0]);
+		  	 formData.append("nodeid",nodeid);
+		  	  
+		     $.ajax({
+		         url: '/setUpload.do',  
+		         type: 'post',
+		         data : formData, 
+		         processData : false, 
+		         contentType : false,
+		        
+		         success: function (data) {
+		            alert("ss");
+		          },
+		          error: function (data) {
+		              alert("服务器向你抛了个异常");
+		          } 
+		      }); 
+			  
+		  }
          
          
-         
-         
-         
-      
       </script>
   
   

@@ -878,14 +878,13 @@ public class MindMapController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping({ "/setUpload.do" })
+	@RequestMapping("/setUpload.do")
 	@ResponseBody
-	public String setUpload(MindNodeTool mindNodeTool,
-			@RequestParam("fileToUpload") MultipartFile file,
+	public String setUpload(@RequestParam("nodeid") String nodeid,
+			@RequestParam("wenjian") MultipartFile file,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		
-		String nodeid = mindNodeTool.getNodeid();
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
 		String uploadtima = df.format(new Date());
 		HttpSession session = request.getSession();
@@ -900,7 +899,7 @@ public class MindMapController {
 		
 		//禁止非本节点用户在节点上传文件
 		if (! (userid.equals(useridBefore)) ){
-			System.out.println("到这里了");
+			System.out.println("到这里,,,,,");
 			return statusMap.a("5");
 		}
 		
@@ -934,6 +933,15 @@ public class MindMapController {
 						.getUploadFile("userid", "filename", "firstStatus",
 								userid, filename, "1");
 				uploadFile1.setZsdid("1");
+				
+				if (tryCatchUploadFileService.saveUploadFile(uploadFile)) {
+					System.out.println("资源界面已经上传过该文件");
+					tryCatchUploadFileService.updateUploadeFile(uploadFile1);
+					return statusMap.a("1");
+				} else {
+					return statusMap.a("2");
+				}
+				
 				
 			} else if (zsdid != nodeid) {
 
@@ -1153,6 +1161,7 @@ public class MindMapController {
 	 * @return
 	 * @throws IOException
 	 */
+	@SuppressWarnings("unused")
 	@RequestMapping("/delUpload.do")
 	@ResponseBody
 	public String delUpload(@RequestBody String requestJsonBody,
@@ -1214,12 +1223,13 @@ public class MindMapController {
 				// TODO: handle exception
 			}
         	
+        	
         	//清空相关数据
         	if ((tryCatchUploadFileService.delAllUploadFile("userid", "files",
 					userid, zlid))
-					&& (tryCatchFileShareService.delAllFileShare("userid",
+					| (tryCatchFileShareService.delAllFileShare("userid",
 							userid, "f_id", zlid))
-					&& (tryCatchFileCollectionService.delAllFileCollection(
+					| (tryCatchFileCollectionService.delAllFileCollection(
 							"userid", userid, "f_id", zlid))) {
 				System.out.println("大清洗式的删除");
 				return statusMap.a("1");
@@ -1227,16 +1237,21 @@ public class MindMapController {
 			return statusMap.a("3");
         	
         } else {
+        	System.out.println("------------------------");
+        	System.out.println(uploadFile+"^^"+fileShare+"^^"+fileCollection);
+        	System.out.println("------------------------");
         	
         	//只删除与该节点上传文件有关的数据
-        	if ((tryCatchUploadFileService.deleteUploadFile(uploadFile))
-					&& (tryCatchFileShareService.delShareFile(fileShare))
-					&& (tryCatchFileCollectionService
-							.delFileCollection(fileCollection))) {
-				System.out.println("只删除节点上的文件");
-				return statusMap.a("1");
-			}
-			return statusMap.a("3");
+        	if (uploadFile != null){
+        		tryCatchUploadFileService.deleteUploadFile(uploadFile);
+        	}
+        	if(fileShare != null){
+        		tryCatchFileShareService.delShareFile(fileShare);
+        	}
+            if(fileCollection != null){
+        		tryCatchFileCollectionService.delFileCollection(fileCollection);
+        	}
+			return statusMap.a("1");
         }
 		
 	}
