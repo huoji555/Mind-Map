@@ -28,11 +28,11 @@ import org.springframework.transaction.interceptor.TransactionAttribute;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 /**
- * <p>Company: B505信息技术研究所 </p> 
+ * 
  * @Description: 基于注解的方式的统一事物处理
  * @Create Date: 2017年9月30日下午8:47:07
  * @Version: V1.00 
- * @Author: 赵良臣
+ * @Author: 
  */
 @Aspect
 @Configuration
