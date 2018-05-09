@@ -42,7 +42,7 @@
 	       <a onclick="getUpload()">我的文件</a>
 	     </li>
 	     <li role="presentation" id="myCollect">
-	       <a href="#">文件收藏</a>
+	       <a onclick='showCollectionFile()'>文件收藏</a>
 	     </li>
 	     <li role="presentation" id="myShare">
 	       <a onclick='getShareUpload()'>文件分享</a>
@@ -208,9 +208,9 @@
 								       "<div><p class='inc'><i class='iconfont icon-shuqianbookmark29'></i>"+content.zlms+"</p>"+
 								       "<span class='span'>"+
 									   "<a href='pdf/generic/web/viewer.html?file="+content.filepath+"'><i class='iconfont icon-chakan' id='sp' style='color: green;'></i></a>"+
-									   "<a href='#' onclick='shareUpload("+nodeid+","+content.zlid+");'><i class='iconfont icon-fenxiang' id='sp'></i></a>"+
-									   "<a href='#' onclick='collectUpload("+content.zlid+","+nodeid+")'><i class='iconfont icon-shoucang' id='sp' style='color: red;'></i></a>"+
-									   "<a href='#' onclick='delUpload("+content.zlid+");'><i class='iconfont icon-shanchu' id='sp' style='color:black;'></i></a>"+
+									   "<a  onclick='shareUpload("+nodeid+","+content.zlid+");'><i class='iconfont icon-fenxiang' id='sp'></i></a>"+
+									   "<a  onclick='collectUpload("+content.zlid+","+nodeid+")'><i class='iconfont icon-shoucang' id='sp' style='color: red;'></i></a>"+
+									   "<a  onclick='delUpload("+content.zlid+");'><i class='iconfont icon-shanchu' id='sp' style='color:black;'></i></a>"+
 								       "</span></div></div>";
 							   } else {
 								   html = html+"<div class='box'><div><img src='"+content.tubiao+"'><a class='name' href='"+content.filepath+"'>"+content.zlmc+"</a>"+
@@ -218,9 +218,9 @@
 								       "<div><p class='inc'><i class='iconfont icon-shuqianbookmark29'></i>"+content.zlms+"</p>"+
 								       "<span class='span'>"+
 									   "<a href='"+content.filepath+"'><i class='iconfont icon-chakan' id='sp' style='color: green;'></i></a>"+
-									   "<a href='#' onclick='shareUpload("+nodeid+","+content.zlid+");'><i class='iconfont icon-fenxiang' id='sp'></i></a>"+
-									   "<a href='#' onclick='collectUpload("+content.zlid+","+nodeid+")'><i class='iconfont icon-shoucang' id='sp' style='color: red;'></i></a>"+
-									   "<a href='#' onclick='delUpload("+content.zlid+");'><i class='iconfont icon-shanchu' id='sp' style='color:black;'></i></a>"+
+									   "<a  onclick='shareUpload("+nodeid+","+content.zlid+");'><i class='iconfont icon-fenxiang' id='sp'></i></a>"+
+									   "<a  onclick='collectUpload("+content.zlid+","+nodeid+")'><i class='iconfont icon-shoucang' id='sp' style='color: red;'></i></a>"+
+									   "<a  onclick='delUpload("+content.zlid+");'><i class='iconfont icon-shanchu' id='sp' style='color:black;'></i></a>"+
 								       "</span></div></div>";
 							   }
 							   
@@ -336,12 +336,16 @@
 		        	 var json = $.parseJSON(data);
 		        	 if(json.a == "1"){
 		        		 alert("上传成功");
+		        		 uploadShow();
 		        	 } else if (json.a == "5"){
 		        		 alert("不是您的知识图谱");
+		        		 uploadShow();
 		        	 } else if (json.a == "3"){
 		        		 alert("已上传过该文件");
+		        		 uploadShow();
 		        	 } else if (json.a == "2"){
 		        		 alert("上传失败");
+		        		 uploadShow();
 		        	 }
 		          },
 		          error: function (data) {
@@ -378,13 +382,13 @@
 					
 					if(data.a=="1"){
 					   alert("分享成功");
-					   window.location.reload();
+					   getShareUpload();
 					}else if(data.a=="2"){
 					   alert("非法操作，请登录");
-					   window.location.reload();
+					   getShareUpload();
 					}else if(data.a=="3"){
 					   alert("已分享，请勿重新提交");
-					   window.location.reload();
+					   getShareUpload();
 					}
 				},
 				
@@ -426,7 +430,8 @@
 								       "<div><p class='inc'><i class='iconfont icon-shuqianbookmark29'></i>"+content.zlms+"</p>"+
 								       "<span class='span'>"+
 									   "<a href='pdf/generic/web/viewer.html?file="+content.filepath+"'><i class='iconfont icon-chakan' id='sp' style='color: green;'></i></a>"+
-									   "<a href='#' onclick='delShareUpload("+content.zlid+");'><i class='iconfont icon-shanchu' id='sp' style='color:black;'></i></a>"+
+									   "<a  onclick='collectUpload("+content.zlid+","+nodeid+")'><i class='iconfont icon-shoucang' id='sp' style='color: red;'></i></a>"+
+									   "<a  onclick='delShareUpload("+content.zlid+");'><i class='iconfont icon-shanchu' id='sp' style='color:black;'></i></a>"+
 								       "</span></div></div>";	   
 				    			}else{
 				    				html = html+"<div class='box'><div><img src='"+content.tubiao+"'><a class='name' href='"+content.filepath+"'>"+content.zlmc+"</a>"+
@@ -434,7 +439,8 @@
 								       "<div><p class='inc'><i class='iconfont icon-shuqianbookmark29'></i>"+content.zlms+"</p>"+
 								       "<span class='span'>"+
 									   "<a href='"+content.filepath+"'><i class='iconfont icon-chakan' id='sp' style='color: green;'></i></a>"+
-									   "<a href='#' onclick='delShareUpload("+content.zlid+");'><i class='iconfont icon-shanchu' id='sp' style='color:black;'></i></a>"+
+									   "<a  onclick='collectUpload("+content.zlid+","+nodeid+")'><i class='iconfont icon-shoucang' id='sp' style='color: red;'></i></a>"+
+									   "<a  onclick='delShareUpload("+content.zlid+");'><i class='iconfont icon-shanchu' id='sp' style='color:black;'></i></a>"+
 								       "</span></div></div>";	    
 				    			}
 				    		
@@ -476,9 +482,10 @@
 			    		
 			    		if(data.a==1){
 			    			alert("删除成功");
-			    			window.location.reload();
+			    			getShareUpload();
 			    		}else{
 			    			alert("删除失败");
+			    			getShareUpload();
 			    		}
 			    	},
 			    	
@@ -491,9 +498,155 @@
 			
 		}        
       
+      </script>
+      
+      
+      
+      <!-- 节点上收藏文件相关操作  -->
+      <script type="text/javascript">
+      
+        //节点上收藏文件功能
+		function collectUpload(zlid,nodeid){
+			
+			var adata={"zlid":zlid,
+					   "nodeid":nodeid
+			       };
+			var data=JSON.stringify(adata);
+			
+			$.ajax({
+				type:"POST",
+				contentType:"application/json",
+				dataType:"json",
+				data:data,
+				url:"saveCollectUpload.do",
+				
+				success:function(data){
+					
+					if(data.a=="1"){
+						alert("收藏成功");
+						showCollectionFile();
+					}else if(data.a=="3"){
+						alert("已收藏过该文件");
+						showCollectionFile();
+					}else{
+						alert("收藏失败");
+						showCollectionFile();
+					}
+					
+				},
+				
+				error:function(e){			
+					alert("连接失败");
+				}
+				
+			});
+	
+		}
+		
+		
+		
+		//显示收藏文件
+		function showCollectionFile(){
+			
+			var nodeid=parent.get_selected_nodeid();
+			
+			var html="";
+			var adata={"nodeid":nodeid};
+			var data=JSON.stringify(adata);
+			
+			   $.ajax({
+				   type:"POST",
+				   contentType:"application/json",
+				   dataType:"json",
+				   data:data,
+				   url:"getCollectUpload.do",
+				   
+				   success:function(data){
+					   $('#a_content').summernote('destroy');
+					   $("#latte").html("");
+					   $("li").removeClass("active");
+					   $("#myCollect").addClass("active");
+
+					   if(data.state=="0"){
+						   
+						   $.each(data.list2,function(i,content){
+							   
+							   if(content.fileType=="other"){
+								   html = html+"<div class='box'><div><img src='"+content.tubiao+"'><a class='name' href='pdf/generic/web/viewer.html?file="+content.filepath+"'>"+content.zlmc+"</a>"+
+						           "<span class='time'><i class='iconfont icon-shijian' ></i>"+content.time+"</span></div>"+ 
+							       "<div><p class='inc'><i class='iconfont icon-shuqianbookmark29'></i>"+content.zlms+"</p>"+
+							       "<span class='span'>"+
+								   "<a href='pdf/generic/web/viewer.html?file="+content.filepath+"'><i class='iconfont icon-chakan' id='sp' style='color: green;'></i></a>"+
+								   "<a  onclick='shareUpload("+nodeid+","+content.zlid+");'><i class='iconfont icon-fenxiang' id='sp'></i></a>"+
+								   "<a  onclick='delCollectionFile("+content.zlid+");'><i class='iconfont icon-shanchu' id='sp' style='color:black;'></i></a>"+
+							       "</span></div></div>";
+							   }else{
+								   html = html+"<div class='box'><div><img src='"+content.tubiao+"'><a class='name' href='"+content.filepath+"'>"+content.zlmc+"</a>"+
+						           "<span class='time'><i class='iconfont icon-shijian' ></i>"+content.time+"</span></div>"+ 
+							       "<div><p class='inc'><i class='iconfont icon-shuqianbookmark29'></i>"+content.zlms+"</p>"+
+							       "<span class='span'>"+
+								   "<a href='"+content.filepath+"'><i class='iconfont icon-chakan' id='sp' style='color: green;'></i></a>"+
+								   "<a  onclick='shareUpload("+nodeid+","+content.zlid+");'><i class='iconfont icon-fenxiang' id='sp'></i></a>"+
+								   "<a  onclick='delCollectionFile("+content.zlid+");'><i class='iconfont icon-shanchu' id='sp' style='color:black;'></i></a>"+
+							       "</span></div></div>";
+							   }
+						      
+						   });   
+					   }else{   
+						   html += "</br></br></br></br></br></br><h1 align='center'>暂无收藏文件</h1>";
+					   }
+					   
+					   $("#a_content").html(html);
+				   },
+				   
+				   error:function(e){   
+					   alert("收藏文件连接失败");
+				   },
+		   
+			   });	
+		}
+		
+		
+		//删除收藏文件
+		function delCollectionFile(zlid){
+			
+			var nodeid=parent.get_selected_nodeid();
+			var adata={"zlid":zlid,
+					   "nodeid":nodeid
+			          };
+			var data=JSON.stringify(adata);
+			
+			   $.ajax({
+				   type:"POST",
+				   contentType:"application/json",
+				   dataType:"json",
+				   data:data,
+				   url:"delCollectUpload.do",
+				   
+				   success:function(data){
+					   
+					   if(data.a=="1"){
+						   alert("删除成功");
+						   showCollectionFile();
+					   }else{
+						   alert("删除失败");
+						   showCollectionFile();
+					   }	   
+				   },
+				   
+				   error:function(e){
+					   alert("连接失败");
+					   window.location.reload();
+				   },
+				   
+			   });
+		    }      
+      
+      
       
       
       </script>
+      
   
   
   

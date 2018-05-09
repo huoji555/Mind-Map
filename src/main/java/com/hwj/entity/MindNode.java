@@ -20,6 +20,7 @@ public class MindNode {
 	private String parentid;
 	private String userid;
 	private String type;
+	private String color;
 
 	@Id
 	@GeneratedValue(generator = "u_assigned")
@@ -68,10 +69,23 @@ public class MindNode {
 	public void setType(String type) {
 		this.type = type;
 	}
-
-	public String toString() {
-		return "MindNode [nodeid=" + this.nodeid + ", nodename="
-				+ this.nodename + ", parentid=" + this.parentid + ", userid="
-				+ this.userid + ", type=" + this.type + "]";
+	
+	@Column(name = "color")
+	public String getColor() {
+		return color;
 	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	
+	@Override
+	public String toString() {
+		return "MindNode [nodeid=" + nodeid + ", nodename=" + nodename
+				+ ", parentid=" + parentid + ", userid=" + userid + ", type="
+				+ type + ", color=" + color + "]";
+	}
+
+	
 }

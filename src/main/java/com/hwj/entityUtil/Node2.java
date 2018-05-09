@@ -13,6 +13,8 @@ public class Node2 {
 	 * 父节点编号
 	 */
 	public String parentid;
+	
+	public String color;
 
 	public String direction;
 	/**
@@ -24,7 +26,7 @@ public class Node2 {
 	// 先序遍历，拼接JSON字符串
 	public String toString() {
 		String result = "{" + "\'id\' : '" + id + "'" + ", \'topic\' : '"
-				+ topic + "'";
+				+ topic + "'"+", \'color\' : '"+ color + "'";
 
 		if (children != null && children.getSize() != 0) {
 			result += ", \'children\' : " + children.toString();

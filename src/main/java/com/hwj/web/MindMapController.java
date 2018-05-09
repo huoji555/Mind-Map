@@ -312,6 +312,7 @@ public class MindMapController {
 			map.put("id", mindNode.getNodeid());
 			map.put("topic", mindNode.getNodename());
 			map.put("parentid", mindNode.getParentid());
+			map.put("color", mindNode.getColor());
 			list2.add(map);
 		}
 		
@@ -326,6 +327,7 @@ public class MindMapController {
 			node.id = ((String) dataRecord.get("id"));
 			node.topic = ((String) dataRecord.get("topic"));
 			node.parentid = ((String) dataRecord.get("parentid"));
+			node.color = (String) dataRecord.get("color");
 			nodeList.put(node.id, node);
 		}
 		
@@ -1461,6 +1463,7 @@ public class MindMapController {
 			map2.put("id", mindNode.getNodeid());
 			map2.put("topic", mindNode.getNodename());
 			map2.put("parentid", mindNode.getParentid());
+			map2.put("color", mindNode.getColor());
 
 			list3.add(map2);
 		}
@@ -1478,6 +1481,7 @@ public class MindMapController {
 			node.id = ((String) dataRecord.get("id"));
 			node.topic = ((String) dataRecord.get("topic"));
 			node.parentid = ((String) dataRecord.get("parentid"));
+			node.color = (String) dataRecord.get("color");
 			nodeList.put(node.id, node);
 		}
 		System.out.println(root + "  root  jiajijfi");
@@ -1932,6 +1936,46 @@ public class MindMapController {
 
     	return statusMap.a("3");
 		
+	}
+	
+	
+	/**
+	 * @author Ragty
+	 * @serialData 2018.5.9
+	 * @param  更改单个节点颜色结构
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("/saveColor.do")
+	@ResponseBody
+	public String saveColor(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		String nodeid = String.valueOf(map.get("nodeid"));
+		String color = String.valueOf(map.get("color"));
+		
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		
+		//添加权限，不是知识图谱的作者，不能更改相关节点颜色
+		MindNode mindNodeNow = tryCatchMindMapService.getMindNodeObject(nodeid);
+		String mindUser = String.valueOf(mindNodeNow.getUserid());
+		
+		if(!mindUser.equals(userid)){
+			return statusMap.a("3");
+		}
+		
+		MindNode mindNode = tryCatchMindMapService.getMindNodeObject("nodeid", "userid", nodeid, userid);
+		mindNode.setColor(color);
+		
+		if(tryCatchMindMapService.updateMindNodeObject(mindNode)){
+			return statusMap.a("1");
+		}
+		
+		return statusMap.a("2");
 	}
 	
 	
