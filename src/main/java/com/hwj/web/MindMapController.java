@@ -536,6 +536,7 @@ public class MindMapController {
 			map2.put("id", mindNode.getNodeid());
 			map2.put("topic", mindNode.getNodename());
 			map2.put("parentid", mindNode.getParentid());
+			map2.put("color", mindNode.getColor());
 
 			list3.add(map2);
 		}
@@ -554,6 +555,7 @@ public class MindMapController {
 			node.topic = ((String) dataRecord.get("topic"));
 			node.parentid = ((String) dataRecord.get("parentid"));
 			node.direction = (String) (dataRecord.get("parentid"));
+			node.color = (String) dataRecord.get("color");
 			nodeList.put(node.id, node);
 		}
 		System.out.println(root + "  root  jiajijfi");
