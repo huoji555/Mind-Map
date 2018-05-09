@@ -108,6 +108,18 @@ public class MindMapController {
 	
 	/**
 	 * @author Ragty
+	 * @serialData 2018.5.9
+	 * @param 映射各个节点的笔记页面(新版)
+	 * @return
+	 */
+    @RequestMapping("/summer.do")
+    public String summer(){
+    	return "summer";
+    }
+	
+	
+	/**
+	 * @author Ragty
 	 * @param  映射教师端思维导图界面
 	 * @serialData 2018.3.22
 	 * @return

@@ -735,13 +735,8 @@
 	<!--根据点击获取子节点的type，显示不同的菜单  -->
 	$("jmnode").live('click', function(e) {
 		
-		$('#showbiji').attr('src', "summer.html");
-			$('#biji').menu();
-			$('#biji').menu('show', { //菜单EasyUI
-				left : e.pageX,
-				top : e.pageY - 250,
-				hideOnUnhover : false
-			});
+				var a = "summer.do";
+				_iframe(a);
 
 	});
 	
@@ -1538,6 +1533,30 @@
             
        }
 	</script>
+	
+	
+	<!-- 动态在小窗口中显示文件的方法-->
+    <script type="text/javascript">
+      
+	  function _iframe(a) {
+	  	  
+	     zeroModal.show({
+            title: '在线预览',
+            iframe: true,
+            url: a,
+            width: '80%',
+            height: '80%',
+            cancel: true,                //允许关闭
+            resize: true,                //允许移动
+            max: true,                   //允许最大化
+            min: true,                   //允许最小化
+            dragHandle: 'container',     //点击任意地方框拖动(旺仔摇滚冻即视感)
+            opacity: 0.8                 //设置遮罩透明度
+	            
+	       });
+	  }
+  
+    </script>
 	
 	
     <!-- 更改单个节点颜色  -->
