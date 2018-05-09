@@ -434,8 +434,8 @@
 						}
 						else if (json.state == 1) {
 							datas=eval('(' + json.datas + ')'); 
-						
 					        jm.show(datas);
+					        traverse(datas.data);
 						}else {
 							$.messager.alert("操作提示", "找不到对应的知识图谱！", "info");
 						}
