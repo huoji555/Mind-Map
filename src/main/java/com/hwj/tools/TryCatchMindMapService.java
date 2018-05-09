@@ -340,6 +340,7 @@ public class TryCatchMindMapService {
 		map10.put("id", ma.getNodeid());
 		map10.put("topic", ma.getNodename());
 		map10.put("parentid", ma.getParentid());
+		map10.put("color", ma.getColor());
 		list100.add(map10);
 		if (this.iMindNodeService.getAll("parentid", nodeid, "userid", userid) != null) {
 			// 获取到该节点下的子节点(之后一步步获取各级的节点,层层下推，共9层)
@@ -352,6 +353,7 @@ public class TryCatchMindMapService {
 				map.put("id", mindNode.getNodeid());
 				map.put("topic", mindNode.getNodename());
 				map.put("parentid", mindNode.getParentid());
+				map.put("color", mindNode.getColor());
 				list100.add(map);
 				if (this.iMindNodeService.getAll("parentid",
 						mindNode.getNodeid(), "userid", userid) != null) {
@@ -365,6 +367,7 @@ public class TryCatchMindMapService {
 						map2.put("id", mindNode2.getNodeid());
 						map2.put("topic", mindNode2.getNodename());
 						map2.put("parentid", mindNode2.getParentid());
+						map2.put("color", mindNode2.getColor());
 						list100.add(map2);
 						if (this.iMindNodeService.getAll("parentid",
 								mindNode2.getNodeid(), "userid", userid) != null) {
@@ -380,6 +383,7 @@ public class TryCatchMindMapService {
 								map3.put("id", mindNode3.getNodeid());
 								map3.put("topic", mindNode3.getNodename());
 								map3.put("parentid", mindNode3.getParentid());
+								map3.put("color", mindNode3.getColor());
 								list100.add(map3);
 								if (this.iMindNodeService
 										.getAll("parentid",
@@ -398,6 +402,8 @@ public class TryCatchMindMapService {
 												mindNode4.getNodename());
 										map4.put("parentid",
 												mindNode4.getParentid());
+										map4.put("color", 
+												mindNode4.getColor());
 										list100.add(map4);
 										if (this.iMindNodeService.getAll(
 												"parentid",
@@ -418,6 +424,8 @@ public class TryCatchMindMapService {
 														mindNode5.getNodename());
 												map5.put("parentid",
 														mindNode5.getParentid());
+												map5.put("color", 
+														mindNode5.getColor());
 												list100.add(map5);
 												if (this.iMindNodeService
 														.getAll("parentid",
@@ -448,6 +456,7 @@ public class TryCatchMindMapService {
 																"parentid",
 																mindNode6
 																		.getParentid());
+														map6.put("color", mindNode6.getColor());
 														list100.add(map6);
 														if (this.iMindNodeService
 																.getAll("parentid",
@@ -478,6 +487,7 @@ public class TryCatchMindMapService {
 																		"parentid",
 																		mindNode7
 																				.getParentid());
+																map7.put("color", mindNode7.getColor());
 																list100.add(map7);
 																if (this.iMindNodeService
 																		.getAll("parentid",
@@ -508,6 +518,7 @@ public class TryCatchMindMapService {
 																				"parentid",
 																				mindNode8
 																						.getParentid());
+																		map8.put("color", mindNode8.getColor());
 																		list100.add(map8);
 																		if (this.iMindNodeService
 																				.getAll("parentid",
@@ -538,6 +549,7 @@ public class TryCatchMindMapService {
 																						"parentid",
 																						mindNode9
 																								.getParentid());
+																				map9.put("color", mindNode9.getColor());
 																				list100.add(map9);
 																			}
 																		}

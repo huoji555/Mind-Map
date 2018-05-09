@@ -444,6 +444,7 @@ public class MindMapController {
 			node.id = ((String) dataRecord.get("id"));
 			node.topic = ((String) dataRecord.get("topic"));
 			node.parentid = ((String) dataRecord.get("parentid"));
+			node.color = (String) dataRecord.get("color");
 			nodeList.put(node.id, node);
 		}
 		System.out.println(root + "  root  jiajijfi");
