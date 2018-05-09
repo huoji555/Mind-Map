@@ -86,21 +86,21 @@
 		<div data-options="iconCls:'icon-edit'" style="height:30px;padding:10px 0 10px 0;">
 		<span>编辑节点颜色</span>
 			<div style="width: 150px;">
-				<div onclick="set_color(this.innerText);">primary</div>
-				<div onclick="set_color(this.innerText);">warning</div>
-				<div onclick="set_color(this.innerText);">danger</div>
-				<div onclick="set_color(this.innerText);">success</div>
-				<div onclick="set_color(this.innerText);">info</div>
-				<div onclick="set_color(this.innerText);">greensea</div>
-				<div onclick="set_color(this.innerText);">nephrite</div>
-				<div onclick="set_color(this.innerText);">belizehole</div>
-				<div onclick="set_color(this.innerText);">wisteria</div>
-				<div onclick="set_color(this.innerText);">asphalt</div>
-				<div onclick="set_color(this.innerText);">orange</div>
-				<div onclick="set_color(this.innerText);">pumpkin</div>
-				<div onclick="set_color(this.innerText);">pomegranate</div>
-				<div onclick="set_color(this.innerText);">clouds</div>
-				<div onclick="set_color(this.innerText);">asbestos</div>
+				<div onclick="set_color(this.innerText);">玫瑰红</div>
+				<div onclick="set_color(this.innerText);">咖色</div>
+				<div onclick="set_color(this.innerText);">浅紫</div>
+				<div onclick="set_color(this.innerText);">抹茶</div>
+				<div onclick="set_color(this.innerText);">郁金色</div>
+				<div onclick="set_color(this.innerText);">原色</div>
+				<div onclick="set_color(this.innerText);">圣诞红</div>
+				<div onclick="set_color(this.innerText);">天蓝</div>
+				<div onclick="set_color(this.innerText);">深紫</div>
+				<div onclick="set_color(this.innerText);">藏青</div>
+				<div onclick="set_color(this.innerText);">要什么颜色</div>
+				<div onclick="set_color(this.innerText);">凑数色</div>
+				<div onclick="set_color(this.innerText);">砖红</div>
+				<div onclick="set_color(this.innerText);">碳灰</div>
+				<div onclick="set_color(this.innerText);">亮粉</div>
 			</div>	
 				
 	    </div>
@@ -464,6 +464,7 @@
 						if (json.state == 1) {
 							datas=eval('(' + json.datas + ')'); 
 					        jm.show(datas);
+					        traverse(datas.data);
 						}else {
 							$.messager.alert("操作提示", "找不到对应的知识图谱！", "info");
 						}
@@ -1367,51 +1368,51 @@
         //颜色转换
         function shiftcolor(color){
 			switch(color){
-			case "danger":
-				color="#0797e4";
+			case "浅紫":
+				color="#CD96CD";
 				break;
-			case "info":
-				color="#5dc0de";
+			case "郁金色":
+				color="#fdb933";
 				break;
-			case "success":
-				color="#5cb85c";
+			case "抹茶":
+				color="#6BB073";
 				break;
-			case "warning":
-				color="#f0ad4e";
+			case "咖色":
+				color="#BF7F50";
 				break;
-			case "primary":
-				color="#d15b47";
+			case "玫瑰红":
+				color="#FF0000";
 				break;
-			case "greensea":
+			case "原色":
 				color="#1abc9c";
 				break;
-			case "nephrite":
-				color="#2ecc71";
+			case "圣诞红":
+				color="#BF0A10";
 				break;
-			case "belizehole":
-				color="#3498db";
-				break;
-			case "wisteria":
+			case "深紫":
 				color="#9b59b6";
 				break;
-			case "asphalt":
+			case "藏青":
 				color="#34495e";
 				break;
-			case "orange":
-				color="#f1c40f";
+			case "要什么颜色":
+				color="#733C80";
 				break;
-			case "pumpkin":
-				color="#e67e22";
+			case "天蓝":
+				color="#426ab3";
 				break;
-			case "pomegranate":
+			case "砖红":
 				color="#e74c3c";
 				break;
-			case "clouds":
-				color="#ecf0f1";
+			case "碳灰":
+				color="#404040";
 				break;
-			case "asbetos":
-				color="#95a5a6";
+			case "亮粉":
+				color="#ff3399";
 				break;
+			case "凑数色":
+				color="#8B1A1A";
+				break;	
 			}
 			return color;
 		}
