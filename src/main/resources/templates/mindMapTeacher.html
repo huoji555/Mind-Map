@@ -85,8 +85,29 @@
 	<div class="menu-sep"></div>
 	<div data-options="iconCls:'icon-puzzle-piece'" onclick="open_mindnode2()" style="height:30px;padding:10px 0 10px 0;">显示完整图</div>
 	<div class="menu-sep"></div>
-    </div>
-
+		<div data-options="iconCls:'icon-edit'" style="height:30px;padding:10px 0 10px 0;">
+		<span>编辑节点颜色</span>
+			<div style="width: 150px;">
+				<div onclick="set_color(this.innerText);">primary</div>
+				<div onclick="set_color(this.innerText);">warning</div>
+				<div onclick="set_color(this.innerText);">danger</div>
+				<div onclick="set_color(this.innerText);">success</div>
+				<div onclick="set_color(this.innerText);">info</div>
+				<div onclick="set_color(this.innerText);">greensea</div>
+				<div onclick="set_color(this.innerText);">nephrite</div>
+				<div onclick="set_color(this.innerText);">belizehole</div>
+				<div onclick="set_color(this.innerText);">wisteria</div>
+				<div onclick="set_color(this.innerText);">asphalt</div>
+				<div onclick="set_color(this.innerText);">orange</div>
+				<div onclick="set_color(this.innerText);">pumpkin</div>
+				<div onclick="set_color(this.innerText);">pomegranate</div>
+				<div onclick="set_color(this.innerText);">clouds</div>
+				<div onclick="set_color(this.innerText);">asbestos</div>
+			</div>	
+				
+	    </div>
+		<div class="menu-sep"></div>
+	    </div>
 
 
     <!-- 改变主题颜色(思维导图)需要调用的版块 -->
@@ -241,6 +262,7 @@
 					if (json.state == 1) {
 						datas=eval('(' + json.datas + ')'); 
 				        jm.show(datas);
+				        traverse(datas.data);
 				        expand_to_level2();  //调整为显示主节点后的三层  
 				        
 					     $('#savemymindmap').live('click',function(e){
@@ -290,6 +312,7 @@
 							datas=eval('(' + json.datas + ')'); 
 						
 					        jm.show(datas);
+					        traverse(datas.data);
 					        expand_to_level2();  //调整为显示主节点后的三层
 						}else if(json.a==2){
 							$.messager.alert("操作提示", "请登录后再查看分享的知识图谱", "info");
@@ -1515,6 +1538,118 @@
             
        }
 	</script>
+	
+	
+    <!-- 更改单个节点颜色  -->
+    <script type="text/javascript">
+    
+        //右键菜单设置单个节点的颜色
+		function set_color(color){
+			var sel=$("jmnode.selected").attr("nodeid");
+			var color1=shiftcolor(color);
+			jm.set_node_color(sel, color1);
+			var data={
+					"nodeid":sel,
+					"color":color,
+			}
+			var da=JSON.stringify(data);
+			
+			$.ajax({
+				type:"POST",
+				url:"/saveColor.do",
+				dataType:"json",
+				contentType:"application/json",
+				data:da,
+				
+				success:function(data){
+					
+					if(data.a == "2"){
+						alert("更改失败");
+					} else if(data.a == "3"){
+						alert("不是您的知识图谱");
+					} 
+				}
+				
+			});
+		}
+        
+        
+        //颜色转换
+        function shiftcolor(color){
+			switch(color){
+			case "danger":
+				color="#0797e4";
+				break;
+			case "info":
+				color="#5dc0de";
+				break;
+			case "success":
+				color="#5cb85c";
+				break;
+			case "warning":
+				color="#f0ad4e";
+				break;
+			case "primary":
+				color="#d15b47";
+				break;
+			case "greensea":
+				color="#1abc9c";
+				break;
+			case "nephrite":
+				color="#2ecc71";
+				break;
+			case "belizehole":
+				color="#3498db";
+				break;
+			case "wisteria":
+				color="#9b59b6";
+				break;
+			case "asphalt":
+				color="#34495e";
+				break;
+			case "orange":
+				color="#f1c40f";
+				break;
+			case "pumpkin":
+				color="#e67e22";
+				break;
+			case "pomegranate":
+				color="#e74c3c";
+				break;
+			case "clouds":
+				color="#ecf0f1";
+				break;
+			case "asbetos":
+				color="#95a5a6";
+				break;
+			}
+			return color;
+		}
+        
+        
+        //编辑单个节点的颜色
+        function changecolor(id,color){
+			jm.set_node_color(id,color);
+		}
+        
+        
+        //遍历一个图谱的所有节点（加载图谱时调用）
+		function traverse(json){
+			if(!json){
+				return ;
+			}
+			
+			var color=shiftcolor(json.color);
+			changecolor(json.id,color);
+			if(json.children&&json.children.length>0){
+				for(var i=0;i<json.children.length;i++){
+					this.traverse(json.children[i]);
+				}
+			}
+		}
+    
+    
+    </script>	
 
 
 

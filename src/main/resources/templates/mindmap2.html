@@ -1357,14 +1357,17 @@
 				dataType:"json",
 				contentType:"application/json",
 				data:da,
-				succcess:function(data){
+				
+				success:function(data){
+					
 					if(data.a == "2"){
 						alert("更改失败");
 					} else if(data.a == "3"){
 						alert("不是您的知识图谱");
 					} 
 				}
-			})
+				
+			});
 		}
         
         
