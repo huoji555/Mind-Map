@@ -293,10 +293,15 @@
                     var src_node = this.active_node;
                     var target_node = this.target_node;
                     var target_direct = this.target_direct;
+
                     this.move_node(src_node,target_node,target_direct);
                     
+                    
+                 //判断拖动目标是否为原节点的小弟  
+                if(!jsMind.node.inherited(src_node, target_node)){
+                    
                   //保存移动节点的位置，下次打开时能够根据拖动的位置打开
-                    try {
+                   try {
                 	  var adata={"beforeId":src_node.id,
                   		         "afterId":target_node.id
                              };
@@ -319,6 +324,8 @@
 		           			  console.log("网络连接失败！");  
 		           		   },
                        });
+                       
+                    }  //更改节点bug
                        
                 }
                 this.hide_shadow();

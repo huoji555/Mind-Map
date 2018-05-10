@@ -1943,6 +1943,15 @@ public class MindMapController {
     		return statusMap.a("4");
     	}
     	
+    	/*System.out.println("-------------");
+    	System.out.println(tryCatchMindMapService.draggableRule(beforeid, afterid, userid));
+    	System.out.println("-------------");
+    	//防止将自己拖到自己的子节点后
+    	if(tryCatchMindMapService.draggableRule(beforeid, afterid, userid)){
+    		System.out.println("是它的子节点（....）");
+    		return statusMap.a("7");
+    	}*/
+    	
     	mindNode.setParentid(afterid);
     	
     	if(this.tryCatchMindMapService.updateMindNodeObject(mindNode)){
