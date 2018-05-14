@@ -21,7 +21,7 @@
 
 
           <!-- hibernate.connection.url : 连接数据库的地址,路径 -->
-        <property name="hibernate.connection.url">jdbc:mysql://172.18.73.161:3306/qqqqq</property>
+        <property name="hibernate.connection.url">jdbc:mysql://172.18.73.161:3306/mind</property>
 
 
         <!-- show_sql: 操作数据库时,会 向控制台打印sql语句 -->
