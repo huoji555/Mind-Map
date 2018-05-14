@@ -26,7 +26,7 @@
 </style>
 
 </head>
-<body>
+<body onkeydown="Ctrl()">
 
      <form class="knowlegMap">
      <div class="form-group" >
@@ -183,12 +183,19 @@
 				  if(zsdBefore != zsdNow){
 					  savezsd();
 				  }
-				  
 			  }
 			  
 		  }
-		  
-	    
+	      
+	      //增加Ctrl+s保存知识点
+	      function Ctrl(){
+	    	  
+	    	  if(event.ctrlKey == true && event.keyCode == 83){
+	    		  alert("保存中");
+	    		  cut();
+	        	}
+	    	  
+	      }
 	    
 	  </script>
 	  
