@@ -147,6 +147,7 @@
 	<script type="text/javascript" src="mindmap/jsmind.screenshot.js"></script>
 	<script type="text/javascript" src="999/zeroModal.min.js"></script>
 	
+	
 	<style type="text/css">
 			#jsmind_container {
 				float: left;
@@ -1318,16 +1319,18 @@
             url: a,
             width: '80%',
             height: '80%',
-            cancel: false,                //允许关闭
+            cancel: false,               //允许关闭
             resize: true,                //允许移动
             max: true,                   //允许最大化
             min: true,                   //允许最小化
             dragHandle: 'container',     //点击任意地方框拖动(旺仔摇滚冻即视感)
-            opacity: 0.8                 //设置遮罩透明度
+            opacity: 0.8,                //设置遮罩透明度
+            overlayClose: true          //点击遮罩层关闭窗口
+             
 	            
 	       });
 	  }
-  
+	  
     </script>
     
     
