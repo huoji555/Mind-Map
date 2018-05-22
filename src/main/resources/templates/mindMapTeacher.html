@@ -1073,6 +1073,7 @@
 	}
 	
 	
+	
 	<!-- 动态获取我的思维导图的页数 -->
 	function getMyMindMapPage(currentPage){
 		
@@ -1219,11 +1220,11 @@
 					alert("该系统目前还没有建立的思维导图");
 				}else{
 				html+="<div style='padding: 10px 10px 10px;'>";
-				html+="<form class='bs-example bs-example-form' role='form'>";
+				html+="<form class='bs-example bs-example-form' role='form' onsubmit='return false;'>";
 				html+="<div class='row'>";
 				html+="<div class='col-lg-7'>";
 				html+="<div class='input-group'>";
-				html+="<input type='text' class='form-control' id='teacherMind'>";
+				html+="<input type='text' class='form-control' onkeydown='EnterPress();' id='teacherMind'>";
 				html+="<span class='input-group-btn'>";
 				html+="<button class='btn btn-info' type='button' onclick='findTeacherMind(1);'>Go!</button>";
 				html+="</span>";
@@ -1384,11 +1385,11 @@
 					alert("该系统目前还没有建立的思维导图");
 				}else{
 				html+="<div style='padding: 10px 10px 10px;'>";
-				html+="<form class='bs-example bs-example-form' role='form'>";
+				html+="<form class='bs-example bs-example-form' role='form' onsubmit='return false;'>";
 				html+="<div class='row'>";
 				html+="<div class='col-lg-7'>";
 				html+="<div class='input-group'>";
-				html+="<input type='text' class='form-control' id='teacherMind'>";
+				html+="<input type='text' class='form-control' onkeydown='EnterPress();' id='teacherMind'>";
 				html+="<span class='input-group-btn'>";
 				html+="<button class='btn btn-info' type='button' onclick='findTeacherMind(1,\""+selectContent+"\");'>Go!</button>";
 				html+="</span>";
@@ -1535,6 +1536,16 @@
          $("#file_input").click();
             
        }
+	</script>
+	
+	
+	<!-- 回车搜索 -->
+	<script type="text/javascript">
+		function EnterPress(){
+		    	if(event.keyCode == 13){
+		    		findTeacherMind(1);
+		    	}
+		    }
 	</script>
 	
 	
