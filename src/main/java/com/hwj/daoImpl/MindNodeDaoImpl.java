@@ -41,7 +41,7 @@ public class MindNodeDaoImpl extends BaseDaoImpl<MindNode> implements
 		// TODO Auto-generated method stub
 		String hql = "select * from  MindNode as model where (model.nodename like '%" + value1
 				+ "%'";
-		hql += " or model.userid = (select name from User as model2 where model2.real_name like '%"+value1+"%')";
+		hql += " or model.userid = (select name from User as model2 where model2.real_name like '%"+value1+"%' limit 1)";
 		hql += " or model.userid like '%"+value1+"%'";
 		hql += " )and model.parentid = '00100'";
 		Query query = ((SQLQuery) getCurrentSession().createSQLQuery(hql).setFirstResult((currentPage-1)*pageSize).setMaxResults(pageSize)).addEntity(MindNode.class);
@@ -66,7 +66,7 @@ public class MindNodeDaoImpl extends BaseDaoImpl<MindNode> implements
 		// TODO Auto-generated method stub
 		String hql = "select count(*) from  MindNode as model where (model.nodename like '%" + value1
 				+ "%'";
-		hql += " or model.userid = (select name from User as model2 where model2.real_name like '%"+value1+"%')";
+		hql += " or model.userid = (select name from User as model2 where model2.real_name like '%"+value1+"%' limit 1)";
 		hql += " or model.userid like '%"+value1+"%'";
 		hql += " )and model.parentid = '00100'";
 		

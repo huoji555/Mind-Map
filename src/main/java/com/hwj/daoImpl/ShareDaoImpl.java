@@ -42,7 +42,7 @@ public class ShareDaoImpl extends BaseDaoImpl<Share> implements IShareDao {
 		// TODO Auto-generated method stub
 		String hql = "select * from  share_mind as model where model.mind_name like '%" + value+ 
 				"%'";
-		hql += " or model.userid = (select name from User as model2 where model2.real_name like '%"+value+"%')";
+		hql += " or model.userid = (select name from User as model2 where model2.real_name like '%"+value+"%' limit 1)";
 		hql += " or model.userid like '%"+value+"%'";
 		Query query = ((SQLQuery) getCurrentSession().createSQLQuery(hql).setFirstResult((currentPage-1)*pageSize).setMaxResults(pageSize)).addEntity(Share.class);
 		
@@ -66,7 +66,7 @@ public class ShareDaoImpl extends BaseDaoImpl<Share> implements IShareDao {
 		// TODO Auto-generated method stub
 		String hql = "select count(*) from  share_mind as model where model.mind_name like '%" + value+ 
 				"%'";
-		hql += " or model.userid = (select name from User as model2 where model2.real_name like '%"+value+"%')";
+		hql += " or model.userid = (select name from User as model2 where model2.real_name like '%"+value+"%' limit 1)";
 		hql += " or model.userid like '%"+value+"%'";
 		
 		Query query = getCurrentSession().createSQLQuery(hql);
