@@ -31,7 +31,7 @@
      <form class="knowlegMap">
      <div class="form-group" >
         <label for="" style = "margin-left: 5%;">知识点名称</label>
-        <input type="email" class="form-control" id="zsdmc" placeholder="知识点名称" style="width:90%; margin:0 auto; margin-top: 1%;">
+        <input type="email" class="form-control" id="zsdmc" onsubmit="return false;"  placeholder="知识点名称" style="width:90%; margin:0 auto; margin-top: 1%;">
      </div>
      <div class="tags">
        <ul class="nav nav-pills nav-justified" style="width:100%;">
@@ -191,8 +191,8 @@
 	      function Ctrl(){
 	    	  
 	    	  if(event.ctrlKey == true && event.keyCode == 83){
-	    		  alert("保存中");
 	    		  cut();
+	    		  event.returnValue=false;  //不同浏览器之间会有阻塞，现在有点懒，以后碰到问题写个多浏览器判断即可
 	        	}
 	    	  
 	      }
