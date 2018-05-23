@@ -34,7 +34,7 @@
         <input type="email" class="form-control" id="zsdmc" placeholder="知识点名称" style="width:90%; margin:0 auto; margin-top: 1%;">
      </div>
      <div class="tags">
-       <ul class="nav nav-pills nav-justified" style="width:80%;">
+       <ul class="nav nav-pills nav-justified" style="width:100%;">
 	     <li role="presentation" id="zsdms">
 	       <a onclick="getzsd()">知识点描述</a>
 	     </li>
@@ -50,6 +50,9 @@
 	     <li role="presentation" id="UploadFile">
 	       <a onclick='uploadShow()'>上传文件</a>
 	     </li>
+	     <li role="presentation" style="text-align:right;">
+	       <button onclick='cut();' type='button' class="btn btn-primary  btn-block">保存</button>
+	     </li>
 	 </ul>
 	 </div>
      <div style="width:90%; margin:0 auto;">
@@ -57,7 +60,6 @@
      </div>
      </form>                  <!-- 显示加载模态框的界面 -->
 
-     <div id="latte"></div>   <!-- 加载显示知识点时的按钮 -->
  
  
    <!-- 初始界面加载 -->
@@ -79,7 +81,7 @@
 	    function getzsd(){
 			  
 	    	$('#a_content').summernote({
-		          height: 280,
+		          height: 350,
 		          tabsize: 2,
 		          minHeight: 20,
 		          maxHeight: 900,
@@ -120,8 +122,6 @@
 				 		 
 				 		 document.getElementById('store').value = html; 
 				 		 
-				 		 button += "<button type='button' onclick='savezsd()' class='btn btn-primary btn-lg' style='display: block; margin: 0 auto;'>保存</button>";
-			    	     $("#latte").html(button);
 			    	 },
 			    	 
 			    	 error:function(e){
@@ -219,7 +219,6 @@
 				   
 				   success: function(data){
 					   $('#a_content').summernote('destroy');
-					   $("#latte").html("");
 					   $("li").removeClass("active");
 					   $("#myFile").addClass("active");
 					   
@@ -315,7 +314,6 @@
         	 
         	 cut();
         	 $('#a_content').summernote('destroy');
-			 $("#latte").html("");
 			 $("li").removeClass("active");
 			 $("#UploadFile").addClass("active");
         	 
@@ -336,7 +334,7 @@
         	 var html = "";
         	 
         	 if($("#wenjian").val()== ""){
-        		 html += "<button class='btn btn-success' style ='margin-top:10px; float:right;' onclick='uploadFile()'>上传</button>";
+        		 html += "<button class='btn btn-success' type='button' style ='margin-top:10px; float:right;' onclick='uploadFile()'>上传</button>";
         		 $("#button").html(html);
         	 } else{
         		 $("#button").html(html);
@@ -445,7 +443,6 @@
 			    	
 			    	success:function(data){
 			    		$('#a_content').summernote('destroy');
-						$("#latte").html("");
 						$("li").removeClass("active");
 						$("#myShare").addClass("active");
 			    		
@@ -593,7 +590,6 @@
 				   
 				   success:function(data){
 					   $('#a_content').summernote('destroy');
-					   $("#latte").html("");
 					   $("li").removeClass("active");
 					   $("#myCollect").addClass("active");
 
