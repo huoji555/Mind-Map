@@ -23,16 +23,23 @@
   background: #f5f5f5;
   margin: 0 auto;
 }
+
+/* .nav li {
+	box-shadow: 0 0 0 0.2px rgba(97,97,97,1) inset; */
 </style>
 
 </head>
 <body onkeydown="Ctrl()">
 
+	 <div class="form-group">
+        <label for="" style=" width:95%; margin:auto; margin-left: 5%;">
+        	<span style="float:left;margin:0,auto;margin-top: 5px;">知识点名称 </span>
+        	<input type="email" class="form-control" id="zsdmc" onsubmit="return false;"  placeholder="知识点名称" style="width:85%;float:right;margin-right: 5%;">
+        </label><br/>
+     </div>           <!-- zsdmc End!!! -->
+     
      <form class="knowlegMap">
-     <div class="form-group" >
-        <label for="" style = "margin-left: 5%;">知识点名称</label>
-        <input type="email" class="form-control" id="zsdmc" onsubmit="return false;"  placeholder="知识点名称" style="width:90%; margin:0 auto; margin-top: 1%;">
-     </div>
+     
      <div class="tags">
        <ul class="nav nav-pills nav-justified" style="width:100%;">
 	     <li role="presentation" id="zsdms">
@@ -51,10 +58,11 @@
 	       <a onclick='uploadShow()'>上传文件</a>
 	     </li>
 	     <li role="presentation" style="text-align:right;">
-	       <button onclick='cut();' type='button' class="btn btn-primary  btn-block">保存</button>
+	       <button onclick='cut();' type='button' class="btn btn-primary btn-block">保存</button>
 	     </li>
 	 </ul>
 	 </div>
+	 
      <div style="width:90%; margin:0 auto;">
         <div  class="summernote" id="a_content" name="a_content"></div>
      </div>
@@ -81,7 +89,7 @@
 	    function getzsd(){
 			  
 	    	$('#a_content').summernote({
-		          height: 350,
+		          height: 400,
 		          tabsize: 2,
 		          minHeight: 20,
 		          maxHeight: 900,
