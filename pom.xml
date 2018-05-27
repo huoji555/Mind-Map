@@ -174,13 +174,7 @@
 			<version>2.15.0</version>
 		</dependency>
 		
-		<!-- web-socket -->
-		<!-- <dependency>
-		    <groupId>org.java-websocket</groupId>
-		    <artifactId>Java-WebSocket</artifactId>
-		    <version>1.3.8</version>
-		</dependency> -->		
-		
+		<!-- web-Socket -->
 		<dependency>  
            <groupId>org.springframework.boot</groupId>  
            <artifactId>spring-boot-starter-websocket</artifactId>  
