@@ -63,7 +63,7 @@ public class WebSocketManytoMany {
       */
      @OnMessage
      public void onMessage(String message, Session session) {
-         System.out.println("来自客户端的消息:" + message);
+         System.out.println("来自客户端的消息1:" + message);
          //群发消息
          for(WebSocketManytoMany item: webSocketSet){
              try {

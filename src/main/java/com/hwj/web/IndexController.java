@@ -53,10 +53,11 @@ public class IndexController {
 	 * @param  用来映射首页面
 	 * @return
 	 */
-	@RequestMapping(value={"/","index1.do"})
+	@RequestMapping(value={"/","index.do"})
 	public String index(){
-		return "index1";
+		return "index";
 	}
+
 	
 	
 	/**

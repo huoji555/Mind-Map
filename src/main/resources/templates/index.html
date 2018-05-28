@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Page-Enter" content="blendTrans(Duration=2.0)">
+    <title>毛线头资源管理系统</title>
+    
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="css/index/style.css">
+    
+    <script type="text/javascript" src="js/jquery.min2.1.4.js" ></script>
+    <script type="text/javascript" src="js/index/style.js" ></script>    <!-- 控制滚动事件 -->
+    <script type="text/javascript" src="js/bootstrap.min.js" ></script>  <!-- 首页面样式 -->
+
+
+</head>
+<body>
+
+
+
+ 	<!--  验证是否登录  -->
+    <script type="text/javascript">
+        var adata = "1";
+        var arr = "";
+        var data = JSON.stringify(adata);
+        $.ajax({
+            type: "POST",
+            contentType:"application/json",
+            url: "iflogin.do",
+            data: data,
+            dataType: "json",
+            success: function(data){
+                if(data.nickname!=null){
+                	sessionStorage.setItem('username', data.nickname);
+                    arr = "<div class='navimg'><div class='btn-group' style='back'><a href='#' style='width:45px;overflow:hidden;white-space:nowrap;'>"+data.nickname+"</a><span class='caret' id='b_nav'></span><ul class='dropdown-menu' role='menu' id='ee' style='background-color:rgba(0,0,0,0);min-width: 16px;'><li><a onclick='quit();' class='zc'>注&nbsp;&nbsp;销</a></li></ul></div></div>"
+                    $("#nickname").html(arr);
+                    $(document).ready(function(){
+                       $("#b_nav").click(function(){
+               			$("#ee").toggle();
+               			});
+               		});
+                }
+            },
+        });
+	        
+	        
+        //登录框下拉
+        $(document).ready(function(){
+        	
+	        $("#b_nav").click(function(){
+	        	$("#ee").toggle();
+			});
+	        
+		});
+	        
+	      
+        
+        $(function(){
+            //点击超链接局部刷新页面
+            $(".navimg>a").click(function(){
+            	if(sessionStorage.getItem("username") == null){
+            		alert("请先登录");
+            		return false;
+            	}
+            	$(".navimg a").css("border-bottom","solid rgba(0,0,0,0) 2px");
+            	$(this).css("border-bottom","solid #DA4E43 2px");
+            	$("#view").load(this.href); 
+                return false;
+            });
+        });
+	        
+	    </script>
+    
+    
+    
+		<!-- 重写一个退出功能 -->
+		<script type="text/javascript">
+		
+		  function quit(){
+			  
+			  $.ajax({
+		          type: "POST",
+		          contentType:"application/json",
+		          url: "quitLogin.do",
+		          data: data,
+		          dataType: "json",
+		          success: function(data){
+		          	
+		          	if(data.a=="1"){
+		          		sessionStorage.clear();
+		          		location.href = "index.do";	
+		          	  }
+		          	},
+		        });
+		  }
+		
+		</script>
+	
+	
+	
+    <!-- 手机页面下拉框显示 -->
+	<script>
+		$(document).ready(function(){
+		$("#btn_nav").click(function(){
+		$("#example-navbar-collapse").toggle();
+		});
+		});
+	</script>
+	
+	
+	<!-- 顶部导航栏  -->
+    <div class="top">
+        <div class="row navbar-fixed-top" style="height:50px;width: 100%;margin-left: 0;" id="tp">
+            <div class="col-md-7">
+                <p id="logo_o" class="logo_o"><a style="color:#D5362A;text-decoration: none;
+                ">M</a>ind <a style="color:#D5362A;text-decoration: none;">M</a>ap</p>
+            </div>
+            <div class="col-md-5 text-center" style="display: flex">
+                <div class="navimg"><div><a class="a_now" href="index.do">首&nbsp;&nbsp;页</a></div></div>
+                <div class="navimg"><a href="view.do">资&nbsp;&nbsp;源</a></div>
+                <div class="navimg" style="white-space:nowrap;"><a href="mindmap2.do">知识图谱</a></div>
+                <div class="navimg"><a href="study.do">学&nbsp;&nbsp;习</a></div>
+				<div class="navimg" id='nickname'>
+	                <div class="btn-group" style="back">
+						<a href="testLogin.do">登&nbsp;&nbsp;录</a> <span class="caret" id="b_nav"></span>
+						<ul class="dropdown-menu" role="menu" id="ee" style="background-color:rgba(0,0,0,0); min-width: 16px;">
+							<li><a href="register.do" class="zc">注&nbsp;&nbsp;册</a></li>
+						</ul>
+					</div>
+                </div>
+            </div>
+        </div>
+        
+       
+        <!-- 手机端导航栏（bug） -->
+       	<div class="navbar navbar-default navbar-fixed-top" id="dnav">
+       	<div class="nav navbar-header navbar-fixed-top ">
+           <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-responsive-collapse" id="btn_nav">
+           <span class="sr-only"></span>
+           <span class="icon-bar"></span>
+           <span class="icon-bar"></span>
+           <span class="icon-bar"></span>
+           </button>
+           </div>
+           <div class="collapse navbar-collapse" id="example-navbar-collapse" style="float:left;">
+               <ul class="nav navbar-nav ">
+                   <li><a href="view.do">资&nbsp;&nbsp;源</a></li>
+                   <li><a href="mindmap2.do">知识图谱</a></li>
+                   <li><a href="study.do">学&nbsp;&nbsp;习</a></li>
+                   <li><a href="testLogin.do">登&nbsp;&nbsp;录</a></li>
+                   <li><a href="register.do" class="zc">注&nbsp;&nbsp;册</a></li>
+               </ul> 
+          </div>
+        </div>
+           
+           
+            
+        <div id="view">
+        <div class="row" style="height:605px;width: 100%;margin-left: 0;">
+            <div class="col-md-10 col-md-offset-1 get-it" style="height: 300px;margin-top: 5vh;">
+                <h1 class="logo">Mind Map</h1>
+                <p class="top_s">Mind Map,a new idea of learning</p>
+                <p class="top_p">Easy to use documentation mind map real-time collaborative editing.</p>
+                <center><button onclick="window.location.href='register.do'" class="signup-btn 
+                btn btn-primary btn-block btn-lg btn-signin" id="btn1" data-track-category="landing"
+                 data-track-action="test-now-landing-top" type="submit">Try now</button></center>
+                <p class="top_p" style="margin-top: 5px;"><a href="#middle" style="transition: 1s;
+                "><span class="glyphicon glyphicon-triangle-bottom" style="position: relative;top:5px;
+                "></span>learn more</a></p>
+            </div>
+        </div>
+        
+        
+  
+    <div class="row">
+    <a id="middle">&nbsp;</a>
+    <h3 class="heart">Teams<a>❤</a>Mindmap</h3>
+    </div>
+    
+    
+    
+    <div class="row" style="width: 100%;margin-left: 0;padding-bottom: 50px;">
+        <div class="col-md-6">
+            <img src="images/gif/" style="max-width: 100%;height: auto;border:solid 1px #CCC;
+            box-shadow: #E8E8E8 3px 4px 10px 0;">
+        </div>
+        <div class="col-md-6 text-center" style="font-family:'方正舒体';margin-bottom:20px;">
+            <h2>Made in Germany</h2><h3>German Privacy</h3>
+        </div>
+        <div class="txt" style="font-family:'方正舒体'"><p>The strict german privacy law is applied.
+         Your data is processed and saved in german data centers.</p>
+         <p>No information will be transferred in other countries or third parties.
+         The strict german privacy law is applied. Your data is processed and saved in german data centers.</p>
+         <p>No information will be transferred in other countries or third parties.</p>
+        </div>
+    </div>
+    
+    
+    
+    <div class="row" style="width: 100%;margin-left: 0;background:#F2F2F2;
+    padding-top: 50px;padding-bottom: 50px;">
+        <div class="col-md-6">
+           <div class="text-center" style="font-family:'方正舒体'">
+            <h2>Made in Germany</h2><h3>German Privacy</h3>
+        </div>
+        <div class="txt" style="font-family:'方正舒体'">
+        <p>The strict german privacy law is applied. Your data is processed and saved in german data centers.</p>
+        <p>No information will be transferred in other countries or third parties.The strict german privacy law is applied. 
+        Your data is processed and saved in german data centers.</p>
+        <p>No information will be transferred in other countries or third parties.</p>
+        </div>
+        </div>
+        <div class="col-md-6 text-center">
+            <img src="images/02.png" style=" max-width: 100%;height: auto;border:solid 1px #CCC;
+            box-shadow: #E8E8E8 3px 4px 10px 0;">
+        </div>
+    </div>
+    
+    
+    
+    
+    <div class="row" style="width: 100%;margin-left: 0;    padding-top: 50px;padding-bottom: 50px;">
+        <div class="col-md-6">
+            <img src="images/03.png" style="max-width: 100%;height: auto;border:solid 1px #CCC;
+            box-shadow: #E8E8E8 3px 4px 10px 0;">
+        </div>
+        <div class="col-md-6 text-center">
+        <div class="text-center" style="font-family:'方正舒体'">
+            <h2>Made in Germany</h2><h3>German Privacy</h3>
+        </div>
+        <div class="txt" style="font-family:'方正舒体'"><p>The strict german privacy law is applied.
+        Your data is processed and saved in german data centers.</p>
+        <p>No information will be transferred in other countries or third parties.
+        The strict german privacy law is applied. Your data is processed and saved in german data centers.</p>
+        <p>No information will be transferred in other countries or third parties.</p>
+        </div>
+        </div>
+    </div>
+    <div class="gray-background" style="padding-bottom:40px;background: #F2F2F2"><div class="container">
+        <h2 class="text-center extra-margin who">谁适合使用本系统？</h2>
+        <div class="row motivation-list">
+            <div class="col-md-4 col-sm-6 motivation-item">
+                <div class="motivation-container box">
+                    <h2><a href="#" style="text-decoration: none;color: inherit;">学生(Student)</a></h2>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <p class="motivation-description ">Collect your ideas and findings in your personal wikis.
+                            Plan your vacation or next <i>do it yourself</i> 
+                            project. Share your thoughts with your family and friends.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 motivation-item">
+                <div class="motivation-container box">
+                    <h2><a href="#" style="text-decoration: none;color: inherit;">老师(Teacher)</a></h2>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <p class="motivation-description">Build up a central knowledge base with your community.
+                             A community wiki is the simplest way for share How-to's,
+                             Tutorials and Documentation in one central place.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-6 motivation-item">
+                <div class="motivation-container box">
+                    <h2><a href="#" style="text-decoration: none;color: inherit;">课上讨论(Class)</a></h2>
+                    <div class="row"><div class="col-xs-12">
+                        <p class="motivation-description">The knowledge of your team members is most important.
+                        Connect your team with a business wiki to conserve your knowledge.</p>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="clearfix"></div>
+    </div>
+
+<div class="gray-background" style="padding-bottom:40px;background: #FFF;font-family:'方正舒体';"><div class="container">
+        <h2 class="text-center extra-margin who">为什么选择本系统？</h2>
+    </div>
+    
+    
+    
+    <div class="row btn_t" style="margin-left: 30px;">
+        <div class="col-md-6 text"><div class="wrap"><span class="glyphicon glyphicon-send"></span>
+        <h2>Made in Germany</h2><h3>German Privacy</h3>
+        </div>
+        <div class="txt">
+        <p>The strict german privacy law is applied. Your data is processed and saved in german data centers.</p>
+        <p>No information will be transferred in other countries or third parties.</p>
+        </div>
+        </div>
+        <div class="col-md-6 text"><div class="wrap"> <span class="glyphicon glyphicon-star-empty"></span>
+        <h2>Made in Germany</h2><h3>German Privacy</h3>
+        </div>
+            <div class="txt">
+            <p>The strict german privacy law is applied. Your data is processed and saved in german data centers.</p>
+            <p>No information will be transferred in other countries or third parties.</p>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    <div class="row btn_t" style="margin-left: 30px;padding-bottom: 20px;background: #FFF;">
+        <div class="col-md-6 text"><div class="wrap"><span class="glyphicon glyphicon-tags"></span>
+        <h2>Made in Germany</h2><h3>German Privacy</h3>
+        </div>
+            <div class="txt"><p>The strict german privacy law is applied.
+            Your data is processed and saved in german data centers.</p>
+            <p>No information will be transferred in other countries or third parties.</p>
+            </div>
+        </div>
+        <div class="col-md-6 text"><div class="wrap"><span class="glyphicon glyphicon-transfer"></span>
+        <h2>Made in Germany</h2><h3>German Privacy</h3>
+        </div>
+            <div class="txt">
+            <p>The strict german privacy law is applied. Your data is processed and saved in german data centers.</p>
+            <p>No information will be transferred in other countries or third parties.</p>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    <div class="row">
+        <center><button onclick="window.location.href='register.do'" 
+        class="signup-btn btn btn-primary btn-block btn-lg btn-signin" data-track-category="landing" 
+        data-track-action="test-now-landing-top" style="font-family:'';">Try now</button></center>
+    </div>
+</div>
+    <div class="row foot" >
+        <div class="col-md-4 col-sm-6 motivation-item">
+            <p style="font-size: 24px"><b><a style="color:#D5362A;text-decoration: none;
+            ">M</a>ind <a style="color:#D5362A;text-decoration: none;">M</a>ap</b></p>
+            <p class="links" style="font-size: 15px;padding-top: 30px;"> 首页 · 资源 · 知识图谱 · 注册 · 登录 </p>
+            <p class="company-name" style="padding-top: 30px;">Mind Map China(haftungsbeschr?nkt) ?2018</p>
+
+        </div>
+        <div class="col-md-4 col-sm-6 motivation-item">
+            <p style="font-size: 24px"><a style="color:#D5362A;text-decoration: none;">关于</a>我们:</p>
+            <p class="links" style="font-size: 15px">毛线头是一个一知识图谱为主的资源管理系统，毛线头就是毛线头啊毛线头啊毛线头啊毛线头啊毛线头啊</p>
+        </div>
+        <div class="col-md-4 col-sm-6 motivation-item">
+            <p style="font-size: 24px"><a style="color:#D5362A;text-decoration: none;">联系</a>我们:</p>
+            <p class="links" style="font-size: 15px">河北省-张家口市-河北北方学院-信息科学与工程学院（东校区）</p>
+            <p style="font-size: 24px;padding-top: 30px;"><a style="color:#D5362A;text-decoration: none;">联系</a>邮箱:</p>
+            <p class="links" style="font-size: 15px">778877887@qq.com/1551136@136.com</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
   * @Description: 配置解析页面
   * @Create Date: 2017年8月14日上午12:01:03
   * @Version: V1.00 
-  * @Author: 赵良臣
   */
 @Configuration
 public class ErrorConfiguration {
