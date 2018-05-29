@@ -49,8 +49,9 @@
 	<span class="green middle bolder" onclick="getShareMindMap(1)"><i class="icon-time blue bigger-120"></i>&nbsp;查看分享图谱</span> &nbsp; 
 	<span class="green middle bolder" onclick="getMyMindMap(1);"><i class="icon-group blue bigger-120"></i>&nbsp;我的知识图谱</span> &nbsp; 
 	<span class="green middle bolder" onclick="sharemindmap();"><i class="icon-share blue bigger-120"></i>&nbsp;分享知识图谱</span> &nbsp; 
-		
 	<span class="green middle bolder align-right" id="shezhi" ><i class="icon-cog blue bigger-120"></i>&nbsp;设置主题</span> &nbsp;&nbsp; 
+    
+    <span class="green middle bolder" onclick="chat();"><i class="icon-share blue bigger-120"></i>&nbsp;讨论</span> &nbsp; 
 				               
 				               
     </div>
@@ -259,6 +260,7 @@
 			data : da,
 			success : function(data) {
 				var json = $.parseJSON(data);
+				document.getElementById('rootid').value = json.kcmc;
 				if (json.state == 1) {
 					datas=eval('(' + json.datas + ')'); 
 			        jm.show(datas);
@@ -287,6 +289,7 @@
 					data : da,
 					success : function(data) {
 						var json = $.parseJSON(data);
+						document.getElementById('rootid').value = json.kcmc;  //记录根节点
 						
 						if (json.state == 1) {
 							datas=eval('(' + json.datas + ')'); 
@@ -504,6 +507,7 @@
 							else if(json.state == "1") {
 								datas=eval('(' + json.datas + ')');
 								document.getElementById('nodeid').value = datas.data.id;
+								document.getElementById('rootid').value = json.kcmc;
 								jm.show(datas);
 							}else {
 								$.messager.alert("操作提示", "找不到对应的知识图谱！", "info");
@@ -622,6 +626,33 @@
 				return null;
 			}
 		}
+		
+		<!-- 获取当前知识图谱的根节点 -->
+		function getRootId(){
+			var rootid = null;
+			rootid = document.getElementById('rootid').value;
+			
+			if(rootid == "undenfined" || rootid == "" || rootid == null ){
+				return false;
+			} else {
+				return rootid;
+			}
+			
+		}
+		
+		<!-- 获取当前用户id -->
+		function getCurrentUser(){
+			var currentUserUser = null;
+			currentUserUser = sessionStorage.getItem("username");
+            
+			if(currentUserUser == "undenfined" || currentUserUser == "" || currentUserUser == null ){
+				return false;
+			} else {
+				return currentUserUser;
+			}
+			
+		}
+		
 		
 		
 		/* 扩张??? */
@@ -816,63 +847,6 @@
 		}
 
 		
-		/* 加入章节描述，但是没有保存???/ */
-		function zhangjie() {
-			$.messager.defaults = {
-				ok : "是",
-				cancel : "否"
-			};
-			$.messager.prompt('章节样式', '请输入章节描述', function(r) {
-				if (r) {
-					var selected_id = get_selected_nodeid();
-					alert(r);
-				}
-			});
-		}
-
-		
-		
-		/* 把增加课程的样式的菜单调出 */
-		$("#kechengstyle").live('click', function(e) {
-            $('#addkc').attr('src', $('#addkc').attr('src'));
-			e.preventDefault();
-			$('#addkecheng').menu();
-			$('#addkecheng').menu('show', { //菜单EasyUI
-				left : 450,
-				top : 200,
-				hideOnUnhover : false
-			});
-		});
-		
-		
-		/* 章节样式的菜单调出 */
-		$("#zhangjiestyle").live('click', function(e) {
-
-			e.preventDefault();
-			$('#addzj').attr('src', $('#addzj').attr('src'));
-			$('#addzhangjie').menu();
-			$('#addzhangjie').menu('show', { //菜单EasyUI
-				left : 450,
-				top : 200,
-                hideOnUnhover : false
-			});
-			return false;
-		})
-
-		
-		/* 知识点样式菜单的打开 */
-		$("#zsdstyle").live('click', function(e) {
-           
-			e.preventDefault();
-			$('#addzsd2').attr('src', $('#addzsd2').attr('src'));  
-			$('#addzsd').menu();
-			$('#addzsd').menu('show', { //菜单EasyUI
-				left : 450,
-				top : 200,
-				hideOnUnhover : false
-			});
-			return false;
-		})
 		
 
 		open_empty();//加载JSMind
@@ -1333,6 +1307,34 @@
     </script>
     
     
+    <!-- 知识图谱讨论窗口 -->
+    <script type="text/javascript">
+    
+      function chat(){
+    	  
+    	  zeroModal.show({
+              title: '讨论',
+              iframe: true,
+              url: 'mindChat.html',
+              width: '80%',
+              height: '80%',
+              cancel: false,               //允许关闭
+              resize: true,                //允许移动
+              max: true,                   //允许最大化
+              min: true,                   //允许最小化
+              dragHandle: 'container',     //点击任意地方框拖动(旺仔摇滚冻即视感)
+              opacity: 0.8,                //设置遮罩透明度
+              overlayClose: true          //点击遮罩层关闭窗口
+  	            
+  	       });
+    	  
+      }
+    
+    
+    
+    </script>
+    
+    
     <!-- 更改单个节点颜色  -->
     <script type="text/javascript">
     
@@ -1456,6 +1458,7 @@
 	
 	<input id="mapid" type="text" value="" hidden />
     <input id="nodeid" type="text" value="" hidden />
+    <input id="rootid" type="text" value="" hidden />
 
 </body>
 </html>
