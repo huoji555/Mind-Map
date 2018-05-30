@@ -54,9 +54,10 @@
 		<ul>
 		<li onclick="xinjian();" title="新建" ><i class="icon-edit hovli bigger-120"></i></li>
 		<li onclick="BrowseFolder();" title="打开文件"><i class="icon-folder-open hovli bigger-120"></i></li>
-		<li onclick="save_file();" title="生产文件"><i class="icon-folder-close hovli bigger-120"></i></li>
+		<input type="file" id="file_input" onchange="open_file();" style="display:none;"  accept=".jm">
+		<li onclick="save_file();" title="生成文件"><i class="icon-folder-close hovli bigger-120"></i></li>
 		<li onclick="screen_shot();" title="生成图片"><i class="icon-camera hovli bigger-120"></i></li>
-		<li onclick="save_file();" title="讨论"><i class="icon-group hovli bigger-120"></i></li>
+		<li onclick="chat();" title="讨论"><i class="icon-group hovli bigger-120"></i></li>
 		<li onclick="getShareMindMap(1)" title="查看分享图谱"><i class="icon-time hovli bigger-120"></i></li>
 		<li onclick="getMyMindMap(1);" title="我的知识图谱"><span class="glyphicon glyphicon-user hovli"></span></li>
 		<li onclick="sharemindmap();" title="分享"><i class="icon-share hovli bigger-120"></i></li>
@@ -1111,6 +1112,7 @@
 					
 					html+="</tbody></table>";
 					
+					$("#jsmind_container")
 					$("#jsmind_container").html(html); 
 					getMyMindMapPage(currentPage);
 				}
