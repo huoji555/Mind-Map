@@ -272,3 +272,31 @@ margin-top: 10px;
 	display:inline;
 	}
 }
+.l_nav{
+	position:fixed;
+	left:0;
+	top:50px;
+	width:45px;
+	height:100%;
+	background:#fff;
+	border-right:solid #eee 1px;
+	box-shadow: 2px 0 10px rgba(0, 0, 0, 0.08);
+}
+.l_nav ul li{
+	height:45px;
+	width:45px;
+	border-bottom:solid #eee 1px;
+	text-align: center;
+    line-height: 47px;
+}
+.hovli{
+	color: #161616;
+}
+.l_nav ul li:hover .hovli{
+	color:#D5362A;
+    cursor:pointer;
+}
+.l_nav ul li:hover{
+	cursor:pointer;
+}
+

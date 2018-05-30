@@ -5,15 +5,21 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="Page-Enter" content="blendTrans(Duration=2.0)">
-    <title>毛线头资源管理系统</title>
+    <title>MindMap</title>
     
     <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="css/index/style.css">
     
     <script type="text/javascript" src="js/jquery.min2.1.4.js" ></script>
-    <script type="text/javascript" src="js/index/style.js" ></script>    <!-- 控制滚动事件 -->
     <script type="text/javascript" src="js/bootstrap.min.js" ></script>  <!-- 首页面样式 -->
-
+<style type="text/css">
+.main-container .page-content{
+background: transparent;
+}
+#tp{
+background: transparent;
+}
+</style>
 
 </head>
 <body>
@@ -66,6 +72,7 @@
             	}
             	$(".navimg a").css("border-bottom","solid rgba(0,0,0,0) 2px");
             	$(this).css("border-bottom","solid #DA4E43 2px");
+            	//$(".top").css('background-image',' linear-gradient(90deg, black, red)');
             	$("#view").load(this.href); 
                 return false;
             });
@@ -100,21 +107,36 @@
 	
 	
 	
-    <!-- 手机页面下拉框显示 -->
+	
+    <!-- 手机页面下拉框显示,监听滚动条 -->
 	<script>
 		$(document).ready(function(){
 		$("#btn_nav").click(function(){
 		$("#example-navbar-collapse").toggle();
 		});
 		});
+		
+		window.onscroll = function(){
+			var t = document.documentElement.scrollTop || document.body.scrollTop;
+		       
+	        if( t == 0 ) {
+	        	$("#tp").css("background","transparent");
+	        } else {
+	        	$("#tp").css("background","#f3f3f3");
+	        }
+	    };
 	</script>
+	
 	
 	
 	<!-- 顶部导航栏  -->
     <div class="top">
-        <div class="row navbar-fixed-top" style="height:50px;width: 100%;margin-left: 0;" id="tp">
+    	
+    	
+    
+        <div class="row navbar-fixed-top" style="width: 100%;margin-left: 0;" id="tp">
             <div class="col-md-7">
-                <p id="logo_o" class="logo_o"><a style="color:#D5362A;text-decoration: none;
+                <p id="logo_o" class="logo_n"><a style="color:#D5362A;text-decoration: none;
                 ">M</a>ind <a style="color:#D5362A;text-decoration: none;">M</a>ap</p>
             </div>
             <div class="col-md-5 text-center" style="display: flex">
@@ -133,6 +155,7 @@
             </div>
         </div>
         
+       
        
         <!-- 手机端导航栏（bug） -->
        	<div class="navbar navbar-default navbar-fixed-top" id="dnav">
@@ -181,10 +204,10 @@
     
     
     
+    <!-- 动图模块(第一部分)左 -->
     <div class="row" style="width: 100%;margin-left: 0;padding-bottom: 50px;">
         <div class="col-md-6">
-            <img src="images/gif/" style="max-width: 100%;height: auto;border:solid 1px #CCC;
-            box-shadow: #E8E8E8 3px 4px 10px 0;">
+            <img src="images/gif/" style="max-width: 100%;height: auto;border:solid 1px #CCC; box-shadow: #E8E8E8 3px 4px 10px 0;">
         </div>
         <div class="col-md-6 text-center" style="font-family:'方正舒体';margin-bottom:20px;">
             <h2>Made in Germany</h2><h3>German Privacy</h3>
@@ -199,6 +222,7 @@
     
     
     
+    <!-- 动图模块(第二部分)右 -->
     <div class="row" style="width: 100%;margin-left: 0;background:#F2F2F2;
     padding-top: 50px;padding-bottom: 50px;">
         <div class="col-md-6">
@@ -220,7 +244,7 @@
     
     
     
-    
+    <!-- 动图模块(第三部分)左 -->
     <div class="row" style="width: 100%;margin-left: 0;    padding-top: 50px;padding-bottom: 50px;">
         <div class="col-md-6">
             <img src="images/03.png" style="max-width: 100%;height: auto;border:solid 1px #CCC;
@@ -238,6 +262,10 @@
         </div>
         </div>
     </div>
+    
+    
+    
+    <!-- 推荐使用理由 -->
     <div class="gray-background" style="padding-bottom:40px;background: #F2F2F2"><div class="container">
         <h2 class="text-center extra-margin who">谁适合使用本系统？</h2>
         <div class="row motivation-list">
@@ -343,16 +371,17 @@
 
         </div>
         <div class="col-md-4 col-sm-6 motivation-item">
-            <p style="font-size: 24px"><a style="color:#D5362A;text-decoration: none;">关于</a>我们:</p>
-            <p class="links" style="font-size: 15px">毛线头是一个一知识图谱为主的资源管理系统，毛线头就是毛线头啊毛线头啊毛线头啊毛线头啊毛线头啊</p>
+            <p style="font-size: 24px"><a style="color:#D5362A;text-decoration: none;">关于</a>我们:</p><p>&nbsp;</p>
+            <p class="links" style="font-size: 15px">Mind Map是一个以知识图谱为主的在线学习系统,用户可</p>
         </div>
         <div class="col-md-4 col-sm-6 motivation-item">
-            <p style="font-size: 24px"><a style="color:#D5362A;text-decoration: none;">联系</a>我们:</p>
-            <p class="links" style="font-size: 15px">河北省-张家口市-河北北方学院-信息科学与工程学院（东校区）</p>
-            <p style="font-size: 24px;padding-top: 30px;"><a style="color:#D5362A;text-decoration: none;">联系</a>邮箱:</p>
-            <p class="links" style="font-size: 15px">778877887@qq.com/1551136@136.com</p>
+            <p style="font-size: 24px"><a style="color:#D5362A;text-decoration: none;">联系</a>我们:</p><p>&nbsp;</p>
+            <p class="links" style="font-size: 15px">河北省-张家口市-河北北方学院-B505</p>
+            <p style="font-size: 24px;padding-top: 30px;"><a style="color:#D5362A;text-decoration: none;">联系</a>邮箱:</p><p>&nbsp;</p>
+            <p class="links" style="font-size: 15px">961946407@qq.com</p>
         </div>
     </div>
+</div>
 </div>
 </body>
 </html>

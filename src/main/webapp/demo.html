@@ -20,7 +20,6 @@
 		    	var room = document.getElementById('room').value;
 		    	
 		        var url = "ws://" + window.location.host +"/WebSocketManytoMany/"+name+","+room;
-		        alert(url);
 		        websocket = new WebSocket(url);  
 		    } else {  
 		        alert('当前浏览器 Not support websocket')
