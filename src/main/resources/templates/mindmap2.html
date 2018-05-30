@@ -17,6 +17,7 @@
 <link rel="stylesheet" type="text/css" href="mindmap/style.css" />
 <link rel="stylesheet" type="text/css" href="mindmap/noJS.css" />
 <link rel="stylesheet" type="text/css" href="css/index/mindMap.css" />
+<link rel="stylesheet" href="css/index/style.css">
 
 
 </head>
@@ -25,19 +26,9 @@
 	<div class="main-container" id="main-container">
 	<div class="page-content">
 
-	<!-- <div class="page-header">
-	<h1>
-	<i class="icon-th-large" style="color:orange"></i> &nbsp;知识图谱
-	<small style="float: right;letter-spacing: 8px;">							
-	<i class="icon-hand-right"></i>
-	知识图谱帮你理清思路，开阔大脑思维！
-	</small>
-	</h1>
-	</div> --><!-- /.page-header -->
-
 
     <!-- 页面上的操作标题 -->
-    <div class="row">
+    <!-- <div class="row">
     <div class="align-left">
     <div style="margin-left:35px;margin-top:10px">
 
@@ -56,13 +47,30 @@
 				               
     </div>
     </div>
-	</div>
+	</div> -->
+	
+	<!-- 侧导航栏 -->
+	<div class="l_nav">
+		<ul>
+		<li onclick="xinjian();" title="新建" ><i class="icon-edit hovli bigger-120"></i></li>
+		<li onclick="BrowseFolder();" title="打开文件"><i class="icon-folder-open hovli bigger-120"></i></li>
+		<li onclick="save_file();" title="生产文件"><i class="icon-folder-close hovli bigger-120"></i></li>
+		<li onclick="screen_shot();" title="生成图片"><i class="icon-camera hovli bigger-120"></i></li>
+		<li onclick="save_file();" title="讨论"><i class="icon-group hovli bigger-120"></i></li>
+		<li onclick="getShareMindMap(1)" title="查看分享图谱"><i class="icon-time hovli bigger-120"></i></li>
+		<li onclick="getMyMindMap(1);" title="我的知识图谱"><span class="glyphicon glyphicon-user hovli"></span></li>
+		<li onclick="sharemindmap();" title="分享"><i class="icon-share hovli bigger-120"></i></li>
+		<li title="设置主题"><span class="green middle bolder align-right" id="shezhi" ><i class="icon-cog hovli bigger-120"></i></span></li>
+	
+		</ul>
+	</div>	
+	
 	
 	
 	
 	    <!-- 下面这个是调整显示思维导图框的大小，位置  -->
 		<div id="dropzone"><br>
-		<div id="jsmind_container" style="width:100%;margin-left:10px"></div>
+		<div id="jsmind_container" style="width:100%;margin-left:25px"></div>
 	    </div>
 	    </div>
 	    <!-- PAGE CONTENT ENDS -->
@@ -133,13 +141,6 @@
 		</div>
 		
 	
-	<!-- 显示笔记的小窗口（点击后加载右侧的框） -->
-    <div id="biji" style="width:703px;height:450px">
-		<iframe id="showbiji" src="" marginwidth="0" marginheight="0"
-			frameborder="0" width="100%" scrolling="yes" height="100%"></iframe>
-	</div>
-	
-	
 	<!-- js文件加载和css head里主要是用来响应调用  body里用来渲染界面 -->
  	<script src="js/jquery-1.7.2.min.js" type="text/javascript"></script>
 	<script src="mindmap/jquery.easyui.min.js" type="text/javascript"></script>
@@ -150,42 +151,21 @@
 	
 	
 	<style type="text/css">
-			#jsmind_container {
-				float: left;
-				width: 100%;
-				height: 600px;
-				border: solid 1px #ccc;
-				background: #fff;
+		#jsmind_container {
+			float: left;
+			width: 100%;
+			height: 600px;
+			border: solid 1px #ccc;
+			background: rgba(0,0,0,0);
 			}
+			
+		#tp{
+		    background: #f3f3f3 !important;  /* 固定导航栏样式 */
+		   }
     </style>
     
+    
 		
-		
-	<!-- 加载页面时隐藏在屏幕右侧弹出的框及内容 -->	
-	<script type="text/javascript">
-		$(function() {
-			$("#addkecheng").hide();
-			$("#kecheng").hide();
-			$("#zhangjie").hide();
-			$("#zsd").hide();
-			$("#addzhangjie").hide();
-			$("#addzsd").hide();
-			$("#zhutiyanse").hide();
-			$("#biji").hide();
-			
-			$("#shezhi").live('click', function(e) {
-			e.preventDefault();
-			$('#zhutiyanse').menu('show', { //菜单EasyUI
-				left : e.pageX,
-				top : e.pageY,
-				hideOnUnhover : false
-			});
-		});
-		})
-	</script>
-	
-	
-	
 	<!-- 一系列对思维导图的操作函数 -->
 	<script type="text/javascript">
 		var jm = null;

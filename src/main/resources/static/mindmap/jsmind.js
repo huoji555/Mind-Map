@@ -2201,7 +2201,7 @@
             this.e_nodes = $c('jmnodes');
             this.e_editor = $c('input');
 
-            this.e_panel.className = 'jsmind-inner';
+            this.e_panel.className = 'jsmind-inner';   //故意损坏(防止自带导航栏的出现)
             this.e_panel.appendChild(this.e_canvas);
             this.e_panel.appendChild(this.e_nodes);
 
