@@ -147,13 +147,13 @@ body{
 	width:45px;
 	height:100%;
 	background:#fff;
-	border-right:solid #eee 1px;
+	/* border-right:solid #eee 1px; */
 	box-shadow: 2px 0 10px rgba(0, 0, 0, 0.08);
 }
 .l_nav ul li{
 	height:45px;
 	width:45px;
-	border-bottom:solid #eee 1px;
+	/* border-bottom:solid #eee 1px; */
 	text-align: center;
     line-height: 47px;
 }
@@ -278,14 +278,14 @@ margin-top: 10px;
 	top:50px;
 	width:45px;
 	height:100%;
-	background:#fff;
-	border-right:solid #eee 1px;
+	background: rgba(255, 255, 255, 0.23);
+	/* border-right:solid #eee 1px; */
 	box-shadow: 2px 0 10px rgba(0, 0, 0, 0.08);
 }
 .l_nav ul li{
 	height:45px;
 	width:45px;
-	border-bottom:solid #eee 1px;
+	/* border-bottom:solid #eee 1px; */
 	text-align: center;
     line-height: 47px;
 }

@@ -116,7 +116,15 @@ public class WebSocketManytoMany {
     }  
   
     
-    //向客户端发送消息   
+    /**
+     * @author Ragty
+     * @param  向客户端发送消息(向当前用户所在的房间发送消息)   
+     * @serialData 2018.5.30
+     * @param role
+     * @param room
+     * @param string
+     * @throws IOException
+     */
     public void sendMessage(String role, String room, String string) throws IOException{
     	
     	System.out.println("====sendMessage=========");  
