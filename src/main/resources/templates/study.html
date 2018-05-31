@@ -93,6 +93,19 @@
 	#tp{
 		    background: #f3f3f3 !important;  /* 固定导航栏样式 */
     }
+    .btn-primary{
+    width: 81px;
+    height: 39px;
+    margin-top: 0px;
+    }
+    .btn-primary:hover{
+    width: 81px;
+    height: 39px;
+    margin-top: 0px;
+    } 
+    .top{
+      background: rgb(255, 252, 252);
+    }
 </style>
 </head>
 <body>
@@ -154,7 +167,7 @@
 	    /* 清除边框样式 */
 	    function clearViewCss() {
             $("#view").css("box-shadow","none");
-            $("#view").css("margin","50px 0 0 0");
+            /* $("#view").css("margin","50px 0 0 0"); */
         }
         /* 添加边框样式 */
         function addViewCss() {
@@ -181,6 +194,7 @@
 	    /* 获取分享过的思维导图 */ //存在一个很大的弊端就是分享后其它用户也可操纵它，不为只读状态,右键菜单的锅
 		function open_ajax(mapid,name,nodename) {
 		clearShare();
+		$("#mm").remove();//清除右键菜单
 		var studyHtml = '<div class="study-title">知识图谱—'+nodename+'</div>';
 		$("#studyHead").html(studyHtml);
 		$("#view").css("box-shadow","0 0 3px 2px #dfdfdf");
@@ -531,6 +545,21 @@
 	}
 	
 	</script>
+	
+	
+	<!-- 回车搜索功能 -->
+	<script type="text/javascript">
+	
+	   function found(){
+		   if(event.keyCode == 13){
+	    		
+	    	}
+	   }
+	
+	
+	</script>
+	
+	
 
 </body>
 </html>
