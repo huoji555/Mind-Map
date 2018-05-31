@@ -26,28 +26,10 @@
 	<div class="main-container" id="main-container">
 	<div class="page-content">
 
-
-    <!-- 页面上的操作标题 -->
-    <!-- <div class="row">
-    <div class="align-left">
-    <div style="margin-left:35px;margin-top:10px">
-
-	<span class="green middle bolder" onclick="xinjian();"><i class="icon-edit blue bigger-120"></i>&nbsp;新建</span> &nbsp; 
-	<span class="green middle bolder"  onclick="BrowseFolder();"><i class="icon-folder-open blue bigger-120"></i>&nbsp;打开文件</span> &nbsp; 
-	<input type="file" id="file_input" onchange="open_file();" style="display:none;"  accept=".jm">
-	<span class="green middle bolder" onclick="save_file();"><i class="icon-folder-close blue bigger-120"></i>&nbsp;生成文件</span> &nbsp; 
-	<span class="green middle bolder" onclick="screen_shot();"><i class="icon-camera blue bigger-120"></i>&nbsp;生成图片</span> &nbsp; 
-	<span class="green middle bolder" onclick="getShareMindMap(1)"><i class="icon-time blue bigger-120"></i>&nbsp;查看分享图谱</span> &nbsp; 
-	<span class="green middle bolder" onclick="getMyMindMap(1);"><i class="icon-group blue bigger-120"></i>&nbsp;我的知识图谱</span> &nbsp; 
-	<span class="green middle bolder" onclick="sharemindmap();"><i class="icon-share blue bigger-120"></i>&nbsp;分享知识图谱</span> &nbsp; 
-	<span class="green middle bolder align-right" id="shezhi" ><i class="icon-cog blue bigger-120"></i>&nbsp;设置主题</span> &nbsp;&nbsp; 
-    
-    <span class="green middle bolder" onclick="chat();"><i class="icon-share blue bigger-120"></i>&nbsp;讨论</span> &nbsp; 
-				               
-				               
-    </div>
-    </div>
-	</div> -->
+	
+	</div> 
+	
+	</div>
 	
 	<!-- 侧导航栏 -->
 	<div class="l_nav">
@@ -61,21 +43,17 @@
 		<li onclick="getShareMindMap(1)" title="查看分享图谱"><i class="icon-time hovli bigger-120"></i></li>
 		<li onclick="getMyMindMap(1);" title="我的知识图谱"><span class="glyphicon glyphicon-user hovli"></span></li>
 		<li onclick="sharemindmap();" title="分享"><i class="icon-share hovli bigger-120"></i></li>
-		<li title="设置主题"><span class="green middle bolder align-right" id="shezhi" ><i class="icon-cog hovli bigger-120"></i></span></li>
 	
 		</ul>
 	</div>	
 	
-	
-	
-	
 	    <!-- 下面这个是调整显示思维导图框的大小，位置  -->
-		<div id="dropzone"><br>
-		<div id="jsmind_container" style="width:100%;margin-left:25px"></div>
-	    </div>
-	    </div>
+		<!-- <div id="dropzone"><br> -->
+		<div id="jsmind_container" style="width:95%;margin-left:55px;height:600px;"></div>
+	    <!-- </div> -->
+	    
 	    <!-- PAGE CONTENT ENDS -->
-	    </div>
+	   
 		<!-- /.col -->
 	    <!-- /.row -->
 	    <!-- 初次页面加载时显示的东西，以上  -->
@@ -117,30 +95,7 @@
 		<div class="menu-sep"></div>
 	    </div>
 	    
-	    
-	    
-	    <!-- 改变主题颜色(思维导图)需要调用的版块 -->
-	    <div id='zhutiyanse' class='easyui-menu' style='width: 120px; z-index: 99999'>
-	        <select onchange="set_theme(this.value);" >
-					<option value="">主题颜色</option>
-					<option value="primary">primary</option>
-					<option value="warning">warning</option>
-					<option value="danger">danger</option>
-					<option value="success">success</option>
-					<option value="info">info</option>
-					<option value="greensea">greensea</option>
-					<option value="nephrite">nephrite</option>
-					<option value="belizehole">belizehole</option>
-					<option value="wisteria">wisteria</option>
-					<option value="asphalt">asphalt</option>
-					<option value="orange">orange</option>
-					<option value="pumpkin">pumpkin</option>
-					<option value="pomegranate">pomegranate</option>
-					<option value="clouds">clouds</option>
-					<option value="asbestos">asbestos</option>
-			</select>
-		</div>
-		
+	
 	
 	<!-- js文件加载和css head里主要是用来响应调用  body里用来渲染界面 -->
  	<script src="js/jquery-1.7.2.min.js" type="text/javascript"></script>
@@ -156,15 +111,27 @@
 			float: left;
 			width: 100%;
 			height: 600px;
-			border: solid 1px #ccc;
+			border: solid 0px #ccc;
 			background: rgba(0,0,0,0);
 			}
 			
 		#tp{
-		    background: #f3f3f3 !important;  /* 固定导航栏样式 */
+		    background: rgba(244, 242, 240, 0.48) !important;  /* 固定导航栏样式 */
 		   }
+		.main-container:after,.top{
+		   background: -webkit-linear-gradient(left, rgba(218, 189, 211, 0.72), #DAB69D, #B4CCC2, #91CCB6);
+		   background: -o-linear-gradient(left, rgba(218, 189, 211, 0.72), #DAB69D, #B4CCC2, #91CCB6);
+		   background: -moz-linear-gradient(left, rgba(218, 189, 211, 0.72), #DAB69D, #B4CCC2, #91CCB6);
+		   background: -ms-linear-gradient(left, rgba(218, 189, 211, 0.72), #DAB69D, #B4CCC2, #91CCB6);
+		}   
+		
+		.table-hover > tbody > tr:hover {
+           background-color: rgba(255, 255, 255, 0.23);
+          }
+          
+		
+		  
     </style>
-    
     
 		
 	<!-- 一系列对思维导图的操作函数 -->
@@ -1112,7 +1079,6 @@
 					
 					html+="</tbody></table>";
 					
-					$("#jsmind_container")
 					$("#jsmind_container").html(html); 
 					getMyMindMapPage(currentPage);
 				}
