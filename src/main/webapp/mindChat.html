@@ -10,6 +10,43 @@
 </head>
 <body>
 
+    <style>
+    
+      .mess{
+        display: inline-block;
+	    position: relative;
+	    padding: 0 10px;
+	    max-width: calc(100% - 40px);
+	    min-height: 30px;
+	    line-height: 2.5;
+	    font-size: 9pt;
+	    text-align: left;
+	    word-break: break-all;
+	    background-color: #b2e281;
+	    border-radius: 4px;
+      }
+      
+      .time{
+        display: inline-block;
+	    padding: 0 18px;
+	    font-size: 11pt;
+	    color: #fff;
+	    border-radius: 2px;
+	    background-color: #dcdcdc;     /* 设置时间样式  */
+      }
+      
+      #hh{
+        text-align: center;
+      }
+      
+      .dir{
+        text-align:left;
+      }
+    
+    </style>
+
+
+
      <!-- mindChat 连接服务器 -->
      <script type="text/javascript">
      
@@ -71,7 +108,12 @@
      
      //将消息显示在网页上
      function setMessageInnerHTML(innerHTML) {  
-	        document.getElementById('message').innerHTML += innerHTML + '<br/>';
+    	 var date = new Date();
+    	 var hours = date.getHours();
+    	 var min = formatTime(date.getMinutes());
+    	 var sec = formatTime(date.getSeconds());
+    	 
+	     document.getElementById('message').innerHTML += "<div id='hh'><span class='time'>"+hours+":"+min+"</span></div>" +innerHTML ;
 	    } 
      
      
@@ -112,15 +154,36 @@
      </script>
 
 
+     <!-- 回车发送消息 -->
+     <script type="text/javascript">
+     
+     function enter(){
+  
+    	 if(event.keyCode == 13){
+    		 send();
+    	 }
+    	 
+     }
+     
+     //格式化时间
+     function formatTime (i){
+    	    if(i < 10){
+    	      i = "0" + i;
+    	    }
+    	    return i;
+     }
+     
+     </script>
+
 
     
     
     <br/><br/>
-    <input id="text" type="text" />
-    <button onclick="send()">发送消息</button>
-    
+    <input id="text" type="text" onkeydown="enter();"/>
+    <button type="button" onclick="send()">发送消息</button>
     
     <div id="message"></div>
+    
 
 
 

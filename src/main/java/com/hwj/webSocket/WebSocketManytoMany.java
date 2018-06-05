@@ -129,7 +129,7 @@ public class WebSocketManytoMany {
     	
     	System.out.println("====sendMessage=========");  
 		for (Session session : rooms.get(room)) {
-	        session.getBasicRemote().sendText(role+":"+string);
+	        session.getBasicRemote().sendText("<div class='dir'>"+role+":<div class='mess'>"+string+"</div></div>");
 	    }
     	
      }

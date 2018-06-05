@@ -107,6 +107,17 @@ public class IndexController {
 		return "access";
 	}
 
+    /**
+     * @author Ragty
+     * @param  映射知识图谱聊天界面
+     * @serialData 2018.6.5
+     * @return
+     */
+    @RequestMapping(value = "mindChat.do")
+    public String mindChat(){
+    	return "mindChat";
+    }
+    
     
     /**
      * @author Ragty
