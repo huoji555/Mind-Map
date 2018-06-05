@@ -293,8 +293,6 @@ public class MindMapController {
 		HttpSession session = request.getSession();
 		String userid = String.valueOf(session.getAttribute("username"));
 		
-		System.out.println(type+"$#$$##$$#$"+nodeid);
-		
 		if(userid.equals("null") || userid.equals(null)){
 			return statusMap.a("2");
 		}
@@ -307,77 +305,10 @@ public class MindMapController {
 		}
 		
 		//包装数据（能在jsmind中显示的数据）
-		Map<String, Object> data = new HashMap<String, Object>();
-		Map<String, Object> meta = new HashMap<String, Object>();
-		meta.put("name", "jsMind remote");
-		meta.put("author", "hizzgdev@163.com");
-		meta.put("version", "0.2");
-		
-		data.put("meta", meta);
-		data.put("format", "node_tree");
-		
-		List<Map<String, String>> list2 = new ArrayList<Map<String,String>>();
-		
-		for(int i=0; i<list.size(); i++){
-			Map<String, String> map = new HashMap<String, String>();
-			MindNode mindNode =list.get(i);
-			map.put("id", mindNode.getNodeid());
-			map.put("topic", mindNode.getNodename());
-			map.put("parentid", mindNode.getParentid());
-			map.put("color", mindNode.getColor());
-			list2.add(map);
-		}
-		
-		List dataList = list2;
-		HashMap nodeList = new HashMap();
-		Node2 root = null;
-		MindNode2Util mindNode2Util = new MindNode2Util();
-		
-		for (Iterator it = dataList.iterator(); it.hasNext();) {
-			Map dataRecord = (Map) it.next();
-			Node2 node = new Node2();
-			node.id = ((String) dataRecord.get("id"));
-			node.topic = ((String) dataRecord.get("topic"));
-			node.parentid = ((String) dataRecord.get("parentid"));
-			node.color = (String) dataRecord.get("color");
-			nodeList.put(node.id, node);
-		}
-		
-		
-		Set entrySet = nodeList.entrySet();
-		for(Iterator it = entrySet.iterator(); it.hasNext();){
-			Node2 node = (Node2) ((Map.Entry) it.next()).getValue();
-			
-			if ((node.parentid == null) || (node.parentid.equals("00100"))) {
-				System.out.println("node的值@@@@@@@@@@@@@@@"+node);
-				root = node;
-			} else {
-				try {
-					((Node2) nodeList.get(node.parentid)).addChild(node); // 重点，在主节点后面加子节点
-				} catch (Exception e) {
-					// TODO: handle exception
-				}
-			}
-			
-		}
-		
-		mindNode2Util.setState("1");
-		
-		data.put("data", root.toString());
-		
-		String datas = this.jsonAnalyze.object2Json(data).toString();
-		
-		datas = datas.replace("\"", "'");
-		datas = datas.replace(" ", "");
-		datas = datas.replace("'{", "{");
-		datas = datas.replace("}'", "}");
-		mindNode2Util.setDatas(datas);
-		mindNode2Util.setKcmc(type);
-		mindNode2Util.setMindJson2("success");
-		
-		return this.jsonAnalyze.object2Json(mindNode2Util);
-        
+		String open = tryCatchMindMapService.openMind(list, type); 
+        return open;
 	}
+	
 	
 	
 	/**
@@ -394,13 +325,14 @@ public class MindMapController {
 	public String getMindNode2(MindNodeTool mindNodeTool,
 			HttpServletRequest request) throws Exception {
 		String nodeid = mindNodeTool.getNodeid();
-		String parentid = ((MindNode) this.tryCatchMindMapService.getMindNode(
-				"nodeid", nodeid).get(0)).getParentid();
 		String type = ((MindNode) this.tryCatchMindMapService.getMindNode(
 				"nodeid", nodeid).get(0)).getType();
+		String userid = ((MindNode) this.tryCatchMindMapService.getMindNode(
+				"nodeid", nodeid).get(0)).getUserid();
+		
 		HttpSession session = request.getSession();
-		String userid = String.valueOf(session.getAttribute("username"));
-		if (userid.equals("null") || userid.equals(null)) {
+		String user = String.valueOf(session.getAttribute("username"));
+		if (user.equals("null") || user.equals(null)) {
 			return statusMap.a("2");
 		}
 
@@ -408,80 +340,14 @@ public class MindMapController {
 		list = this.tryCatchMindMapService.getMindNode("userid", userid,
 				"type", type);
 
-		System.out.println(list + "##########打开子节点");
 		MindNode2Util mindNode2Util = new MindNode2Util();
 		if ((list == null) || (list.size() <= 0)) {
 			return null;
 		}
-		Map<String, Object> data = new HashMap<String, Object>();
-		Map<String, Object> meta = new HashMap<String, Object>();
-		meta.put("name", "jsMind remote");
-		meta.put("author", "hizzgdev@163.com");
-		meta.put("version", "0.2");
-		data.put("meta", meta);
-		data.put("format", "node_tree");
-
-		List<MindNode> list2 = new ArrayList<MindNode>();
-		list2 = this.tryCatchMindMapService.getMindNode("userid", userid,
-				"type", type);
-
-		List<Map<String, String>> list3 = new ArrayList();
-
-		// 可以显示取出的子节点及它的子数据（分层取数据）
-		list3 = this.tryCatchMindMapService.getzijiedian(nodeid, userid);
-
-		System.out.println(list3 + "list");
-		List dataList = list3;
-		System.out.println(dataList + "  zheishi  jiajijfi");
-
-		HashMap nodeList = new HashMap();
-
-		System.out.println(nodeList + "  zheishi  jiajijfi");
-		Node2 root = null;
-		for (Iterator it = dataList.iterator(); it.hasNext();) {
-			Map dataRecord = (Map) it.next();
-			Node2 node = new Node2();
-			node.id = ((String) dataRecord.get("id"));
-			node.topic = ((String) dataRecord.get("topic"));
-			node.parentid = ((String) dataRecord.get("parentid"));
-			node.color = (String) dataRecord.get("color");
-			nodeList.put(node.id, node);
-		}
-		System.out.println(root + "  root  jiajijfi");
-
-		Set entrySet = nodeList.entrySet();
-		System.out.println(entrySet + "  entrySet  jiajijfi");
-		for (Iterator it = entrySet.iterator(); it.hasNext();) {
-			Node2 node = (Node2) ((Map.Entry) it.next()).getValue();
-			if ((node.parentid == null) || (node.parentid.equals(parentid))) {
-				root = node;
-			} else {
-				
-				try {
-					((Node2) nodeList.get(node.parentid)).addChild(node);
-				} catch (Exception e) {
-					// TODO: handle exception
-				}
-				
-			}
-		}
-		System.out.println("sdfsdf :" + root.toString());
-		System.out.println("sdsfsdfds:" + root);
-		mindNode2Util.setState("1");
-
-		data.put("data", root.toString());
-
-		String datas = this.jsonAnalyze.object2Json(data).toString();
-
-		System.out.println("datatatat:" + datas);
-		datas = datas.replace("\"", "'");
-		datas = datas.replace(" ", "");
-		datas = datas.replace("'{", "{");
-		datas = datas.replace("}'", "}");
-		mindNode2Util.setDatas(datas);
-		mindNode2Util.setKcmc(type);
-		mindNode2Util.setMindJson2("success");
-		return this.jsonAnalyze.object2Json(mindNode2Util);
+		
+		String open = tryCatchMindMapService.openMind(list, type); 
+        return open;
+		
 	}
 	
 	
@@ -501,9 +367,12 @@ public class MindMapController {
 		String nodeid = mindNodeTool.getNodeid();
 		String type = ((MindNode) this.tryCatchMindMapService.getMindNode(
 				"nodeid", nodeid).get(0)).getType();
+		String userid = ((MindNode) this.tryCatchMindMapService.getMindNode(
+				"nodeid", nodeid).get(0)).getUserid();
+		
 		HttpSession session = request.getSession();
-		String userid = String.valueOf(session.getAttribute("username"));
-		if (userid.equals("null") || userid.equals(null)) {
+		String user = String.valueOf(session.getAttribute("username"));
+		if (user.equals("null") || user.equals(null)) {
 			return statusMap.a("2");
 		}
 
@@ -515,85 +384,10 @@ public class MindMapController {
 		if ((list == null) || (list.size() <= 0)) {
 			return null;
 		}
-		Map<String, Object> data = new HashMap<String, Object>();
-		Map<String, Object> meta = new HashMap<String, Object>();
-		meta.put("name", "jsMind remote");
-		meta.put("author", "hizzgdev@163.com");
-		meta.put("version", "0.2");
-		data.put("meta", meta);
-		data.put("format", "node_tree");
-
-		List<MindNode> list2 = new ArrayList<MindNode>();
-		list2 = this.tryCatchMindMapService.getMindNode("userid", userid,
-				"type", type);
-
-		System.out.println("让我看看是何方妖孽"+list2);
 		
+		String open = tryCatchMindMapService.openMind(list, type); 
+        return open;
 		
-		List<Map<String, String>> list3 = new ArrayList<Map<String, String>>();
-		for (int i = 0; i < list2.size(); i++) {
-			Map<String, String> map2 = new HashMap<String, String>();
-			MindNode mindNode = (MindNode) list2.get(i);
-			map2.put("id", mindNode.getNodeid());
-			map2.put("topic", mindNode.getNodename());
-			map2.put("parentid", mindNode.getParentid());
-			map2.put("color", mindNode.getColor());
-
-			list3.add(map2);
-		}
-		System.out.println(list3 + "list");
-		List dataList = list3;
-		System.out.println(dataList + "  zheishi  jiajijfi");
-
-		HashMap nodeList = new HashMap();
-
-		System.out.println(nodeList + "  zheishi  jiajijfi");
-		Node2 root = null;
-		for (Iterator it = dataList.iterator(); it.hasNext();) {
-			Map dataRecord = (Map) it.next();
-			Node2 node = new Node2();
-			node.id = ((String) dataRecord.get("id"));
-			node.topic = ((String) dataRecord.get("topic"));
-			node.parentid = ((String) dataRecord.get("parentid"));
-			node.direction = (String) (dataRecord.get("parentid"));
-			node.color = (String) dataRecord.get("color");
-			nodeList.put(node.id, node);
-		}
-		System.out.println(root + "  root  jiajijfi");
-
-		Set entrySet = nodeList.entrySet();
-		System.out.println(entrySet + "  entrySet  jiajijfi");
-		for (Iterator it = entrySet.iterator(); it.hasNext();) {
-			Node2 node = (Node2) ((Map.Entry) it.next()).getValue();
-			if ((node.parentid == null) || (node.parentid.equals("00100"))) {
-				root = node;
-			} else {
-				
-				try {
-					((Node2) nodeList.get(node.parentid)).addChild(node);
-				} catch (Exception e) {
-					// TODO: handle exception
-				}
-				
-			}
-		}
-		System.out.println("sdfsdf :" + root.toString());
-		System.out.println("sdsfsdfds:" + root);
-		mindNode2Util.setState("1");
-
-		data.put("data", root.toString());
-
-		String datas = this.jsonAnalyze.object2Json(data).toString();
-
-		System.out.println("datatatat:" + datas);
-		datas = datas.replace("\"", "'");
-		datas = datas.replace(" ", "");
-		datas = datas.replace("'{", "{");
-		datas = datas.replace("}'", "}");
-		mindNode2Util.setDatas(datas);
-		mindNode2Util.setKcmc(type);
-		mindNode2Util.setMindJson2("success");
-		return this.jsonAnalyze.object2Json(mindNode2Util);
 	}
 	
 	
