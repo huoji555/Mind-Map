@@ -17,52 +17,64 @@ import org.hibernate.annotations.GenericGenerator;
 public class MindMap implements Serializable {
 	
 	private static final long serialVersionUID = 1177531226916736908L;
-	private String id;
-	private String data;
-	private String uid;
-	private String name;
+	private String nodeid;                  //图谱id
+	private String nodename;                //图谱名称
+	private String data;                    //图谱数据
+	private String userid;                  //图谱作者
+	private String realname;                //图谱作者真实姓名
+
 
 	@Id
 	@GeneratedValue(generator = "u_assigned")
 	@GenericGenerator(name = "u_assigned", strategy = "assigned")
-	@Column(name = "mapid")
-	public String getId() {
-		return this.id;
+	@Column(name = "nodeid")
+	public String getNodeid() {
+		return nodeid;
 	}
-
-	public void setId(String id) {
-		this.id = id;
+	public void setNodeid(String nodeid) {
+		this.nodeid = nodeid;
 	}
-
-	@Column(name = "data")
+	
+	@Column(name = "nodename")
+	public String getNodename() {
+		return nodename;
+	}
+	public void setNodename(String nodename) {
+		this.nodename = nodename;
+	}
+	
+	@Column(name = "data", columnDefinition = "longtext")
 	public String getData() {
-		return this.data;
+		return data;
 	}
-
 	public void setData(String data) {
 		this.data = data;
 	}
-
-	@Column(name = "nickName")
-	public String getUid() {
-		return this.uid;
+	
+	@Column(name = "userid")
+	public String getUserid() {
+		return userid;
 	}
-
-	public void setUid(String uid) {
-		this.uid = uid;
+	public void setUserid(String userid) {
+		this.userid = userid;
 	}
-
-	@Column(name = "name")
-	public String getName() {
-		return this.name;
+	
+	@Column(name = "realname")
+	public String getRealname() {
+		return realname;
 	}
-
-	public void setName(String name) {
-		this.name = name;
+	public void setRealname(String realname) {
+		this.realname = realname;
 	}
-
+	
+	
+	
+	@Override
 	public String toString() {
-		return "MindMap [id=" + this.id + ", data=" + this.data + ", uid="
-				+ this.uid + ", name=" + this.name + "]";
+		return "MindMap [nodeid=" + nodeid + ", nodename=" + nodename
+				+ ", data=" + data + ", userid=" + userid + ", realname="
+				+ realname + "]";
 	}
+	
+	
 }
