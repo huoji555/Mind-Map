@@ -6,6 +6,8 @@ public class MindNodeTool {
 	private String parentid;
 	private String userid;
 	private String type;
+	private String rootid;
+
 
 	public String getNodeid() {
 		return this.nodeid;
@@ -46,10 +48,22 @@ public class MindNodeTool {
 	public void setType(String type) {
 		this.type = type;
 	}
-
-	public String toString() {
-		return "MindNodeTool [nodeid=" + this.nodeid + ", nodename="
-				+ this.nodename + ", parentid=" + this.parentid + ", userid="
-				+ this.userid + ", type=" + this.type + "]";
+	public String getRootid() {
+		return rootid;
 	}
+
+	public void setRootid(String rootid) {
+		this.rootid = rootid;
+	}
+
+	
+	
+	@Override
+	public String toString() {
+		return "MindNodeTool [nodeid=" + nodeid + ", nodename=" + nodename
+				+ ", parentid=" + parentid + ", userid=" + userid + ", type="
+				+ type + ", rootid=" + rootid + "]";
+	}	
+	
+	
 }
