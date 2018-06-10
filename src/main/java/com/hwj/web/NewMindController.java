@@ -150,7 +150,7 @@ public class NewMindController {
 	/**
 	 * @author Ragty
 	 * @param  新建子节点(先在这留一个bug)
-	 * @serialData 2018.6.9
+	 * @serialData 2018.6.10
 	 * @param mindNodeTool
 	 * @param request
 	 * @return
@@ -176,6 +176,13 @@ public class NewMindController {
 		MindMap mindMap = tryCatchNewMindService.getMindMap("nodeid", rootid,
 				"userid", userid);
 		String activeList = mindMap.getMaplist();
+		String mindUser = mindMap.getUserid();
+		
+		
+		//防止其他人修改自己的知识图谱
+		if (!userid.equals(mindUser)){
+			return statusMap.a("5");
+		}
 		
 		//更新动态树
 		List<MindNode> list = jsonAnalyze.parseList(activeList);
@@ -199,6 +206,78 @@ public class NewMindController {
 		}
 		
 		return statusMap.a("2");
+	}
+	
+	
+	
+	/**
+	 * @author Ragty
+	 * @param 修改知识图谱节点信息
+	 * @serialData 2018.6.10
+	 * @param mindNodeTool
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("updateMapNode.do")
+	@ResponseBody
+	public String updateMapNode(MindNodeTool mindNodeTool,
+			HttpServletRequest request) throws IOException{
+		
+		String nodeid = mindNodeTool.getNodeid();
+		String nodename = mindNodeTool.getNodename();
+		String rootid = mindNodeTool.getRootid();
+		
+		HttpSession session = request.getSession();
+		String userid =String.valueOf(session.getAttribute("username"));
+		
+		if(userid.equals("null") || userid.equals(null)){
+			return statusMap.a("2");
+		}
+		
+		
+		MindMap mindMap = tryCatchNewMindService.getMindMap("nodeid", rootid,
+				"userid", userid);
+		String activeList = mindMap.getMaplist();
+		String mindUser = mindMap.getUserid();
+		
+		
+		//防止其他人修改自己的知识图谱
+		if (!userid.equals(mindUser)){
+			return statusMap.a("5");
+		}
+		
+		//更新动态树
+		List<MindNode> list = jsonAnalyze.parseList(activeList);
+
+		for(int i= 0; i<list.size(); i++){
+			MindNode mindNode = list.get(i);
+			
+			if( mindNode.getNodeid().equals(nodeid) ){
+				mindNode.setNodename(nodename);
+				list.set(i, mindNode);          //修改
+			}
+			
+		}
+		
+		//更改MindMap名
+		if(rootid.equals(nodeid)){
+			mindMap.setNodename(nodename);
+		}
+		
+		
+		//打开知识图谱
+		String open = tryCatchMindMapService.openMind(list, rootid);
+
+		mindMap.setMaplist(jsonAnalyze.list2Json(list));    //更新树
+		mindMap.setData(open);                              //更新数据
+		
+		if(tryCatchNewMindService.updateMindMap(mindMap)){
+			return statusMap.a("1");
+		}
+		
+		return statusMap.a("3");
+		
 	}
 	
 	
