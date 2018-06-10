@@ -1,9 +1,12 @@
 package com.hwj.tools;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.hwj.entity.MindMap;
+import com.hwj.entity.MindNode;
 import com.hwj.json.JsonAnalyze;
 import com.hwj.service.IMindMapService;
 
@@ -99,6 +102,27 @@ public class TryCatchNewMindService {
 		}
 		return mindMap;
 	}
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  判断有无子节点
+	 * @serialData 2018.6.10
+	 * @param list
+	 * @return
+	 */
+	public boolean judgeHaveChild(List<MindNode> list, String nodeid){
+		
+		for(int i= 0; i<list.size(); i++){
+			MindNode mindNode = list.get(i);
+			if(mindNode.getParentid().equals(nodeid)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	
 	
 }
