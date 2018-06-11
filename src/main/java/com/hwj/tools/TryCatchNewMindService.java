@@ -1,6 +1,9 @@
 package com.hwj.tools;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -106,22 +109,37 @@ public class TryCatchNewMindService {
 	
 	/**
 	 * @author Ragty
-	 * @param  判断有无子节点
+	 * @param  获取子节点
 	 * @serialData 2018.6.10
 	 * @param list
 	 * @return
 	 */
-	public boolean judgeHaveChild(List<MindNode> list, String nodeid){
+	public List<MindNode> judgeHaveChild(List<MindNode> list, String nodeid, List<MindNode> storage){
+		
+		String parentid = null;
 		
 		for(int i= 0; i<list.size(); i++){
 			MindNode mindNode = list.get(i);
 			if(mindNode.getParentid().equals(nodeid)){
-				return true;
+				parentid = mindNode.getNodeid();            //repeat too many times
+				storage.add(mindNode);
 			}
 		}
 		
-		return false;
+		try {
+			if( !parentid.equals(null) ){
+				judgeHaveChild(list, parentid, storage);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return storage;
 	}
+	
+	
+	
+	
 	
 	
 	
