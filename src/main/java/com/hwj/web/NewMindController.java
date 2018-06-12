@@ -635,5 +635,227 @@ public class NewMindController {
 	
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  分享知识图谱
+	 * @param rootid（这里是rootid）
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("shareMap.do")
+	@ResponseBody
+	public String shareMap(@RequestParam String rootid,
+			HttpServletRequest request) throws IOException{
+		
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		
+		MindMap mindMap = tryCatchNewMindService.getMindMap("userid", userid, "nodeid", rootid);
+		String mindUser = mindMap.getUserid();
+		
+		//权限
+		if (!userid.equals(mindUser)){
+			return statusMap.a("5");
+		}
+		
+		try {
+			Share share=this.tryCatchShareService.getshare("userid", userid, "zsdid",rootid);
+			System.out.println("%%%%%Share"+share);
+			if(!share.equals("null")){
+				return statusMap.a("3");  //将状态3设置为防止重复上传
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		//DataBase handle
+		Share share = new Share();
+		share.setMindName(mindMap.getNodename());
+		share.setUserid(mindUser);
+		share.setSharetype("mindnode");
+		share.setZsdid(rootid);
+		
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+		share.setSharetime(df.format(new Date()));
+		
+		if (tryCatchShareService.saveShare(share)) {
+
+			return statusMap.a("1"); // 分享成功
+		}
+		return statusMap.a("2"); // 分享失败
+	}
+	
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  获取分享的知识图谱列表
+	 * @serialData 2018.6.12
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("getShareMap.do")
+	@ResponseBody
+	public String getShareMap(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map1 = jsonAnalyze.json2Map(requestJsonBody);
+		String sharetype=String.valueOf(map1.get("sharetype"));
+		Integer currentPage= (Integer) map1.get("currentPage");
+		Integer pageSize= (Integer) map1.get("pageSize");
+		
+		List<Share> list = null;
+		try {
+			list = tryCatchShareService.getSharePageByOne(
+					currentPage, pageSize, "sharetype", sharetype);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		
+		if(userid.equals("null")||userid.equals(null)){
+			return statusMap.a("2");    //未登录用户
+		}
+		
+		if (list == null) {
+			return statusMap.a("1");     //没有获取到分享的思维导图
+		}
+		
+		List<Map<String, String>> list2 = new ArrayList<Map<String,String>>();
+		
+		for(int i=0; i<list.size(); i++){
+			Share share = list.get(i);
+		    Map<String, String> map = new HashMap<String, String>();
+		    map.put("nodeid", share.getZsdid());        // 获取分享的思维导图根节点id
+			map.put("nodename", share.getMindName());   // 获取分享的思维导图的名字
+			map.put("userid", share.getUserid());       // 获取分享的思维导图的拥有者
+			map.put("sharetime", share.getSharetime()); // 获取分享思维导图的时间
+			list2.add(map);
+		}
+		
+		return jsonAnalyze.list2Json(list2);
+		
+	}
+	
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  获取分享的知识图谱总页数
+	 * @serialData 2018.6.12
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("getShareMapTotal.do")
+	@ResponseBody
+	public Long getShareMapTotal(@RequestBody String requestJsonBody, 
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		String sharetype=String.valueOf(map.get("sharetype"));
+		
+		Integer pageSize= (Integer) map.get("pageSize");
+		Long total;
+		try {
+			total=this.tryCatchShareService.countShareByOne("sharetype", sharetype);
+			total=(total-1)/pageSize+1;
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+		
+		if( total.equals("null")||total.equals(null) ){
+			return null;
+		}
+		
+		return total;
+	}
+	
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  打开分享过的知识图谱
+	 * @serialData 2018.6.12
+	 * @param userid
+	 * @param nodeid
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("openShareMap.do")
+	@ResponseBody
+	public String openShareMap(@RequestParam String userid,
+			@RequestParam String nodeid, HttpServletRequest request){
+		
+		HttpSession session = request.getSession();
+		String uid = String.valueOf(session.getAttribute("username"));
+		
+		MindMap mindMap = tryCatchNewMindService.getMindMap("userid", userid, "nodeid", nodeid);
+		
+		return mindMap.getData();
+	}
+	
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  删除分享列表中的知识图谱
+	 * @serialData 2018.6.12
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("delShareMap.do")
+	@ResponseBody
+	public String delShareMap(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map=jsonAnalyze.json2Map(requestJsonBody);
+        String nodeid=String.valueOf(map.get("nodeid"));
+        String deleteUser=String.valueOf(map.get("deleteUser"));
+        
+        HttpSession session=request.getSession();
+        String userid=String.valueOf(session.getAttribute("username"));
+        
+        if( userid.equals("null")|| userid.equals(null) ){
+        	return statusMap.a("2");           //尚未登录的
+        }
+        
+        if( !userid.equals(deleteUser) ){
+        	return statusMap.a("3");           //没有删除权限的
+        }
+        
+        Share share=null;
+        try {
+			share=this.tryCatchShareService.getshare("userid", userid, "zsdid", nodeid);
+			
+			if(share!=null){
+              
+				if(this.tryCatchShareService.delShare(share)){
+					return statusMap.a("1");      //删除成功
+				}else{
+					return statusMap.a("5");      //删除失败
+				}
+				
+			}
+        	
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+        return statusMap.a("10");
+		
+	}
+	
+	
+	
+	
 	
 }
