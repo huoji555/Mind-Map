@@ -978,4 +978,66 @@ public class NewMindController {
 	
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  保存节点拖动后的位置
+	 * @serialData 2018.6.12
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("saveMapPosition.do")
+	@ResponseBody
+	public String saveMapPosition(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		String beforeid=String.valueOf(map.get("beforeId"));
+    	String afterid=String.valueOf(map.get("afterId"));
+    	String rootid = String.valueOf(map.get("rootid"));
+    	
+    	HttpSession session=request.getSession();
+    	String userid=String.valueOf(session.getAttribute("username"));
+    	
+    	if( userid.equals("null")||userid.equals(null) ){
+    		return statusMap.a("2");
+    	}
+    	
+    	
+    	MindMap mindMap = tryCatchNewMindService.getMindMap("userid", userid, "nodeid", rootid);
+		String  maplist = mindMap.getMaplist();
+		String  mindUser = mindMap.getUserid();
+		
+		//权限
+		if (!userid.equals(mindUser)){
+			return statusMap.a("4");
+		}
+    	
+		
+		List<MindNode> list = jsonAnalyze.parseList(maplist);
+    	
+		//保存拖动后的位置
+    	for(int i=0; i<list.size(); i++){
+    		MindNode mind = list.get(i);
+    		
+    		if( mind.getNodeid().equals(beforeid) ){
+				mind.setParentid(afterid);
+				list.set(i, mind);
+			}
+    	}
+    	
+    	//更新数据
+		String open = tryCatchMindMapService.openMind(list, rootid);
+	
+		mindMap.setMaplist(jsonAnalyze.list2Json(list));    //更新树
+		mindMap.setData(open);                              //更新数据
+		
+		if(tryCatchNewMindService.updateMindMap(mindMap)){
+			return statusMap.a("1");
+		}
+		return statusMap.a("10");
+	}
+	
+	
 }
