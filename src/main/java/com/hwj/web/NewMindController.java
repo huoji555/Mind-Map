@@ -562,20 +562,9 @@ public class NewMindController {
 			return statusMap.a("1");
 		}
 		
-		System.out.println("--------------");
-        System.out.println(currentPage);
-        System.out.println(pageSize);
-        System.out.println(userid);
-		System.out.println("--------------");
-		
 		List<MindMap> list = new ArrayList<MindMap>();
 		list = tryCatchNewMindService.getMindMapByPage(currentPage, pageSize, "userid", userid);
-		
-		System.out.println("-----------------");
-		System.out.println(list);
-		System.out.println("-----------------");
-		
-		
+
 		if (list == null){
 			return statusMap.a("2");
 		}
@@ -585,7 +574,64 @@ public class NewMindController {
 	
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  获取我的知识图谱总页数
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("getMyMapPage.do")
+	@ResponseBody
+	public Long getMyMapPage(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		String parentid=String.valueOf(map.get("parentid"));
+		
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		
+		Long total=null;
+    	Integer pageSize=(Integer) map.get("pageSize");
+    	try {
+    		total=this.tryCatchNewMindService.countByOneMind("userid", userid);
+    		total=(total-1)/pageSize+1;   
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+		
+    	if( total.equals("null")||total.equals(null) ){
+    		return null;
+    	}
+		return total;
+		
+	}
 	
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  打开某个具体的知识图谱
+	 * @serialData 2018.6.12
+	 * @param nodeid
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("openMyMap.do")
+	@ResponseBody
+	public String openMyMap(@RequestParam String nodeid,
+			HttpServletRequest request){
+		
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		
+		MindMap mindMap = tryCatchNewMindService.getMindMap("userid", userid, "nodeid", nodeid);
+		
+		return mindMap.getData();
+	}
 	
 	
 	

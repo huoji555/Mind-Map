@@ -253,4 +253,26 @@ public class TryCatchNewMindService {
 	
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  根据一个条件获取到查询到的总数
+	 * @serialData 2018.6.12
+	 * @param propertyName
+	 * @param value
+	 * @return
+	 */
+    public Long countByOneMind(String propertyName,Object value){
+		
+		Long total=null;
+		try {
+			total=this.iMindMapService.countByOne(propertyName, value);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+		return total;
+	}
+	
+	
+	
 }
