@@ -329,10 +329,7 @@ public class NewMindController {
 		Map<String, Object> map=jsonAnalyze.json2Map(requestJsonBody);
     	String nodeid = String.valueOf(map.get("nodeid"));
     	String rootid = String.valueOf(map.get("rootid"));
-    	
-    	System.out.println("----------------");
-    	System.out.println(nodeid.equals(rootid));
-    	System.out.println("----------------");
+    			
     	
     	HttpSession session=request.getSession();
     	String userid=String.valueOf(session.getAttribute("username"));
@@ -359,10 +356,6 @@ public class NewMindController {
 		//用来存储取出要删除的子节点
 		List<MindNode> list3 = tryCatchNewMindService.getChild(list, nodeid, list2);
 		
-		System.out.println("--------------------");
-		System.out.println(list3);
-		System.out.println(list3.size());
-		System.out.println("--------------------");
 		
 		
 		//循环处理数据
@@ -499,27 +492,28 @@ public class NewMindController {
 				// TODO: handle exception
 			}
 			
-			//step4.若是删除整个图(将分享过的思维导图也一并删除掉,并删掉整个图)
-			try {
-				
-				if( nodeid.equals(rootid) ) {
-					
-					Share share=this.tryCatchShareService.getshare("userid", userid, "zsdid", mindNode.getNodeid());
-					if( !(share == null) ){
-						System.out.println("删除分享过的思维导图"+share);
-						this.tryCatchShareService.delShare(share);
-					}
-					
-					if(tryCatchNewMindService.delMindMap(mindMap)){
-						System.out.println("删除整个图");
-						return statusMap.a("1");
-					}
-					
-				}
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
+		}
+		
+		
+		//step4.若是删除整个图(将分享过的思维导图也一并删除掉,并删掉整个图)
+		try {
 			
+			if( nodeid.equals(rootid) ) {
+				
+				Share share=this.tryCatchShareService.getshare("userid", userid, "zsdid", nodeid);
+				if( !(share == null) ){
+					System.out.println("删除分享过的思维导图"+share);
+					this.tryCatchShareService.delShare(share);
+				}
+				
+				if(tryCatchNewMindService.delMindMap(mindMap)){
+					System.out.println("删除整个图");
+					return statusMap.a("1");
+				}
+				
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
     	    
 		
@@ -544,6 +538,50 @@ public class NewMindController {
 	
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  获取自己的知识图谱列表
+	 * @serialData 2018.6.12
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException 
+	 */
+	@RequestMapping("getMyMap.do")
+	@ResponseBody
+	public String getMyMap(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		Integer currentPage=(Integer) map.get("currentPage");
+		Integer pageSize = (Integer) map.get("pageSize");
+		
+		if (userid.equals("null")||userid.equals(null)){
+			return statusMap.a("1");
+		}
+		
+		System.out.println("--------------");
+        System.out.println(currentPage);
+        System.out.println(pageSize);
+        System.out.println(userid);
+		System.out.println("--------------");
+		
+		List<MindMap> list = new ArrayList<MindMap>();
+		list = tryCatchNewMindService.getMindMapByPage(currentPage, pageSize, "userid", userid);
+		
+		System.out.println("-----------------");
+		System.out.println(list);
+		System.out.println("-----------------");
+		
+		
+		if (list == null){
+			return statusMap.a("2");
+		}
+		
+		return jsonAnalyze.list2Json(list);
+	}
 	
 	
 	

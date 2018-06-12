@@ -200,6 +200,57 @@ public class TryCatchNewMindService {
 	
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  根据一个属性获取当前页数的数据
+	 * @param currentPage
+	 * @param pageSize
+	 * @param propertyName
+	 * @param value
+	 * @return
+	 */
+	public List<MindMap> getMindMapByPage(Integer currentPage, Integer pageSize,
+			String propertyName,Object value){
+		
+		List<MindMap> list = null;
+		try {
+			list = iMindMapService.getAllByPage(currentPage, pageSize, propertyName, value);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+		
+		return list;
+	}
+	
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  根据两个值获取当前页数的数据
+	 * @param currentPage
+	 * @param pageSize
+	 * @param propertyName1
+	 * @param value1
+	 * @param propertyName2
+	 * @param value2
+	 * @return
+	 */
+	public List<MindMap> getMindMapByPage(Integer currentPage, Integer pageSize,
+			String propertyName1,Object value1,String propertyName2,Object value2){
+		
+		List<MindMap> list = null;
+		try {
+			list = iMindMapService.getAllByPage(currentPage, pageSize, propertyName1, value1, propertyName2, value2);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+		
+		return list;
+	}
+	
+	
 	
 	
 }
