@@ -894,4 +894,30 @@ public class NewMindController {
 	
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  根据一个节点获取整个知识图谱
+	 * @serialData 2018.6.12
+	 * @param mindNodeTool
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("getCompleteMap.do")
+	@ResponseBody
+	public String getCompleteMap(MindNodeTool mindNodeTool,
+			HttpServletRequest request){
+		
+        String rootid = mindNodeTool.getRootid();
+		
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		
+		MindMap mindMap = tryCatchNewMindService.getMindMap("userid", userid, "nodeid", rootid);
+		
+		return mindMap.getData();
+	}
+	
+	
+	
+	
 }
