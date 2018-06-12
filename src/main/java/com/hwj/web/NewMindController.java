@@ -919,5 +919,63 @@ public class NewMindController {
 	
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  修改节点颜色
+	 * @serialData 2018.6.12
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("setMapColor.do")
+	@ResponseBody
+	public String setMapColor(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		String nodeid = String.valueOf(map.get("nodeid"));
+		String color = String.valueOf(map.get("color"));
+		String rootid = String.valueOf(map.get("rootid"));
+		
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		
+		MindMap mindMap = tryCatchNewMindService.getMindMap("userid", userid, "nodeid", rootid);
+		String  maplist = mindMap.getMaplist();
+		String  mindUser = mindMap.getUserid();
+		
+		List<MindNode> list = jsonAnalyze.parseList(maplist);
+		
+		//权限
+		if (!userid.equals(mindUser)){
+			return statusMap.a("3");
+		}
+		
+		//改颜色
+		for(int i=0; i<list.size(); i++){
+    		MindNode mind = list.get(i);
+    		
+    		if( mind.getNodeid().equals(nodeid) ){
+				mind.setColor(color);
+				list.set(i, mind);
+			}
+    	}
+		
+		//更新数据
+		String open = tryCatchMindMapService.openMind(list, rootid);
+
+		mindMap.setMaplist(jsonAnalyze.list2Json(list));    //更新树
+		mindMap.setData(open);                              //更新数据
+		
+		if(tryCatchNewMindService.updateMindMap(mindMap)){
+			return statusMap.a("1");
+		}
+		
+		return statusMap.a("2");
+		
+	}
+	
+	
 	
 }
