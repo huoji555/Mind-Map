@@ -856,6 +856,42 @@ public class NewMindController {
 	
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  获取选中节点后面的子节点
+	 * @serialData 2018.6.12
+	 * @param mindNodeTool
+	 * @param request
+	 * @return
+	 * @throws IOException 
+	 */
+	@RequestMapping("getMapChild.do")
+	@ResponseBody
+	public String getMapChild(MindNodeTool mindNodeTool,
+			HttpServletRequest request) throws IOException{
+		
+		String rootid = mindNodeTool.getRootid();
+		String nodeid = mindNodeTool.getNodeid();
+		
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		
+		MindMap mindMap = tryCatchNewMindService.getMindMap("userid", userid, "nodeid", rootid);
+		String activeList = mindMap.getMaplist();
+		
+        List<MindNode> list = jsonAnalyze.parseList(activeList);
+		
+		List<MindNode> list2 = new ArrayList<MindNode>();
+		
+		//用来存储取出选中节点及它的子节点
+		List<MindNode> list3 = tryCatchNewMindService.getChild(list, nodeid, list2);
+		
+		//包装数据
+		String open = tryCatchNewMindService.openChildMap(list3, nodeid, rootid);
+		return open;
+	}
+	
+	
 	
 	
 }

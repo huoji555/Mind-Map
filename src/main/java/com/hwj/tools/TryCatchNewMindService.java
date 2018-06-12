@@ -1,5 +1,6 @@
 package com.hwj.tools;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Component;
 
 import com.hwj.entity.MindMap;
 import com.hwj.entity.MindNode;
+import com.hwj.entityUtil.MindNode2Util;
+import com.hwj.entityUtil.Node2;
 import com.hwj.json.JsonAnalyze;
 import com.hwj.service.IMindMapService;
 
@@ -272,6 +275,88 @@ public class TryCatchNewMindService {
 		}
 		return total;
 	}
+    
+    
+    
+    /**
+     * @author Ragty
+     * @param  打开子节点的知识图
+     * @serialData 2018.6.12
+     * @param list
+     * @param nodeid
+     * @param rootid
+     * @return
+     * @throws IOException
+     */
+    public String openChildMap(List<MindNode> list,String nodeid ,String rootid) throws IOException{
+    	
+    	String parentid = null;
+    	
+    	for(Iterator it = list.iterator(); it.hasNext();){
+    		MindNode mind = (MindNode) it.next();
+    		
+    		if(mind.getNodeid().equals(nodeid)){
+    			parentid = mind.getParentid();
+    		}
+    	}
+    	
+    	
+    	HashMap nodeList = new HashMap();
+    	MindNode2Util mindNode2Util = new MindNode2Util();
+    	Node2 root = null;
+    	
+    	Map<String, Object> data = new HashMap<String, Object>();
+		Map<String, Object> meta = new HashMap<String, Object>();
+		meta.put("name", "jsMind remote");
+		meta.put("author", "hizzgdev@163.com");
+		meta.put("version", "0.2");
+		data.put("meta", meta);
+		data.put("format", "node_tree");
+    	
+    	
+    	for (Iterator it = list.iterator(); it.hasNext();) {
+			MindNode mindNode = (MindNode) it.next();
+			Node2 node = new Node2();
+			node.id = mindNode.getNodeid();
+			node.topic = mindNode.getNodename();
+			node.parentid = mindNode.getParentid();
+			node.color = mindNode.getColor();
+			nodeList.put(node.id, node);
+		}
+    	
+    	Set entrySet = nodeList.entrySet();
+    	
+    	for (Iterator it = entrySet.iterator(); it.hasNext();) {
+			Node2 node = (Node2) ((Map.Entry) it.next()).getValue();
+			if ((node.parentid == null) || (node.parentid.equals(parentid))) {
+				root = node;
+			} else {
+				
+				try {
+					((Node2) nodeList.get(node.parentid)).addChild(node);
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+				
+			}
+		}
+		mindNode2Util.setState("1");
+
+		data.put("data", root.toString());
+
+		String datas = this.jsonAnalyze.object2Json(data).toString();
+
+		System.out.println("datatatat:" + datas);
+		datas = datas.replace("\"", "'");
+		datas = datas.replace(" ", "");
+		datas = datas.replace("'{", "{");
+		datas = datas.replace("}'", "}");
+		mindNode2Util.setDatas(datas);
+		mindNode2Util.setKcmc(rootid);
+		mindNode2Util.setMindJson2("success");
+		return this.jsonAnalyze.object2Json(mindNode2Util);
+    	
+    }
 	
 	
 	
