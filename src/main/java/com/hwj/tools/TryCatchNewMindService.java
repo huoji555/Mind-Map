@@ -2,8 +2,11 @@ package com.hwj.tools;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -109,7 +112,7 @@ public class TryCatchNewMindService {
 	
 	/**
 	 * @author Ragty
-	 * @param  获取子节点
+	 * @param  获取子节点(not cotain select_node)
 	 * @serialData 2018.6.10
 	 * @param list
 	 * @return
@@ -118,26 +121,82 @@ public class TryCatchNewMindService {
 		
 		String parentid = null;
 		
-		for(int i= 0; i<list.size(); i++){
-			MindNode mindNode = list.get(i);
+		for(Iterator it = list.iterator(); it.hasNext();){
+			MindNode mindNode = (MindNode) it.next();
 			if(mindNode.getParentid().equals(nodeid)){
 				parentid = mindNode.getNodeid();            //repeat too many times
+				
+				try {
+					if( !parentid.equals(null) ){
+						System.out.println("还有下一层");
+						judgeHaveChild(list, parentid, storage);
+					}
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+				
 				storage.add(mindNode);
 			}
-		}
-		
-		try {
-			if( !parentid.equals(null) ){
-				judgeHaveChild(list, parentid, storage);
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
 		}
 		
 		return storage;
 	}
 	
 	
+	
+	/**
+	 * @author Ragty
+	 * @param  获取所有子节点
+	 * @serialData 2018.6.11
+	 * @param list
+	 * @param nodeid
+	 * @param storage
+	 * @return
+	 */
+	public List<MindNode> getChild(List<MindNode> list, String nodeid, List<MindNode> storage){
+		
+		judgeHaveChild(list, nodeid, storage);
+		
+		for(Iterator it = list.iterator(); it.hasNext();){
+			MindNode mindNode = (MindNode) it.next();
+			if(mindNode.getNodeid().equals(nodeid)){
+				storage.add(mindNode);
+			}
+		}
+		
+		return storage;
+		
+	}
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  获取删除后的节点(利用Set的不可重复性,Banner)  //利用list的contain也可去掉，所以我懒得写了
+	 * @serialData  2018.6.11
+	 * @param less
+	 * @param more
+	 * @param target
+	 * @return
+	 */
+	public List<MindNode> getNope(List<MindNode> less, List<MindNode> more ){
+		
+		Set<MindNode> les = new HashSet<MindNode>(less);
+		Set<MindNode> mor = new HashSet<MindNode>(more);
+		
+		List<MindNode> target = new ArrayList<MindNode>();
+		
+        Iterator<MindNode> it = mor.iterator();
+		
+		while (it.hasNext()) {  
+		  MindNode mind = it.next();  
+		  
+		  if( les.add(mind) ){
+			  target.add(mind);
+		  }
+		  
+		}  
+		return target;
+	}
 	
 	
 	

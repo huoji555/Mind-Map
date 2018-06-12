@@ -77,7 +77,7 @@ body{
 .logo{
     text-align: center;
     margin-top: 68px;
-    font:bold 72px/82px '方正舒体';
+    font:bold 65px/80px '华文楷体';
     color:#DA4E43;
 }
 .top_s{
@@ -179,7 +179,7 @@ body{
 }
 .logo_o{
     color: #616161;
-    font:40px/50px '方正舒体';
+    font:40px/50px '华文楷体';
     display: none;
 }
 .logo_w{
