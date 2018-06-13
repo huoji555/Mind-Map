@@ -1103,6 +1103,46 @@ public class NewMindController {
 	
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  获取当前节点知识点
+	 * @serialData 2018.6.13
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("getMapZsd.do")
+	@ResponseBody
+	public String getZsd(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map3 = jsonAnalyze.json2Map(requestJsonBody);
+		String nodeid = String.valueOf(map3.get("nodeid"));
+		String rootid = String.valueOf(map3.get("rootid"));
+		
+		MindMap mindMap = tryCatchNewMindService.getMindMap("nodeid", rootid);
+	    String mindUser = mindMap.getUserid();
+		
+		Map<String, String> map = new HashMap<String, String>();
+		Map<String, Object> map2 = new HashMap<String, Object>();
+		
+		Zsd zsd=null;
+		
+		try {
+			zsd = tryCatchZsdService.getZsd1("userid", "zsdid", mindUser, nodeid);
+			map.put("zsdmc", zsd.getZsdmc());
+			map.put("zsdms", zsd.getZsdms());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		map2.put("zsdid", nodeid);
+		map2.put("userid", mindUser);
+		map2.put("map", map);
+		
+		return jsonAnalyze.map2Json(map2);
+	}
 	
 	
 	

@@ -100,7 +100,10 @@
 			  var button = "";
 			  var nodeid=parent.get_selected_nodeid();
 			  var nodeName=parent.get_selected_nodeName();
-			  var adata={"nodeid":nodeid};
+			  var rootid = parent.getRootId();
+			  var adata={"nodeid":nodeid,
+					     "rootid":rootid 
+					    };
 			  var data=JSON.stringify(adata);
 			  $("li").removeClass("active");
 			  $("#zsdms").addClass("active");
@@ -110,7 +113,7 @@
 			    	 contentType:"application/json",
 			    	 dataType:"json",
 			    	 data:data,
-			    	 url:"getZsd.do",
+			    	 url:"getMapZsd.do",
 			    	 
 			    	 success:function(data){
 			    		 
