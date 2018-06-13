@@ -283,8 +283,10 @@
 		function delUpload(zlid){
 			
 			var nodeid=parent.get_selected_nodeid();
+			var rootid = parent.getRootId();
 			var adata={"zlid":zlid,
-					   "nodeid":nodeid
+					   "nodeid":nodeid,
+					   "rootid":rootid
 			         };
 			var data=JSON.stringify(adata);
 			
@@ -299,7 +301,7 @@
 					  
 					  if(data.a==1){
 						  alert("删除成功");
-						  window.location.reload("biji.html");
+						  window.location.reload();
 					  }else if(data.a==2){
 						  alert("非合法操作");
 					  }else{
@@ -407,8 +409,10 @@
         //分享上传文件
 		function shareUpload(nodeid,zlid){
 			
+			var rootid = parent.getRootId();
 			var adata={"nodeid":nodeid,
-					   "zlid":zlid
+					   "zlid":zlid,
+					   "rootid":rootid
 			          };
 			var data=JSON.stringify(adata);
 			
@@ -507,8 +511,10 @@
 		function delShareUpload(f_id){
 			
 			var nodeid=parent.get_selected_nodeid();
+			var rootid = parent.getRootId();
 			var adata={"f_id":f_id,
-					   "nodeid":nodeid
+					   "nodeid":nodeid,
+					   "rootid":rootid
 					   };
 			var data=JSON.stringify(adata);
 			
@@ -549,8 +555,10 @@
         //节点上收藏文件功能
 		function collectUpload(zlid,nodeid){
 			
+			var rootid = parent.getRootId();
 			var adata={"zlid":zlid,
-					   "nodeid":nodeid
+					   "nodeid":nodeid,
+					   "rootid":rootid
 			       };
 			var data=JSON.stringify(adata);
 			
@@ -652,8 +660,10 @@
 		function delCollectionFile(zlid){
 			
 			var nodeid=parent.get_selected_nodeid();
+			var rootid = parent.getRootId();
 			var adata={"zlid":zlid,
-					   "nodeid":nodeid
+					   "nodeid":nodeid,
+					   "rootid":rootid
 			          };
 			var data=JSON.stringify(adata);
 			

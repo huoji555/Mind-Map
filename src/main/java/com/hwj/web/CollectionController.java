@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hwj.entity.FileCollection;
+import com.hwj.entity.MindMap;
 import com.hwj.entity.UploadFile;
 import com.hwj.json.JsonAnalyze;
 import com.hwj.tools.StatusMap;
 import com.hwj.tools.TryCatchFileCollectionService;
+import com.hwj.tools.TryCatchNewMindService;
 import com.hwj.tools.TryCatchUploadFileService;
 
 @Controller
@@ -35,6 +37,8 @@ public class CollectionController {
 	private TryCatchUploadFileService tryCatchUploadFileService;
 	@Autowired
 	private TryCatchFileCollectionService tryCatchFileCollectionService;
+	@Autowired
+	private TryCatchNewMindService tryCatchNewMindService;
 	
 	
 	/**
@@ -259,8 +263,24 @@ public class CollectionController {
 		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
 		String zlid = String.valueOf(map.get("zlid"));
 		String nodeid = String.valueOf(map.get("nodeid"));
+		String rootid = String.valueOf(map.get("rootid"));
 		HttpSession session = request.getSession();
 		String userid = String.valueOf(session.getAttribute("username"));
+		
+		//权限
+		MindMap mindMap = tryCatchNewMindService.getMindMap("nodeid", rootid);
+	    String mindUser = mindMap.getUserid();
+		
+		if (userid.equals("null") || userid.equals(null)) {
+			return statusMap.a("2");
+		}
+		
+		//禁止非本节点用户在节点上传文件
+		if (! (userid.equals(mindUser)) ){
+			System.out.println("到这里,,,,,");
+			return statusMap.a("5");
+		}
+		
 		
 		UploadFile uploadFile = this.tryCatchUploadFileService.getUploadFile(
 				"userid", "files", "zsdid", userid, zlid, nodeid);
@@ -366,8 +386,22 @@ public class CollectionController {
 		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
 		String zlid = String.valueOf(map.get("zlid"));
 		String nodeid = String.valueOf(map.get("nodeid"));
+		String rootid = String.valueOf(map.get("rootid"));
 		HttpSession session = request.getSession();
 		String userid = String.valueOf(session.getAttribute("username"));
+		
+		MindMap mindMap = tryCatchNewMindService.getMindMap("nodeid", rootid);
+	    String mindUser = mindMap.getUserid();
+		
+		if (userid.equals("null") || userid.equals(null)) {
+			return statusMap.a("2");
+		}
+		
+		//禁止非本节点用户在节点上传文件
+		if (! (userid.equals(mindUser)) ){
+			System.out.println("到这里,,,,,");
+			return statusMap.a("5");
+		}
 		
 		FileCollection fileCollection = tryCatchFileCollectionService.
 				getFileCollection("userid", userid, "nodeid", nodeid,"f_id", zlid);

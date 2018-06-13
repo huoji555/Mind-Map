@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hwj.entity.FileShare;
+import com.hwj.entity.MindMap;
 import com.hwj.entity.UploadFile;
 import com.hwj.json.JsonAnalyze;
 import com.hwj.tools.StatusMap;
 import com.hwj.tools.TryCatchFileShareService;
+import com.hwj.tools.TryCatchNewMindService;
 import com.hwj.tools.TryCatchUploadFileService;
 
 @Controller
@@ -33,6 +35,8 @@ public class FileShareController {
 	  private TryCatchFileShareService tryCatchFileShareService;
 	  @Autowired
 	  private TryCatchUploadFileService tryCatchUploadFileService;
+	  @Autowired
+	  private TryCatchNewMindService tryCatchNewMindService;
 	  
 	  
 	  /**
@@ -143,10 +147,20 @@ public class FileShareController {
 
 		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
 		String nodeid = String.valueOf(map.get("nodeid"));
+		String rootid = String.valueOf(map.get("rootid"));
 		String zlid = String.valueOf(map.get("zlid"));
 
 		HttpSession session = request.getSession();
 		String userid = String.valueOf(session.getAttribute("username"));
+		
+		MindMap mindMap = tryCatchNewMindService.getMindMap("nodeid", rootid);
+	    String mindUser = mindMap.getUserid();
+	    
+	    if (! (userid.equals(mindUser)) ){
+			System.out.println("到这里,,,,,");
+			return statusMap.a("5");
+		}
+	    
 
 		UploadFile uploadFile = new UploadFile();
 		uploadFile = this.tryCatchUploadFileService.getUploadFile("userid",
@@ -246,8 +260,17 @@ public class FileShareController {
  		  Map<String, Object> map=jsonAnalyze.json2Map(requestJsonBody);
  		  String f_id = String.valueOf(map.get("f_id"));
  		  String nodeid = String.valueOf(map.get("nodeid"));
+ 		  String rootid = String.valueOf(map.get("rootid"));
  		  HttpSession session=request.getSession();
  		  String userid = String.valueOf(session.getAttribute("username"));
+ 		  
+ 		  MindMap mindMap = tryCatchNewMindService.getMindMap("nodeid", rootid);
+ 	      String mindUser = mindMap.getUserid();
+ 	    
+ 	      if (! (userid.equals(mindUser)) ){
+ 			  System.out.println("到这里,,,,,");
+ 			  return statusMap.a("5");
+ 		   }
  		  
  		  FileShare fileShare = this.tryCatchFileShareService.getFileShare(
  				 "userid", userid, "f_id", f_id, "nodeid", nodeid);
