@@ -39,6 +39,7 @@ import com.hwj.entity.UploadFile;
 import com.hwj.entity.Zsd;
 import com.hwj.entityUtil.BeSaveFileUitl;
 import com.hwj.entityUtil.MindNodeTool;
+import com.hwj.entityUtil.MindNodeUtil;
 import com.hwj.entityUtil.Node2;
 import com.hwj.json.JsonAnalyze;
 import com.hwj.tools.FileUpload;
@@ -1367,7 +1368,78 @@ public class NewMindController {
 	
 	
 	
-	
+	/**
+	 * @author Ragty
+	 * @param  获取本节点用户的上传文件（这里不加权限，谁都可以看到）
+	 * @serialData 2018.6.13
+	 * @param mindNodeTool
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("getMapUpload.do")
+	@ResponseBody
+	public String getMapUpload(MindNodeTool mindNodeTool,
+			HttpServletRequest request) throws IOException{
+		
+		String nodeid = mindNodeTool.getNodeid();
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		
+		String uploadzl = "success";
+		String state = null;
+		
+		List<UploadFile> list = tryCatchUploadFileService.getUploadeFile(
+				 "userid", userid, "zsdid", nodeid);
+		List<Map<String, String>> list2 = new ArrayList<Map<String,String>>();
+		
+		if ((list == null) || (list.equals(null))) {
+			state = "1";
+		} else {
+			state = "0";
+			for(int i = 0; i < list.size(); i++){
+				UploadFile uploadFile = list.get(i);
+				Map<String, String> map = new HashMap<String, String>();
+				
+				String type = uploadFile.getFiletype();
+				String tubiao = "";
+				if (type.equals("doc")) {
+					tubiao = "/assets/avatars/word.jpg";
+				} else if (type.equals("video")) {
+					tubiao = "/assets/avatars/shipin.jpg";
+				} else if (type.equals("picture")) {
+					tubiao = "/assets/avatars/tupian.jpg";
+				} else if (type.equals("other")) {
+					tubiao = "/assets/avatars/tuzhi.jpg";
+				} else if (type.equals("5")) {
+					tubiao = "/assets/avatars/yinpin.jpg";
+				}
+				
+				map.put("zlmc", uploadFile.getFilename());
+				map.put("tubiao", tubiao);
+				map.put("zlms", uploadFile.getZlms()); // 资料描述
+				map.put("zlid", String.valueOf(uploadFile.getFiles()));
+				map.put("filepath", uploadFile.getFilepath());
+				map.put("time", uploadFile.getUploadtime());
+				map.put("fileType", uploadFile.getFiletype());
+				
+				if (list2.size() < list.size()){
+					list2.add(map);
+				}
+				
+			}   //<!-- for -->
+			
+		}    //<!-- else -->
+		
+		Map<String, Object> map2 = new HashMap<String, Object>();
+		map2.put("uploadzl", uploadzl);
+		map2.put("state", state);
+		map2.put("list2", list2);
+		map2.put("nodeid", nodeid);
+		
+		return jsonAnalyze.map2Json(map2);
+		
+	}
 	
 	
 	
