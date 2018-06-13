@@ -361,11 +361,13 @@
 	 		 
 			 var formData = new FormData();
 			 var nodeid=parent.get_selected_nodeid();
+			 var rootid = parent.getRootId();
 		  	 formData.append("wenjian",$("#wenjian")[0].files[0]);
 		  	 formData.append("nodeid",nodeid);
+		  	 formData.append("rootid",rootid);
 		  	  
 		     $.ajax({
-		         url: '/setUpload.do',  
+		         url: 'setMapUpload.do',  
 		         type: 'post',
 		         data : formData, 
 		         processData : false, 
