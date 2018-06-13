@@ -1040,4 +1040,81 @@ public class NewMindController {
 	}
 	
 	
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  保存节点知识点
+	 * @serialData 2018.6.13
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("saveMapZsd.do")
+	@ResponseBody
+	public String saveMapZsd(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		String zsdid = String.valueOf(map.get("zsdid"));
+		String zsdmc = String.valueOf(map.get("zsdmc"));
+		String zsdms = String.valueOf(map.get("zsdms"));
+		String rootid = String.valueOf(map.get("rootid"));
+		
+		HttpSession session = request.getSession();
+		String userid = String.valueOf(session.getAttribute("username"));
+		
+		Zsd zsd= new Zsd();
+		zsd.setZsdid(zsdid);
+		zsd.setZsdmc(zsdmc);
+		zsd.setZsdms(zsdms);
+		zsd.setUserid(userid);
+		
+        MindMap mindMap = tryCatchNewMindService.getMindMap("nodeid", rootid);
+        String mindUser = mindMap.getUserid();
+		
+		//禁止在别人的知识图谱里添加知识点
+		if( !(userid.equals(mindUser)) ){
+			return statusMap.a("3");
+		}
+		
+		if(tryCatchZsdService.getZsd1("userid", "zsdid", userid, zsdid) == null){
+			
+			if(tryCatchZsdService.saveZsd(zsd)){
+				return statusMap.a("1");
+			} else {
+				return statusMap.a("2");
+			}
+			
+		} else {
+			
+			if(tryCatchZsdService.update(zsd)){
+				return statusMap.a("1");
+			} else {
+				return statusMap.a("2");
+			}
+			
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

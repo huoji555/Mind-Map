@@ -89,6 +89,27 @@ public class TryCatchNewMindService {
 	}
 	
 	
+	/**
+	 * @author Ragty
+	 * @param  根据一个属性获取MindMap对象
+	 * @serialData 2018.6.13
+	 * @param propertyName
+	 * @param value
+	 * @return
+	 */
+	public MindMap getMindMap(String propertyName,Object value){
+		
+		MindMap mindMap = null;
+		try {
+			mindMap = iMindMapService.get(propertyName, value);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+		
+		return mindMap;
+	}
+	
 	
 	/**
 	 * @author Ragty
