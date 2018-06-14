@@ -296,4 +296,23 @@ public class TryCatchUserService {
 	}
     
     
+    /**
+     * @author Ragty
+     * @param  获取所有用户数据
+     * @serialData 2018.6.13
+     * @return
+     */
+    public List<LoginUser> getAllUser(){
+    	
+    	List<LoginUser> list = null;
+    	try {
+			list = userService.getAll();
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+    	return list;
+    }
+    
+    
 }

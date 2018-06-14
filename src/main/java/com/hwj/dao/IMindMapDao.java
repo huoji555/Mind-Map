@@ -7,4 +7,11 @@ import com.hwj.entity.MindNode;
 
 public interface IMindMapDao extends IBaseDao<MindMap> {
 	
+	List<MindMap> queryMindNap(Object value1, Integer currentPage,
+			Integer pageSize);
+	
+	Long searchMapPage(Object value1);
+	
+	Long getAllMapPage();
+	
 }

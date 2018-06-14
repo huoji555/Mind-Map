@@ -208,7 +208,7 @@
 
 		$.ajax({
 			type : "POST",
-			url : "getShareMindNodeObject.do",  //打开具体的思维导图
+			url : "openShareMap.do",  //打开具体的思维导图
 			data : da,
 			success : function(data) {
 				var json = $.parseJSON(data);
@@ -242,7 +242,7 @@
     		 dataType:"json",
     		 contentType:"application/json",
     		 data:data,
-    		 url:"getShareMindNode.do",
+    		 url:"getShareMap.do",
 
     		 success:function(data){
     			 if(data.a=="1"){
@@ -301,7 +301,7 @@
 			contentType:"application/json",
 			dataType:"json",
 			data:data,
-			url:"getShareMindNodeTotal.do",
+			url:"getShareMapTotal.do",
 	
 			success:function(data){
 				if(data==null){

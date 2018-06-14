@@ -380,5 +380,90 @@ public class TryCatchNewMindService {
     }
 	
 	
+    /**
+     * @author Ragty
+     * @param  获取所有知识图谱(根据当前页数)
+     * @serialData 2018.6.14
+     * @return
+     */
+    public List<MindMap> getAllMap(Integer currentPage, Integer pageSize){
+    	
+    	List<MindMap> list = null;
+    	try {
+			list = iMindMapService.getByPage(currentPage, pageSize);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+    	return list;
+    }
+    
+    
+    /**
+     * @author Ragty
+     * @param  获取所有知识图谱的条数
+     * @serialData 2018.6.14
+     * @return
+     */
+    public Long getAllMapPage(){
+    	
+    	Long total=null;
+    	try {
+			total=this.iMindMapService.getAllMapPage();
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+    	
+    	return total;
+    	
+    }
+    
+    
+    /**
+     * @author Ragty
+     * @param  获取查询后每页的知识图谱
+     * @serialData 2018.6.14
+     * @param value1
+     * @param currentPage
+     * @param pageSize
+     * @return
+     */
+    public List<MindMap> queryTeacherMap(Object value1, Integer currentPage,Integer pageSize){
+    	
+    	List<MindMap> list = null;
+    	try {
+			list = iMindMapService.queryMindNap(value1, currentPage, pageSize);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+    	return list;
+    }
+    
+    
+    
+    /**
+     * @author Ragty
+     * @param  获取查询后的页数
+     * @serialData 2018.6.14
+     * @param value1
+     * @return
+     */
+    public Long queryTeacherMapPage(Object value1){
+    	
+    	Long total = null;
+    	try {
+			total = iMindMapService.searchMapPage(value1);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+    	
+    	return total;
+    }
+    
+    
+    
 	
 }

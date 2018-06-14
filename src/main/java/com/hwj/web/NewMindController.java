@@ -32,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.hwj.entity.FileCollection;
 import com.hwj.entity.FileShare;
 import com.hwj.entity.FileStream;
+import com.hwj.entity.LoginUser;
 import com.hwj.entity.MindMap;
 import com.hwj.entity.MindNode;
 import com.hwj.entity.Share;
@@ -93,11 +94,21 @@ public class NewMindController {
 	 * @serialData 2018.6.8
 	 * @return
 	 */
-	@RequestMapping("/test.do")
+	@RequestMapping("/mindMap.do")
 	public String test(){
-		return "test";
+		return "mindMap";
 	}
 	
+	
+	/**
+	 * @author Ragty
+	 * @param  映射更新数据（change）
+	 * @return
+	 */
+	@RequestMapping("/dataChange.do")
+	public String xxml(){
+		return "dataChange";
+	}
 	
 	
 	/**
@@ -888,11 +899,12 @@ public class NewMindController {
 		HttpSession session = request.getSession();
 		String userid = String.valueOf(session.getAttribute("username"));
 		
-		MindMap mindMap = tryCatchNewMindService.getMindMap("userid", userid, "nodeid", rootid);
+		MindMap mindMap = tryCatchNewMindService.getMindMap("nodeid", rootid);
 		String activeList = mindMap.getMaplist();
 		
         List<MindNode> list = jsonAnalyze.parseList(activeList);
 		
+        
 		List<MindNode> list2 = new ArrayList<MindNode>();
 		
 		//用来存储取出选中节点及它的子节点
@@ -924,7 +936,7 @@ public class NewMindController {
 		HttpSession session = request.getSession();
 		String userid = String.valueOf(session.getAttribute("username"));
 		
-		MindMap mindMap = tryCatchNewMindService.getMindMap("userid", userid, "nodeid", rootid);
+		MindMap mindMap = tryCatchNewMindService.getMindMap("nodeid", rootid);
 		
 		return mindMap.getData();
 	}
@@ -1552,6 +1564,202 @@ public class NewMindController {
         }
 		
 	}
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  乾坤大挪移
+	 * @serialData 2018.6.13
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("changeData.do")
+	@ResponseBody
+	public String changeData(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		String xx = String.valueOf(map.get("xx"));
+		
+		List<MindNode> mapList = tryCatchMindMapService.getMindNode("parentid", "00100");
+		
+		//遍历所有图
+		for(Iterator it = mapList.iterator(); it.hasNext();){
+			
+			MindNode mind = (MindNode) it.next();
+			String nodeid = mind.getNodeid();
+			String color = mind.getColor();
+			String type = mind.getType();
+			String nodename = mind.getNodename();
+			String userid = mind.getUserid();
+			String realname = null;
+			try {
+				realname = tryCatchUserService.getUserByNickname(userid).getRealName();
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
+			
+			List<MindNode>  listDemo = tryCatchMindMapService.getMindNode("type", type);
+			String open = tryCatchMindMapService.openMind(listDemo, type);
+			
+			MindMap mindMap = new MindMap();
+			mindMap.setDate(nodeid);
+			mindMap.setData(open);
+			mindMap.setMaplist(jsonAnalyze.list2Json(listDemo));
+			mindMap.setNodeid(nodeid);
+			mindMap.setRealname(realname);
+			mindMap.setUserid(userid);
+			mindMap.setNodename(nodename);
+			
+			tryCatchNewMindService.saveMindMap(mindMap);
+			
+		}
+		
+		return statusMap.a("1");
+	}
+	
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  教师获取所有用户的知识图谱
+	 * @serialData 2018.6.14
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("getAllMap.do")
+	@ResponseBody
+	public String getAllMap(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		Integer currentPage= (Integer) map.get("currentPage");
+		Integer pageSize= (Integer) map.get("pageSize");
+		
+		
+		List<MindMap> list = tryCatchNewMindService.getAllMap(currentPage, pageSize);
+		
+		if(list.equals(null) || list.equals("null")){
+			return statusMap.a("3");
+		}
+		
+		return jsonAnalyze.list2Json(list);
+	}
+	
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  获取教师端知识图谱总页数
+	 * @serialData 2018.6.14
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("getAllMapPage.do")
+	@ResponseBody
+	public Long getAllMapPage(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		
+		Integer pageSize= (Integer) map.get("pageSize");
+        Long total=null;
+		
+		try {
+			total = tryCatchNewMindService.getAllMapPage();
+			System.out.println(total);
+			total = (total-1)/pageSize+1;
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		if( total.equals("null")||total.equals(null) ){
+			return null;
+		}
+		
+		return total;
+		
+	}
+	
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  获取教师端查询后的数据
+	 * @serialData 2018.6.14
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("findTeacherMap.do")
+	@ResponseBody
+	public String findTeacherMap(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map =jsonAnalyze.json2Map(requestJsonBody);
+		String queryMessage =  String.valueOf(map.get("queryMessage"));
+		Integer currentPage  = (Integer) map.get("currentPage");
+		Integer pageSize = (Integer) map.get("pageSize");
+		
+		HttpSession session=request.getSession();
+		String username=String.valueOf(session.getAttribute("username"));
+		
+		if( (username.equals("null"))||(username.equals(null)) ){
+			return statusMap.a("2");
+		}
+		
+		List<MindMap> list = tryCatchNewMindService.queryTeacherMap(queryMessage, currentPage, pageSize);
+		
+		if( list == null ){
+			return statusMap.a("3");
+		}
+		
+		return jsonAnalyze.list2Json(list);
+	}
+	
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  获取查询后的知识图谱的页数
+	 * @param requestJsonBody
+	 * @param request
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("findTeacherMapPage.do")
+	@ResponseBody
+	public Long findTeacherMapPage(@RequestBody String requestJsonBody,
+			HttpServletRequest request) throws IOException{
+		
+		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
+		String queryMessage = String.valueOf(map.get("queryMessage"));
+		
+		Integer pageSize = (Integer) map.get("pageSize");
+		
+		Long total=null;
+		
+		total= tryCatchNewMindService.queryTeacherMapPage(queryMessage);
+		total=(total-1)/pageSize+1; 
+		
+		if( total.equals("null")||total.equals(null) ){
+			return null;
+		}
+		return total;
+		
+	}	 
+		
+	
+	
+	
 	
 	
 	

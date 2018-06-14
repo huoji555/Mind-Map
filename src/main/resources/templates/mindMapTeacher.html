@@ -257,10 +257,11 @@
 		
 			$.ajax({
 				type : "POST",
-				url : "getShareMindNodeObject.do",  //打开具体的思维导图
+				url : "openShareMap.do",  //打开具体的思维导图
 				data : da,
 				success : function(data) {
 					var json = $.parseJSON(data);
+					document.getElementById('rootid').value = json.kcmc;
 					if (json.state == 1) {
 						datas=eval('(' + json.datas + ')'); 
 				        jm.show(datas);
@@ -306,10 +307,11 @@
 			var da={"nodeid":kcmc};
 			    $.ajax({
 					type : "POST",
-					url : "getNodeData.do", //获取属于自己的某个思维导图
+					url : "openMyMap.do", //获取属于自己的某个思维导图
 					data : da,
 					success : function(data) {
 						var json = $.parseJSON(data);
+						document.getElementById('rootid').value = json.kcmc;
 						if (json.state == 1) {
 							datas=eval('(' + json.datas + ')'); 
 						
@@ -329,11 +331,11 @@
 		<!-- 分享思维导图  -->
 		function sharemindmap(){
     	
-	    	var nodeid=document.getElementById('nodeid').value; //从打开历史记录里直接获取
-			var da={"nodeid":nodeid};
+	    	var rootid = document.getElementById('nodeid').value; //从打开历史记录里直接获取
+			var da={"rootid":rootid};
 			        $.ajax({
 				        type : "POST",
-						url : "setShare.do",
+						url : "shareMap.do",
 						data : da,
 						success : function(data) {
 							var json = $.parseJSON(data);
@@ -358,10 +360,13 @@
 		<!-- 打开思维导图的子节点 -->
 		function open_zijiedian() {
 		
-			var da={"nodeid":selected_id};
+			var selected_id = get_selected_nodeid();
+			var da={"nodeid":selected_id,
+					"rootid":getRootId()
+			       };
 			    $.ajax({
 					type : "POST",
-					url : "getMindNode2.do",
+					url : "getMapChild.do",
 					data : da,
 					success : function(data) {
 						var json = $.parseJSON(data);
@@ -383,12 +388,10 @@
 		<!-- 根据某个id获取整个mindNode树(根据部分显示整个思维导图) -->
 		function open_mindnode2() {
 		
-			$('#mapid').attr("value",1);
-			var selected_id = get_selected_nodeid();
-			var da={"nodeid":selected_id};
+			var da={"rootid":getRootId()};
 			    $.ajax({
 					type : "POST",
-					url : "getMindNode3.do",   //根据某个id获取整个mindNode树
+					url : "getCompleteMap.do",   //根据某个id获取整个mindNode树
 					data : da,
 					success : function(data) {
 						var json = $.parseJSON(data);
@@ -428,7 +431,7 @@
 					$.ajax({
 						type : "POST",
 						data : da,
-						url : "getNodeDatexinjian.do",
+						url : "newNewMind.do",
 						
 						success : function(data) {
 							var json = $.parseJSON(data);
@@ -438,6 +441,7 @@
 							else if(json.state == 1) {
 								datas=eval('(' + json.datas + ')');
 								document.getElementById('nodeid').value = datas.data.id;
+								document.getElementById('rootid').value = json.kcmc;
 			        			jm.show(datas);
 							}else {
 								$.messager.alert("操作提示", "找不到对应的知识图谱！", "info");
@@ -541,10 +545,37 @@
 	}
 	
 	
+	function getRootId(){
+		var rootid = null;
+		rootid = document.getElementById('rootid').value;
+		
+		if(rootid == "undenfined" || rootid == "" || rootid == null ){
+			return false;
+		} else {
+			return rootid;
+		}
+		
+	}
+	
+	
+	function getCurrentUser(){
+		var currentUserUser = null;
+		currentUserUser = sessionStorage.getItem("username");
+        
+		if(currentUserUser == "undenfined" || currentUserUser == "" || currentUserUser == null ){
+			return false;
+		} else {
+			return currentUserUser;
+		}
+		
+	}
+	
+	
 	<!-- 修改节点信息 -->
 	function modify_node() {
 		var selected_id = get_selected_nodeid();
 		var selected_name=get_selected_nodeName();
+		var rootid = getRootId();
 		
 		$.messager.prompt('编辑标签', '请输入新的标签名', function(options) {
 			var r = loap(options);
@@ -554,12 +585,13 @@
 	         
 				var da = {
 					"nodeid" : selected_id,
-					"nodename" : r	
+					"nodename" : r	,
+					"rootid" : rootid
 			             };
 		       
 				$.ajax({
 					type : "POST",
-					url : "updateMindNode.do",
+					url : "updateMapNode.do",
 					data : da,
 					success : function(data) {
 						var json = $.parseJSON(data);
@@ -625,21 +657,23 @@
 				jm.enable_edit();
 				var selected_node = jm.get_selected_node();
 	            var selected_id = get_selected_nodeid();
-                jm.remove_node(selected_node);
-		        var adata= {"nodeid":selected_id			
+	            var rootid = getRootId();
+		        var adata= {"nodeid":selected_id,
+		        		    "rootid":rootid
 				         };
 		        var data=JSON.stringify(adata);
 		        
 		        
 				$.ajax({
 					type : "POST",
-					url : "deleteNodeByBatch.do",
+					url : "delMapNode.do",
 					contentType:"application/json",
 					dataType:"json",
 					data : data,
 					success : function(data) {
 						if(data.a == "1"){
 							if(selected_ifRoot()){
+								jm.remove_node(selected_node);
 								freshenMyMindMap(1);
 							}
 						} else {
@@ -667,8 +701,10 @@
 			   };
 		
 		$.messager.prompt('新增子级标签', '请输入标签名', function(r) {
+			
 			if (r) {
 				var nodeid = jsMind.util.uuid2.newid();//自动生成一个新id
+				var rootid = getRootId();
 				var topic = r;
 				jm.enable_edit();
 				//扩展方法， right 将子节点增加到右侧， left 将子节点增加到左侧，默认右侧
@@ -679,17 +715,16 @@
                     var da = {
 					"nodeid" : nodeid,          //新时间
 					"nodename" : topic,
-					"parentid":selected_id      //原来节点的nodeid，这样才可以串起来
-					
+					"parentid":selected_id,     //原来节点的nodeid，这样才可以串起来
+					"rootid" : rootid  //根节点
 				};
                        
 				$.ajax({
 					type : "POST",
-					url : "saveMindNode2.do",
+					url : "saveMapNode.do",
 					data : da,
 					
 					success : function(data){
-						alert("2323");
 						var json = $.parseJSON(data);
 						if (json.a == "1") {
 							$('#mapid').attr("value", json.mapid);
@@ -754,12 +789,12 @@
     
     
 	    <!-- 分享思维导图按钮(列表中操作) -->
-		function sharemindmapButton(nodeid){
+		function sharemindmapButton(rootid){
 	    	
-			var da={"nodeid":nodeid};
+			var da={"rootid":rootid};
 			        $.ajax({
 				        type : "POST",
-						url : "setShare.do",
+						url : "shareMap.do",
 						data : da,
 						success : function(data) {
 							var json = $.parseJSON(data);
@@ -779,12 +814,14 @@
 		<!-- 列表中删除整个思维导图  -->
 		function deleteNodeByBatchButton(nodeid,currentPage){
 			
-	        var adata= {"nodeid":nodeid};
+	        var adata= {"nodeid":nodeid,
+	        		    "rootid":nodeid 
+	                 };
 	        var data=JSON.stringify(adata);
 	        
 			$.ajax({
 				type : "POST",
-				url : "deleteNodeByBatch.do",
+				url : "delMapNode.do",
 				contentType:"application/json",
 				dataType:"json",
 				data : data,
@@ -854,7 +891,7 @@
 	    		 dataType:"json",
 	    		 contentType:"application/json",
 	    		 data:data,
-	    		 url:"getShareMindNode.do",
+	    		 url:"getShareMap.do",
 	    		 
 	    		 success:function(data){
 	    			 if(data.a=="1"){
@@ -1031,7 +1068,7 @@
 			contentType:"application/json",
 			dataType:"json",
 			data:data,
-			url:"getMindNode.do",
+			url:"getMyMap.do",
 			
 			success:function(data){
 				
@@ -1200,8 +1237,7 @@
 	
 	function showAll(currentPage){
         var html="";	 
-		var adata={"parentid":"00100",
-				   "currentPage":currentPage,
+		var adata={"currentPage":currentPage,
 				   "pageSize":12
 		          };
 		var data=JSON.stringify(adata);
@@ -1211,7 +1247,7 @@
 			contentType:"application/json",
 			dataType:"json",
 			data:data,
-			url:"teacherMind.do",
+			url:"getAllMap.do",
 			
 			success:function(data){
 				if(data.a=="2"){
@@ -1241,7 +1277,7 @@
 					data,
 					function(i,a){
 					    html+="<tr><td>"+a.nodename+"</td>";
-					    html+="<td>"+a.realName+"</td>";
+					    html+="<td>"+a.realname+"</td>";
 					    html+="<td><span class='link-style' onclick='open_ajax("+a.nodeid+",\""+a.userid+"\");'>"+"查看"+"</span></td>";
 					    html+="</tr>"; 
 				});
@@ -1270,9 +1306,7 @@
  		var showPage=4;      //每次显示的页数
  		var index;
  		var x;               //定义后面页数固定
- 		var adata={"parentid":"00100",
- 				   "pageSize":12
- 		          };
+ 		var adata={"pageSize":12};
  		var data=JSON.stringify(adata);
  		
  		$.ajax({
@@ -1280,7 +1314,7 @@
  			contentType:"application/json",
  			dataType:"json",
  			data:data,
- 			url:"teacherMindTotal.do",
+ 			url:"getAllMapPage.do",
  			
  			success:function(data){
  				if(data==null){
@@ -1689,7 +1723,7 @@
 
 <input id="mapid" type="text" value="" hidden />
 <input id="nodeid" type="text" value="" hidden />
-
+<input id="rootid" type="text" value="" hidden />
 
 </body>
 </html>
