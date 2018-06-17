@@ -29,11 +29,6 @@ public class FileCollectionServiceImpl extends BaseServiceImpl<FileCollection>
 	super.setDao(dao);
 	}
 
-	/*@Override
-	public void setIBaseDao(IBaseDao<FileCollection> iFileCollectionDao) {
-
-		this.baseDao = iFileCollectionDao;
-		this.iFileCollectionDao = (IFileCollectionDao) iFileCollectionDao;
-	}*/
+	
 
 }
