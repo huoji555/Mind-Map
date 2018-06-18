@@ -314,8 +314,9 @@ public class FileController {
 		System.out.println("REALPATH" + realPath
 				+ "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
-		String fileURL = realPath + "upload";
-
+		//String fileURL = realPath + "upload";
+		String fileURL = "C:\\upload";
+		
 		// 存相对路径
 		BeSaveFileUitl be = new BeSaveFileUitl();
 		be.setFileExtension(fileExtension);
@@ -325,6 +326,7 @@ public class FileController {
 		String Url2 = "";
 		String Url3 = "";
 		String[] string = this.fileUpload.saveFile(be);
+		
 
 		//代表文件上传成功
 		if ("1".equals(string[0])) {
@@ -333,8 +335,13 @@ public class FileController {
 			String url = URL.replaceAll("\\\\", "/") + "." + fileExtension;
 			String real = realPath.replaceAll("\\\\", "/");
 			
+			System.out.println("-------------------");
+			System.out.println(url);
+			System.out.println(real);
+			System.out.println("-------------------");
+			
 			Url3 = url; // 文件在服务器中的真实路径，用来删除
-			Url2 = "http://"  + ip + ":8080/"+ url.split(real)[1]; //代表服务器中的地址
+			Url2 = "http://"  + ip + ":8080/"+ url.split("C:/")[1]; //代表服务器中的地址
 
 		}
 
