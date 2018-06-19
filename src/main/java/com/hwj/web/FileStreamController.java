@@ -134,16 +134,12 @@ public class FileStreamController {
 		byte[] QN = streamToBlob.blobToBytes(blob);
 		String fileExtension = fileStream.getFileExtension();
     	
-		String realPath = request.getSession().getServletContext()
-				.getRealPath("/");
-		String fileURL = realPath + "upload";
+		String fileURL = "C:\\upload";
 		
 		BeSaveFileUitl be = new BeSaveFileUitl();
 		be.setFileExtension(fileExtension);
 		be.setFilesByte(QN);
 		be.setFileURL(fileURL);
-		
-		String ip = InetAddress.getLocalHost().getHostAddress();
 		
 		
 		String Url2 = "";
@@ -155,10 +151,9 @@ public class FileStreamController {
 			String URL = string[1];
 			// 文件的真实路径，将之代替截图路径存入
 			String url = URL.replaceAll("\\\\", "/") + "." + fileExtension;
-			String real = realPath.replaceAll("\\\\", "/");
 			
 			Url3 = url; // 文件在服务器中的真实路径，用来删除
-			Url2 = "http://"  + ip + ":8080/"+ url.split(real)[1]; //代表服务器中的地址
+			Url2 = "/"+ url.split("C:/")[1]; //代表服务器中的地址
 
 		}
 		

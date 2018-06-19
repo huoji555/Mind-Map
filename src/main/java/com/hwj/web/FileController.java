@@ -304,7 +304,6 @@ public class FileController {
 		}
 
 		String ip = InetAddress.getLocalHost().getHostAddress();
-		System.out.println("ip" + ip);
 
 		// 看文件大小
 		byte[] newsPageByte = file.getBytes();
@@ -333,19 +332,11 @@ public class FileController {
 			String URL = string[1];
 			// 文件的真实路径，将之代替截图路径存入
 			String url = URL.replaceAll("\\\\", "/") + "." + fileExtension;
-			String real = realPath.replaceAll("\\\\", "/");
-			
-			System.out.println("-------------------");
-			System.out.println(url);
-			System.out.println(real);
-			System.out.println("-------------------");
 			
 			Url3 = url; // 文件在服务器中的真实路径，用来删除
-			Url2 = "http://"  + ip + ":8080/"+ url.split("C:/")[1]; //代表服务器中的地址
-
+			//Url2 = "http://"  + ip + ":8080/"+ url.split("C:/")[1]; //代表服务器中的地址
+			Url2 = "/"+ url.split("C:/")[1];
 		}
-
-		ByteArrayInputStream bis = new ByteArrayInputStream(newsPageByte);
 
 		Blob blob = streamToBlob.toBlob(file.getInputStream());
 
