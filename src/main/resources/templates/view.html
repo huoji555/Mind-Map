@@ -77,25 +77,25 @@
                  	
                         if(a.filetype=="video"){
                         	html+="<li class='aaa' style='text-align:center'>";
- 	                        html+="<img src='images/dota2/video.jpg' oncontextmenu='onMouseOver("+a.files+",\""+a.zsdid+"\")' style='width:80px;height:60px;' class='hover'  value='"+a.f_parentid+"' id='"+a.files+"' ondblclick='_iframe(\""+a.filepath+"\")' >";
+ 	                        html+="<img src='images/dota2/video.jpg' oncontextmenu='onMouseOver("+a.files+",\""+a.zsdid+"\")' style='width:80px;height:60px;' class='hover'  value='"+a.f_parentid+"' id='"+a.files+"' ondblclick='_iframe(\"http://"+window.location.host+a.filepath+"\")' >";
  	                        html+="<div>"+a.filename+"</div>";
  	                        html+="</li>";
                         }else if(a.filetype=="picture"){
                         	
                         	html+="<li class='aaa' style='text-align:center'>";
- 	                     	html+="<img src='"+a.filepath+"'  oncontextmenu='onMouseOver("+a.files+",\""+a.zsdid+"\")' style='width:80px;height:60px;' class='hover' value='"+a.f_parentid+"' id='"+a.files+"' onclick='lookBigImg(this)' >"; 
+ 	                     	html+="<img src='http://"+window.location.host+""+a.filepath+"'  oncontextmenu='onMouseOver("+a.files+",\""+a.zsdid+"\")' style='width:80px;height:60px;' class='hover' value='"+a.f_parentid+"' id='"+a.files+"' onclick='lookBigImg(this)' >"; 
  	                     	html+="<div>"+a.filename+"</div>";
  	                        html+="</li>";
                         }else if(a.filetype=="other"){
                         	
                         	html+="<li class='aaa' style='text-align:center'>";
- 	                        html+="<img src='images/dota2/other.jpg' oncontextmenu='onMouseOver("+a.files+",\""+a.zsdid+"\")' style='width:80px;height:60px;' class='hover ' value='"+a.f_parentid+"' id='"+a.files+"' ondblclick='_iframe(\"pdf/generic/web/viewer.html?file="+a.filepath+"\")' >";
+ 	                        html+="<img src='images/dota2/other.jpg' oncontextmenu='onMouseOver("+a.files+",\""+a.zsdid+"\")' style='width:80px;height:60px;' class='hover ' value='"+a.f_parentid+"' id='"+a.files+"' ondblclick='_iframe(\"pdf/generic/web/viewer.html?file=http://"+window.location.host+""+a.filepath+"\")' >";
                         	html+="<div>"+a.filename+"</div>";
  	                   		html+="</li>";
                         }else if(a.filetype=="doc"){
                         	
                         	html+="<li class='aaa' style='text-align:center'>";
- 	                        html+="<img src='images/dota2/doc.jpg' oncontextmenu='onMouseOver("+a.files+",\""+a.zsdid+"\")' style='width:80px;height:60px;' class='hover' value='"+a.f_parentid+"' id='"+a.files+"' ondblclick='_iframe(\""+a.filepath+"\")' >";
+ 	                        html+="<img src='images/dota2/doc.jpg' oncontextmenu='onMouseOver("+a.files+",\""+a.zsdid+"\")' style='width:80px;height:60px;' class='hover' value='"+a.f_parentid+"' id='"+a.files+"' ondblclick='_iframe(\"http://"+window.location.host+""+a.filepath+"\")' >";
  	                        html+="<div>"+a.filename+"</div>";
  	                        html+="</li>";
                         }else if(a.filetype=="file"){
