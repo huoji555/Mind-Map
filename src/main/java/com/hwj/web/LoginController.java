@@ -14,6 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +48,8 @@ public class LoginController {
 	private SSHA ssha;
 	@Autowired
 	private TryCatchAssessLogService tryCatchAssessLogService;
+	@Autowired
+	private AuthenticationManager authenticationManager;
 	
 	
 	/**
@@ -124,6 +130,12 @@ public class LoginController {
 			assessLog.setUsername(username);
 			
 			this.tryCatchAssessLogService.setAssessLog(assessLog);
+			
+			//验证成功后将会把返回的Authentication对象存放在SecurityContext
+			UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
+			Authentication authentication = authenticationManager.authenticate(authRequest); //调用loadUserByUsername
+			System.out.println("调用了");
+			SecurityContextHolder.getContext().setAuthentication(authentication);
 			
 			//根据状态值返回
 			if (isValidUser == 4) {
@@ -240,6 +252,13 @@ public class LoginController {
 		//保存注册信息并登录
 		if (this.tryCatchUserService.saveUser(loginUser)) {
 			System.out.println("成功保存注册信息");
+			
+			//验证成功后将会把返回的Authentication对象存放在SecurityContext
+			UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(nickName, password);
+			Authentication authentication = authenticationManager.authenticate(authRequest); //调用loadUserByUsername
+			System.out.println("调用了");
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+			
 			session.setAttribute("username", nickName);
 			session.setMaxInactiveInterval(6*60*60);
 			return this.statusMap.a("3");
