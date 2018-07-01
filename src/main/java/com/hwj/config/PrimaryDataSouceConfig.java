@@ -19,9 +19,9 @@ import javax.sql.DataSource;
 import java.util.Map;
 
 /**
-  * @Description: 第一个数据源的配置类
-  * @Create Date: 2017年5月11日下午9:22:12
-  * @Version: V1.00 
+  * @Description: 第一个数据源的配置类(相关注入对象和启用jpa支持)
+  * @author Ragty
+  * @serialData: 2018.6.19 
   */
 @Configuration
 @EnableTransactionManagement
@@ -41,6 +41,11 @@ public class PrimaryDataSouceConfig {
         return entityManagerFactoryPrimary(builder).getObject().createEntityManager();
     }
 
+    /**
+     * @param 实体管理对象,由spring注入这个对象，首先根据type注入（多个就取声明@Primary的对象），否则根据name注入
+     * @param builder
+     * @return
+     */
     @Primary
     @Bean(name = "entityManagerFactoryPrimary")
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryPrimary (EntityManagerFactoryBuilder builder) {
@@ -59,6 +64,11 @@ public class PrimaryDataSouceConfig {
         return jpaProperties.getHibernateProperties(dataSource);
     }
 
+    /**
+     * @param 事务管理对象
+     * @param builder
+     * @return
+     */
     @Primary
     @Bean(name = "transactionManagerPrimary")
     public PlatformTransactionManager transactionManagerPrimary(EntityManagerFactoryBuilder builder) {
