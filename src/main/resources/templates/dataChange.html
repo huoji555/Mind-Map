@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<script src="js/jquery.min2.1.4.js"></script>
+
+</head>
+<body>
+
+   <button type="button" id="change">提交</button>
+
+
+   <script type="text/javascript">
+   
+   
+      $(function(){
+    	  
+    	  $("#change").click(function(){
+    		  alert("xxsds");
+    		  var adata = {"xx":"00100"};
+    		  var data=JSON.stringify(adata);
+    		  
+    		  $.ajax({
+    			  
+    			  type:"POST",
+   		          dataType:"json",
+   		          url:"changeData.do",
+   		          contentType:"application/json",      
+   		          data:data,
+   		          
+   		          success:function(data){
+   		        	  alert("转移完成");
+   		          },
+   		          
+   		          error:function(data){
+   		        	  alert("转移失败");
+   		          }
+    			  
+    			  
+    		  }); 
+    		  
+    		  
+    	  });
+    	  
+      });
+   
+   </script>
+
+
+
+
+</body>
+</html>
