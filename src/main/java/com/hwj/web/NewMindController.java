@@ -1075,7 +1075,7 @@ public class NewMindController {
 	/**
 	 * @author Ragty
 	 * @param  保存节点知识点(增加缓存机制,设置过期时间为7天)
-	 * @serialData 2018.9.11
+	 * @serialData 2018.9. 11
 	 * @param requestJsonBody
 	 * @param request
 	 * @return
