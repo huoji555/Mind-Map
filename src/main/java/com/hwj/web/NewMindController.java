@@ -2,6 +2,7 @@ package com.hwj.web;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.sql.Blob;
 import java.text.SimpleDateFormat;
@@ -14,12 +15,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -85,6 +89,8 @@ public class NewMindController {
 	private JsonAnalyze jsonAnalyze;
 	@Autowired
 	private StatusMap statusMap;
+	@Autowired
+	private RedisTemplate redisTemplate;
 	
 	
 	
@@ -1068,8 +1074,8 @@ public class NewMindController {
 	
 	/**
 	 * @author Ragty
-	 * @param  保存节点知识点
-	 * @serialData 2018.6.13
+	 * @param  保存节点知识点(增加缓存机制,设置过期时间为7天)
+	 * @serialData 2018.9.11
 	 * @param requestJsonBody
 	 * @param request
 	 * @return
@@ -1098,11 +1104,27 @@ public class NewMindController {
 		
         MindMap mindMap = tryCatchNewMindService.getMindMap("nodeid", rootid);
         String mindUser = mindMap.getUserid();
-		
+        
 		//禁止在别人的知识图谱里添加知识点
 		if( !(userid.equals(mindUser)) ){
 			return statusMap.a("3");
 		}
+		
+		//Redis包装
+        ValueOperations ops = redisTemplate.opsForValue();
+        Map<String, String> map1 = new HashMap<String, String>();
+		Map<String, Object> map2 = new HashMap<String, Object>();
+		
+		map1.put("zsdmc", zsdmc);
+		map1.put("zsdms", zsdms);
+		
+		map2.put("zsdid", zsdid);
+		map2.put("userid", mindUser);
+		map2.put("map", map1);
+		
+		ops.set("zsd"+zsdid, jsonAnalyze.map2Json(map2));
+		redisTemplate.expire("zsd"+zsdid, 7, TimeUnit.DAYS);
+		
 		
 		if(tryCatchZsdService.getZsd1("userid", "zsdid", userid, zsdid) == null){
 			
@@ -1129,8 +1151,8 @@ public class NewMindController {
 	
 	/**
 	 * @author Ragty
-	 * @param  获取当前节点知识点
-	 * @serialData 2018.6.13
+	 * @param  获取当前节点知识点（增加Redis缓存）
+	 * @serialData 2018.9.11
 	 * @param requestJsonBody
 	 * @param request
 	 * @return
@@ -1153,6 +1175,12 @@ public class NewMindController {
 		
 		Zsd zsd=null;
 		
+		ValueOperations ops = redisTemplate.opsForValue();
+        
+        if (ops.get("zsd"+nodeid) != null) {
+        	return (String) ops.get("zsd"+nodeid);
+        }
+		
 		try {
 			zsd = tryCatchZsdService.getZsd1("userid", "zsdid", mindUser, nodeid);
 			map.put("zsdmc", zsd.getZsdmc());
@@ -1161,9 +1189,13 @@ public class NewMindController {
 			// TODO: handle exception
 		}
 		
+		
 		map2.put("zsdid", nodeid);
 		map2.put("userid", mindUser);
 		map2.put("map", map);
+		
+		ops.set("zsd"+nodeid,jsonAnalyze.map2Json(map2));
+		redisTemplate.expire("zsd"+nodeid, 7, TimeUnit.DAYS);
 		
 		return jsonAnalyze.map2Json(map2);
 	}
