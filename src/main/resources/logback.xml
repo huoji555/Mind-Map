@@ -42,13 +42,13 @@
     </appender>
     
     <!-- hibernate日志输入 -->
-    <logger name="org.hibernate.type.descriptor.sql.BasicBinder"
+    <!-- <logger name="org.hibernate.type.descriptor.sql.BasicBinder"
         level="TRACE" />
     <logger name="org.hibernate.type.descriptor.sql.BasicExtractor"
         level="TRACE" />
     <logger name="org.hibernate.SQL" level="DEBUG" />
     <logger name="org.hibernate.engine.QueryParameters" level="DEBUG" />
-    <logger name="org.hibernate.engine.query.HQLQueryPlan" level="DEBUG" />
+    <logger name="org.hibernate.engine.query.HQLQueryPlan" level="DEBUG" /> -->
 
     <root level="INFO">
         <appender-ref ref="INFO_FILE" />

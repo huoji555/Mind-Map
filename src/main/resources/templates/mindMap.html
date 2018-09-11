@@ -138,6 +138,8 @@
 	<script type="text/javascript">
 		var jm = null;
 		
+		open_empty();//加载JSMind
+		
 		<!-- 打开思维导图的框 -->
 		function open_empty() {
 			var options = {
@@ -804,11 +806,7 @@
 			jm.toggle_node(selected_id);
 		}
 
-		
-		
 
-		open_empty();//加载JSMind
-		
 		
 		/* 节点右键菜单? */
 		$("jmnode").live('contextmenu', function(e) {
