@@ -51,7 +51,6 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 	@Override
 	public void save(T entity) {
 		// TODO Auto-generated method stub
-		System.out.println(entity);
 		getCurrentSession().save(entity);
 	}
 
@@ -59,7 +58,6 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 	@Transactional
 	public T get(Serializable id) {
 		// TODO Auto-generated method stub
-		System.out.println(entityClass);
 		return (T) getCurrentSession().get(entityClass, id);
 	}
 
@@ -85,15 +83,12 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public T get(String propertyName, Object value) {
-		System.out.println(entityClass.getName());
 		String hql = "from " + entityClass.getName() + "  model where model."
 				+ propertyName + " = :name";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("name", value);
-		System.out.println(123);
 		@SuppressWarnings("unchecked")
 		List<T> list = query.list();
-		System.out.println(list);
 		if (list.size() > 0) {
 			System.out.println(list);
 			return list.get(0);
@@ -109,7 +104,6 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 		String hql = " from " + entityClass.getName()
 				+ " as model where model." + propertyName1 + " = :name"
 				+ " and " + " model." + propertyName2 + " = :pd";
-		System.out.println("#######"+hql);
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("name", value1);
 		query.setParameter("pd", value2);
@@ -123,12 +117,10 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 
 	@Override
 	public List<T> getAll() {
-		System.out.println("Dao层");
 		String hql = "from " + entityClass.getName();
 		Query query = getCurrentSession().createQuery(hql);
 		@SuppressWarnings("unchecked")
 		List<T> list = query.list();
-		System.out.println(list);
 		if (list.size() > 0) {
 
 			return list;
@@ -185,12 +177,10 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 
 	@Override
 	public List<T> select(String propertyName, Object value) {
-		System.out.println(entityClass.getName());
 		String hql = "from " + entityClass.getName() + "  model where model."
 				+ propertyName + " like '%" + value + "%'";
 		Query query = getCurrentSession().createQuery(hql);
 		// query.setParameter("name", "%"+value+"%");
-		System.out.println(123);
 		@SuppressWarnings("unchecked")
 		List<T> list = query.list();
 		System.out.println(list);
@@ -205,15 +195,12 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 	@Override
 	public List<T> select(String propertyName1, String propertyName2,
 			Object value1, Object value2) {
-		System.out.println(propertyName1 + "" + propertyName2 + ""
-				+ value1.toString() + "   " + value1 + "" + value2);
 		String hql = " from " + entityClass.getName()
 				+ " as model where model." + propertyName1 + "like '%" + value1
 				+ "%'";
 		hql += " and " + " model." + propertyName2 + " like '%" + value2
 				+ "%'   ";
 		Query query = getCurrentSession().createQuery(hql);
-		// query.setParameter("name1","%"+ value1+"%");
 		// query.setParameter("name2","%"+ value2+"%");
 		@SuppressWarnings("unchecked")
 		List<T> list = query.list();
@@ -249,14 +236,11 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 				+ propertyName1 + " = :name1 ";
 		hql += "and model." + propertyName2 + " = :name2";
 
-		// Query query=
 		@SuppressWarnings("unchecked")
 		List<T> list = getCurrentSession().createQuery(hql)
 				.setParameter("name1", value1).setParameter("name2", value2)
 				.list();
-		// query.setParameter("value", value);
 
-		// List<T> list=query.list();
 		if (list.size() > 0) {
 			return list;
 		} else {
