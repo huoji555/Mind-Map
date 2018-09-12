@@ -1189,13 +1189,14 @@ public class NewMindController {
 			// TODO: handle exception
 		}
 		
-		
 		map2.put("zsdid", nodeid);
 		map2.put("userid", mindUser);
 		map2.put("map", map);
 		
-		ops.set("zsd"+nodeid,jsonAnalyze.map2Json(map2));
-		redisTemplate.expire("zsd"+nodeid, 7, TimeUnit.DAYS);
+		if (zsd != null) {
+			ops.set("zsd"+nodeid,jsonAnalyze.map2Json(map2));
+			redisTemplate.expire("zsd"+nodeid, 7, TimeUnit.DAYS);
+		}
 		
 		return jsonAnalyze.map2Json(map2);
 	}
