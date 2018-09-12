@@ -38,8 +38,7 @@
         	
         	var adata={
                     "user":$("#input").val(),
-                    "password":$("#password").val(),
-                    "verifyImage":$("#verifyCode").val(),
+                    "password":$("#password").val()
                 };
                 var data=JSON.stringify(adata);
 
@@ -53,13 +52,8 @@
      
                         if (data.Status == "NotHaveUser" || data.Status == "PasswordError") {
                             alert("用户名或密码填写不正确");
-                            $(".verifyImage").attr("src", "getVerifyCode.do");
-                        } else if (data.Status == "verifyCodeError") {
-                            alert("验证码不正确");
-                            $(".verifyImage").attr("src", "getVerifyCode.do");
-                        }else if(data.Status=="RoleError"){
+                        } else if(data.Status=="RoleError"){
                        		alert("角色不正确");
-                       		$("#verifyImage").attr("src","getVerifyCode.do");
                        } else if (data.Status == "student") {
                            location.href = "index.do";
                        }else if (data.Status == "teacher"||data.Status == "admin") {
@@ -76,24 +70,6 @@
         
     </script>
     
-    
-    <!--  每次加载页面后重新加载验证码  -->
-    <!--  下面的src是接受返回图片的地址 -->
-    <script type="text/javascript" >
-
-        function reloadVerifyCode()
-        {
-            $(".verifyImage").attr("src","getVerifyCode.do");
-            
-        }
-
-        jQuery(document).ready(function(){
-            //每次加载页面后重新加载验证码
-            reloadVerifyCode();
-        });
-    </script>
-
-
 
 <body onkeydown="EnterPress()">
 
@@ -113,11 +89,6 @@
 		<div>
 			<input id="password" type="password" name="password" class="password" placeholder="密码" oncontextmenu="return false" onpaste="return false" />
 		</div>
-		<div class="input-group">
-            <input type="text" id="verifyCode"  name="verifyCode" valType="required" placeholder="请输入验证码" />
-            <img class="verifyImage"  src="getVerifyCode.do"  align="left" style="cursor:pointer;"
-                 onclick="reloadVerifyCode();" title="点击更换验证码" alt="看不清，换一张" />
-        </div>
 		<button id="login2" type="button" >登 陆</button>
 	    </form>
 

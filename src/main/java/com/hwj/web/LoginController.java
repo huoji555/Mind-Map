@@ -68,16 +68,6 @@ public class LoginController {
 		Map<String, Object> map=jsonAnalyze.json2Map(requestJsonBody);
 		String username = String.valueOf(map.get("user"));
 		String password = String.valueOf(map.get("password"));
-		String verifyImage = String.valueOf(map.get("verifyImage"));
-		
-		//缓存中生成的验证码
-		String result_verifyCode = request.getSession().getAttribute("verifyCode").toString();
-		System.out.println(verifyImage + "@@@@@@@@@@@@@@@@@@@@@@"+ result_verifyCode);
-		
-		//判断验证码是否正确，不正确的话返回一个错误的状态
-		if (!checkValidateCode(verifyImage, result_verifyCode)) {
-			return this.returnStatus.verifyCodeError;
-		}
 		
 		//判断登录信息(具体表现为是学生，管理员，用户名错误，密码错误)
 		String pd = password;
@@ -116,7 +106,6 @@ public class LoginController {
 					ip = inet.getHostAddress();
 				}
 			}
-			System.out.println("ip地址" + ip);			
 			
 			//获取用户登录时间
 			SimpleDateFormat sDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -134,7 +123,6 @@ public class LoginController {
 			//验证成功后将会把返回的Authentication对象存放在SecurityContext
 			UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
 			Authentication authentication = authenticationManager.authenticate(authRequest); //调用loadUserByUsername
-			System.out.println("调用了");
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			
 			//根据状态值返回
