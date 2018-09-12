@@ -393,7 +393,6 @@ public class NewMindController {
 			MindNode mindNode = (MindNode) it.next();
 			String id= mindNode.getNodeid();	
 			
-			System.out.println("这他妈就是节点"+mindNode);
 			
 			List<UploadFile> listUploadFile=null;
 			try {
@@ -421,11 +420,8 @@ public class NewMindController {
 			//Step1.获取节点上关于文件的信息
 			try {
 				uploadFile=listUploadFile.get(i);
-				System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 				zlid=uploadFile.getFiles();
-				System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+zlid);
 				firstStatus=uploadFile.getFirstStatus();
-				System.out.println("小样》》》"+firstStatus);
 				
 				if( !( zlid.equals(null)||zlid.equals("null")) ){
 					uploadFile = this.tryCatchUploadFileService.getUploadFile("zsdid",
@@ -451,13 +447,9 @@ public class NewMindController {
 				
 				File file = new File(realPath);
 
-				System.out.println(file + "进入了呢");
-
 				if (!file.exists()) {
 					System.out.println("文件不存在");
 				} else {
-					System.out.println("文件存在");
-					System.out.println("即将删除文件");
 					file.delete();
 					System.out.println("成功,已将文件删除");
 				}
@@ -514,6 +506,7 @@ public class NewMindController {
 				
 				Zsd zsd=tryCatchZsdService.getZsd1("userid", "zsdid", userid, id);
 				if( !(zsd == null) ){
+					redisTemplate.delete("zsd"+id);
 					this.tryCatchZsdService.deleteZsd(zsd);
 				}
 				
