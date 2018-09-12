@@ -1171,6 +1171,7 @@ public class NewMindController {
 		ValueOperations ops = redisTemplate.opsForValue();
         
         if (ops.get("zsd"+nodeid) != null) {
+        	redisTemplate.expire("zsd"+nodeid, 7, TimeUnit.DAYS);     //更新Redis时间
         	return (String) ops.get("zsd"+nodeid);
         }
 		
