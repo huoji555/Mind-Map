@@ -1233,7 +1233,9 @@
 		  var str1 = str.replace(/&/g,"&amp;");
 		  var str2 = str1.replace(/>/g,"&gt;");
 		  var str3 = str2.replace(/</g,"&lt;");	
-		  return str3;
+		  var str4 = str3.replace(/'/g,"&apos;");   
+		  var str5 = str4.replace(/\"/g,'&quot;');
+		  return str4;
 	  }
 	
 	</script>
