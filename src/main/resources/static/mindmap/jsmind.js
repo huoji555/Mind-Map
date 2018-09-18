@@ -48,7 +48,7 @@
         support_html : true,
 
         view:{
-            hmargin:100,
+            hmargin:80,
             vmargin:50,
             line_width:2,
             line_color:'#555'

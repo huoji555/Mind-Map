@@ -8,7 +8,7 @@
 
 /* important section */
 .jsmind-inner{position:relative;/* overflow:auto; */width:100%;height:100%;}/*box-shadow:0 0 2px #000;*/
-.jsmind-inner{     /* 破坏样式去掉内边栏 */
+.jsmind-inner{     /* 鐮村潖鏍峰紡鍘绘帀鍐呰竟鏍� */
     moz-user-select:-moz-none;
     -moz-user-select:none;
     -o-user-select:none;
@@ -26,8 +26,8 @@ jmnodes{position:absolute;z-index:2;background-color:rgba(0,0,0,0);}/*background
 jmnode{position:absolute;cursor:default;max-width:400px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 jmexpander{position:absolute;width:11px;height:11px;display:block;overflow:hidden;line-height:12px;font-size:12px;text-align:center;border-radius:6px;border-width:1px;border-style:solid;cursor:pointer;}
 
-/* default theme */
-jmnode{padding:10px;background-color:#fff;color:#333;border-radius:5px;box-shadow:1px 1px 1px #666;font:16px/1.125 Verdana,Arial,Helvetica,sans-serif;}
+/* default theme 这里可以调节节点的留白等*/
+jmnode{padding:6px;background-color:#fff;color:#333;border-radius:5px;box-shadow:1px 1px 1px #666;font:16px/1.125 Verdana,Arial,Helvetica,sans-serif;}
 
 jmnode:hover{box-shadow:2px 2px 8px #000;background-color:#ebebeb;color:#333;}
 jmnode.selected{background-color:#11f;color:#fff;box-shadow:2px 2px 8px #000;}
