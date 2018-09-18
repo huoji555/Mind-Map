@@ -49,6 +49,17 @@ public class TryCatchZsdService {
 		}
 		return zsd1;
 	}
+	
+	public Zsd getZsdContent(String zsdid) {
+		Zsd zsd = null;
+		try {
+		   zsd = iZsdService.get(zsdid);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+		return zsd;
+	}
 
 	public boolean saveZsd(Zsd zsd) {
 		try {

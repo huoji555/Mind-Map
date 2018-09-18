@@ -1089,19 +1089,19 @@ public class NewMindController {
 		HttpSession session = request.getSession();
 		String userid = String.valueOf(session.getAttribute("username"));
 		
-		Zsd zsd= new Zsd();
-		zsd.setZsdid(zsdid);
-		zsd.setZsdmc(zsdmc);
-		zsd.setZsdms(zsdms);
-		zsd.setUserid(userid);
-		
-        MindMap mindMap = tryCatchNewMindService.getMindMap("nodeid", rootid);
+		MindMap mindMap = tryCatchNewMindService.getMindMap("nodeid", rootid);
         String mindUser = mindMap.getUserid();
         
 		//禁止在别人的知识图谱里添加知识点
 		if( !(userid.equals(mindUser)) ){
 			return statusMap.a("3");
 		}
+		
+		Zsd zsd= new Zsd();
+		zsd.setZsdid(zsdid);
+		zsd.setZsdmc(zsdmc);
+		zsd.setZsdms(zsdms);
+		zsd.setUserid(userid);
 		
 		//Redis包装
         ValueOperations ops = redisTemplate.opsForValue();
@@ -1118,8 +1118,8 @@ public class NewMindController {
 		ops.set("zsd"+zsdid, jsonAnalyze.map2Json(map2));
 		redisTemplate.expire("zsd"+zsdid, 7, TimeUnit.DAYS);
 		
-		
-		if(tryCatchZsdService.getZsd1("userid", "zsdid", userid, zsdid) == null){
+		//tryCatchZsdService.getZsd1("userid", "zsdid", userid, zsdid) == null
+		if(tryCatchZsdService.getZsdContent(zsdid) == null){
 			
 			if(tryCatchZsdService.saveZsd(zsd)){
 				return statusMap.a("1");
@@ -1158,10 +1158,10 @@ public class NewMindController {
 		
 		Map<String, Object> map3 = jsonAnalyze.json2Map(requestJsonBody);
 		String nodeid = String.valueOf(map3.get("nodeid"));
-		String rootid = String.valueOf(map3.get("rootid"));
+		//String rootid = String.valueOf(map3.get("rootid"));
 		
-		MindMap mindMap = tryCatchNewMindService.getMindMap("nodeid", rootid);
-	    String mindUser = mindMap.getUserid();
+		/*MindMap mindMap = tryCatchNewMindService.getMindMap("nodeid", rootid);
+	    String mindUser = mindMap.getUserid();*/
 		
 		Map<String, String> map = new HashMap<String, String>();
 		Map<String, Object> map2 = new HashMap<String, Object>();
@@ -1176,7 +1176,7 @@ public class NewMindController {
         }
 		
 		try {
-			zsd = tryCatchZsdService.getZsd1("userid", "zsdid", mindUser, nodeid);
+			zsd = tryCatchZsdService.getZsdContent(nodeid);
 			map.put("zsdmc", zsd.getZsdmc());
 			map.put("zsdms", zsd.getZsdms());
 		} catch (Exception e) {
@@ -1184,7 +1184,7 @@ public class NewMindController {
 		}
 		
 		map2.put("zsdid", nodeid);
-		map2.put("userid", mindUser);
+		//map2.put("userid", mindUser);
 		map2.put("map", map);
 		
 		if (zsd != null) {
