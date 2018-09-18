@@ -1158,10 +1158,7 @@ public class NewMindController {
 		
 		Map<String, Object> map3 = jsonAnalyze.json2Map(requestJsonBody);
 		String nodeid = String.valueOf(map3.get("nodeid"));
-		//String rootid = String.valueOf(map3.get("rootid"));
 		
-		/*MindMap mindMap = tryCatchNewMindService.getMindMap("nodeid", rootid);
-	    String mindUser = mindMap.getUserid();*/
 		
 		Map<String, String> map = new HashMap<String, String>();
 		Map<String, Object> map2 = new HashMap<String, Object>();
@@ -1184,7 +1181,6 @@ public class NewMindController {
 		}
 		
 		map2.put("zsdid", nodeid);
-		//map2.put("userid", mindUser);
 		map2.put("map", map);
 		
 		if (zsd != null) {
