@@ -388,7 +388,7 @@ public class NewMindController {
 		
 		
 		//循环处理数据
-		for (Iterator it = list.iterator(); it.hasNext();) {
+		for (Iterator it = list3.iterator(); it.hasNext();) {
 			
 			MindNode mindNode = (MindNode) it.next();
 			String id= mindNode.getNodeid();	
