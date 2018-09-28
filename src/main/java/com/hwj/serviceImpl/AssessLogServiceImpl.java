@@ -40,7 +40,7 @@ public class AssessLogServiceImpl extends BaseServiceImpl<AssessLog> implements
 	public void setAssessLog(AssessLog assessLog) {
 		System.out.println(assessLog);
 
-		iAssessLogDao.setAssessLog(assessLog);
+		iAssessLogDao.save(assessLog);
 	}
 
 }

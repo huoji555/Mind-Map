@@ -768,7 +768,7 @@ public class NewMindController {
 	
 	/**
 	 * @author Ragty
-	 * @param  获取分享的知识图谱总页数
+	 * @param  获取分享的知识图谱总页数    
 	 * @serialData 2018.6.12
 	 * @param requestJsonBody
 	 * @param request
