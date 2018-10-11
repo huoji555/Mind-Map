@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
+import javax.el.LambdaExpression;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -33,6 +34,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.hankcs.hanlp.HanLP;
+import com.hankcs.hanlp.dictionary.CoreSynonymDictionary;
 import com.hwj.entity.FileCollection;
 import com.hwj.entity.FileShare;
 import com.hwj.entity.FileStream;
@@ -251,6 +254,14 @@ public class NewMindController {
 		mindNode.setParentid(parentid);
 		
 		list.add(mindNode);
+		
+		List<String> content = tryCatchNewMindService.getKeywordByLayer(list);
+		List<String> pathList = new ArrayList<>();
+		for(Iterator<String> it = content.iterator(); it.hasNext();) {
+			System.out.println(it.next());
+		}
+		
+		
 		
 		
 		//打开整个知识图谱
@@ -651,6 +662,12 @@ public class NewMindController {
 		String userid = String.valueOf(session.getAttribute("username"));
 		
 		MindMap mindMap = tryCatchNewMindService.getMindMap("userid", userid, "nodeid", nodeid);
+		
+		List<String> keywordList = HanLP.extractKeyword(mindMap.getData(), 5);
+		/*System.out.println("------------------");
+		System.out.println("关键词提取Test");
+		System.out.println(keywordList);
+		System.out.println("------------------");*/
 		
 		return mindMap.getData();
 	}

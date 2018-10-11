@@ -388,7 +388,6 @@ public class TryCatchMindMapService {
 			Node2 node = (Node2) ((Map.Entry) it.next()).getValue();
 			
 			if ((node.parentid == null) || (node.parentid.equals("00100"))) {
-				System.out.println("node的值@@@@@@@@@@@@@@@"+node);
 				root = node;
 			} else {
 				try {

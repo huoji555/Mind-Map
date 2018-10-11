@@ -12,6 +12,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.hankcs.hanlp.HanLP;
 import com.hwj.entity.MindMap;
 import com.hwj.entity.MindNode;
 import com.hwj.entityUtil.MindNode2Util;
@@ -220,6 +221,49 @@ public class TryCatchNewMindService {
 		  
 		}  
 		return target;
+	}
+	
+	
+	/**
+	 * @author Ragty
+	 * @param  提取知识图谱关键字
+	 * @serialData 2018.10.11
+	 * @param list
+	 * @return
+	 */
+	public List<String> getKeywordByLayer(List<MindNode> list) {
+		
+		String parentid = null;
+		String content = "";
+		List<String> storage = new ArrayList<>();
+		
+		for(Iterator it = list.iterator(); it.hasNext();){
+			MindNode mindNode = (MindNode) it.next();
+			if(mindNode.getParentid().equals("00100")){
+				parentid = mindNode.getNodeid();      
+				content += mindNode.getNodename()+",";
+				storage.add(mindNode.getNodename());
+			}
+		}
+		
+		try {
+			if( !parentid.equals(null) ) {
+				for(Iterator it = list.iterator(); it.hasNext();){
+					MindNode mindNode = (MindNode) it.next();
+					if(mindNode.getParentid().equals(parentid)){
+						content += mindNode.getNodename()+",";
+						storage.add(mindNode.getNodename());
+					}
+				}
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		List<String> keyWordList = HanLP.extractKeyword(content, 3);
+		
+		return keyWordList;
+		
 	}
 	
 	
