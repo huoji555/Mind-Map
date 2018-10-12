@@ -90,9 +90,7 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 		@SuppressWarnings("unchecked")
 		List<T> list = query.list();
 		if (list.size() > 0) {
-			System.out.println(list);
 			return list.get(0);
-
 		}
 		return null;
 	}
@@ -122,7 +120,6 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 		@SuppressWarnings("unchecked")
 		List<T> list = query.list();
 		if (list.size() > 0) {
-
 			return list;
 		} else {
 			return null;

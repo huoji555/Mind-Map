@@ -13,4 +13,6 @@ public interface IMindMapService extends IBaseService<MindMap> {
 	
 	Long getAllMapPage();
 	
+	List<MindMap> getAllMap();
+	
 }

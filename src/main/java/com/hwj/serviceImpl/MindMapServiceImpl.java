@@ -49,6 +49,11 @@ public class MindMapServiceImpl extends BaseServiceImpl<MindMap> implements
 		// TODO Auto-generated method stub
 		return iMindMapDao.getAllMapPage();
 	}
+
+	@Override
+	public List<MindMap> getAllMap() {
+		return iMindMapDao.getAllMap();
+	}
 	
 	
 }

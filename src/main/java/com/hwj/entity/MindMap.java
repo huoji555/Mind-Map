@@ -24,6 +24,7 @@ public class MindMap implements Serializable {
 	private String realname;                //图谱作者真实姓名
 	private String maplist;                 //存节点数据
 	private String date;                    //存储建图时间
+	private String keyWord;                 //图谱关键字
 
 
 	@Id
@@ -85,14 +86,13 @@ public class MindMap implements Serializable {
 		this.date = date;
 	}
 	
-	
-	@Override
-	public String toString() {
-		return "MindMap [nodeid=" + nodeid + ", nodename=" + nodename
-				+ ", data=" + data + ", userid=" + userid + ", realname="
-				+ realname + ", maplist=" + maplist + ", date=" + date + "]";
+	@Column(name = "keyWord")
+	public String getKeyWord() {
+		return keyWord;
 	}
-	
+	public void setKeyWord(String keyWord) {
+		this.keyWord = keyWord;
+	}
 	
 	
 }

@@ -508,6 +508,24 @@ public class TryCatchNewMindService {
     }
     
     
+    /**
+     * @author Ragty
+     * @param  返回所有图谱(Only use in test)
+     * @return
+     */
+    public List<MindMap> getAllMindMap() {
+    	
+    	List<MindMap> list = null;
+    	try {
+			list = iMindMapService.getAllMap();
+		} catch (Exception e) {
+			return null;
+		}
+
+    	return list;
+    }
+    
+    
     
 	
 }

@@ -10,8 +10,6 @@ import com.hwj.entity.MindMap;
 
 public class HanlpTest{
 	
-	@Autowired
-	private TryCatchNewMindService tryCatchNewMindService;
 	
 	public static void main(String[] args){
 		

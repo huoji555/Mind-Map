@@ -14,4 +14,6 @@ public interface IMindMapDao extends IBaseDao<MindMap> {
 	
 	Long getAllMapPage();
 	
+	List<MindMap> getAllMap();
+	
 }

@@ -97,5 +97,27 @@ public class MindMapDaoImpl extends BaseDaoImpl<MindMap> implements IMindMapDao 
 		return total;
 	}
 
+
+	/**
+	 * @author Ragty
+	 * @param  获取所有的图谱
+	 * @serialData 2018.10.12
+	 */
+	@Override
+	public List<MindMap> getAllMap() {
+		String sql = "select * from mind_map";
+		Query query = getCurrentSession().createSQLQuery(sql).addEntity(MindMap.class);
+		
+		@SuppressWarnings("unchecked")
+		List<MindMap> list=query.list();
+		
+		if(list.size()>0){
+			return list;
+		}
+		return null;
+	}
+	
+	
+
 	
 }

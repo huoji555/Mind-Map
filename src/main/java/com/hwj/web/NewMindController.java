@@ -63,6 +63,8 @@ import com.hwj.tools.TryCatchUploadFileService;
 import com.hwj.tools.TryCatchUserService;
 import com.hwj.tools.TryCatchZsdService;
 
+import redis.clients.jedis.Protocol.Keyword;
+
 @Controller
 public class NewMindController {
 
@@ -1794,6 +1796,52 @@ public class NewMindController {
 		
 	
 	
+	
+	/**
+	 * @author Ragty
+	 * @param  训练所有图谱 (测试期间使用)
+	 * @serialData 2018.10.12
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping("updateKeyWords.do")
+	@ResponseBody
+	public String updateKeyWords() throws IOException {
+		List<MindMap> list = tryCatchNewMindService.getAllMindMap();
+		List<String> listMap = new ArrayList<>();
+		
+		try {
+			for (Iterator<MindMap> it = list.iterator(); it.hasNext(); ) {
+				MindMap mindMap = it.next();
+				
+				List<MindNode> nodeList = jsonAnalyze.parseList(mindMap.getMaplist());
+
+				List<String> keyWord = tryCatchNewMindService.getKeywordByLayer(nodeList);
+				
+				if(keyWord.size() > 0) {
+					for(int i=0; i<keyWord.size(); i++) {
+						listMap.add(keyWord.get(i));
+					}
+				}
+				
+				mindMap.setKeyWord(jsonAnalyze.list2Json(keyWord));
+				tryCatchMindMapService.saveOrUpdata(mindMap);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		System.out.println(listMap.size());
+		System.out.println(listMap.toString());
+		
+		List<String> type = HanLP.extractKeyword(listMap.toString(), 5);
+		
+		System.out.println(type.toString());
+		
+		return statusMap.a("1");
+		
+	}
 	
 	
 	
