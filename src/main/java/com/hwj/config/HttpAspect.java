@@ -1,34 +1,28 @@
-package com.hwj.aspect;
-
-import javax.servlet.http.HttpServletRequest;
+package com.hwj.config;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Around;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import lombok.extern.slf4j.Slf4j;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
-  * <p>Company: B505信息技术研究所 </p> 
-  * @Description: 对web请求进行日志记录
-  * @Create Date: 2017年5月11日下午9:45:00
-  * @Version: V1.00 
-  */
+ *
+ */
 @Aspect
 @Component
 public class HttpAspect {
 	
 	private final static Logger logger = LoggerFactory.getLogger(HttpAspect.class);
 	//两个..代表所有子目录，最后括号里的两个..代表所有参数
-    @Pointcut("execution( public * com.hwj.web.*.*(..))")
+    @Pointcut("execution( public * com.hwj.controller.*.*(..))")
     public  void log(){
     }
 
@@ -58,18 +52,32 @@ public class HttpAspect {
     }
 
 
+    
     @AfterReturning(returning = "object",pointcut = "log()")
     public void doAfterReturning(Object object){
     	logger.info("返回结果:"+"response={}" , object.toString());
     }
     
-   @Around("log()")
-   public Object daRound(ProceedingJoinPoint pjp) throws Throwable{
-	   long startTime = System.currentTimeMillis();
-       Object ob = pjp.proceed();// ob 为方法的返回值
-       logger.info("耗时 : " + (System.currentTimeMillis() - startTime));
-       return ob;
-   }
+    
+    @AfterThrowing(pointcut = "log()", throwing = "e")
+    public void afterThrowing(JoinPoint joinPoint, Exception e) {
+    	ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+    	if(attributes != null) {
+    		HttpServletRequest request = attributes.getRequest();
+    		if (request != null) {
+    			//记录异常信息(后边来补实体类)
+    		}
+    	}
+    	logger.warn("请求异常",e);
+    }
+    
+    @Around("log()")
+    public Object daRound(ProceedingJoinPoint pjp) throws Throwable{
+	    long startTime = System.currentTimeMillis();
+        Object ob = pjp.proceed();// ob 为方法的返回值
+        logger.info("耗时 : " + (System.currentTimeMillis() - startTime));
+        return ob;
+    }
 
 
 }
