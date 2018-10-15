@@ -1835,7 +1835,9 @@ public class NewMindController {
 		System.out.println(listMap.size());
 		System.out.println(listMap.toString());
 		
-		List<String> type = HanLP.extractKeyword(listMap.toString(), 5);
+		//List<String> type = HanLP.extractKeyword(listMap.toString(), 5);
+		List<String> type = HanLP.extractSummary(listMap.toString(), 5);
+	
 		
 		System.out.println(type.toString());
 		
