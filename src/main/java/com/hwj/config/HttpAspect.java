@@ -5,11 +5,18 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.hwj.entity.AdminErrorMsg;
+import com.hwj.service.AdminErrorMsgService;
+
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Arrays;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,6 +26,9 @@ import javax.servlet.http.HttpServletRequest;
 @Aspect
 @Component
 public class HttpAspect {
+	
+	@Autowired
+	private AdminErrorMsgService adminErrorMsgService;
 	
 	private final static Logger logger = LoggerFactory.getLogger(HttpAspect.class);
 	//两个..代表所有子目录，最后括号里的两个..代表所有参数
@@ -59,13 +69,25 @@ public class HttpAspect {
     }
     
     
+    //记录异常信息
     @AfterThrowing(pointcut = "log()", throwing = "e")
     public void afterThrowing(JoinPoint joinPoint, Exception e) {
     	ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
     	if(attributes != null) {
     		HttpServletRequest request = attributes.getRequest();
     		if (request != null) {
-    			//记录异常信息(后边来补实体类)
+    			AdminErrorMsg msg = new AdminErrorMsg();
+    			msg.setAdminIp(request.getRemoteAddr());
+    			msg.setUrl(request.getRequestURI().toString());
+    			msg.setMethod_type(request.getMethod());
+    			String s = joinPoint.getSignature().getDeclaringTypeName();
+                String name = s.substring(s.lastIndexOf(".") + 1);
+                msg.setController_name(name);
+                msg.setMethod_name(joinPoint.getSignature().getName());
+                msg.setParams(Arrays.toString(joinPoint.getArgs()));
+                msg.setCreate_time(new Date());
+                msg.setError_msg(e.toString());
+                adminErrorMsgService.save(msg);
     		}
     	}
     	logger.warn("请求异常",e);

@@ -12,8 +12,10 @@ import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
+@EnableTransactionManagement
 @EnableCaching                   //开启缓存
 public class MindMapApplication extends SpringBootServletInitializer{
 
@@ -27,8 +29,10 @@ public class MindMapApplication extends SpringBootServletInitializer{
 		
 		if (System.getenv("SPWD") == null) {
 			SpringApplication.run(MindMapApplication.class, args);    //加载本地数据库
+		} else {
+			application.run(args);                                    //加载线上数据库
 		}
-		application.run(args);                                        //加载线上数据库
+		
 	}
 	
 	
