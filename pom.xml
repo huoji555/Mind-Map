@@ -10,7 +10,7 @@
 	
 
 	<name>Mind_Map</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Online Mind Map</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -27,102 +27,61 @@
 
 	<dependencies>
 	
-		<!-- spring aop -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-aop</artifactId>
-		</dependency>
-		<!-- spring data jpa -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<!-- hibernate 依赖 -->
-		<dependency>
+		<!--Web-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- spring aop -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <!--JPA-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-rest</artifactId>
+        </dependency>
+        <!-- hibernate 依赖 -->
+        <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.1-api</artifactId>
             <version>1.0.2.Final</version>
         </dependency>
         <!-- JDBC连接数据库 -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jdbc</artifactId>
-			<exclusions>
-           		<exclusion>
-               		<groupId>org.apache.tomcat</groupId>
-               		<artifactId>tomcat-jdbc</artifactId>
-           		</exclusion>
-       		</exclusions>
-		</dependency>
-		<!-- HikariCP 连接池依赖 -->
-		<dependency>
-			<groupId>com.zaxxer</groupId>
-			<artifactId>HikariCP</artifactId>
-			<!-- <scope>runtime</scope> -->
-		</dependency> 
-		<!-- thymeleaf 模板   默认包含spring-boot-starter-web-->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-		</dependency>
-		<!-- security 配置-->
-		<dependency>
-		  <groupId>org.springframework.boot</groupId>
-		  <artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
-		<!-- Redis 配置 -->
-		<dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
             <exclusions>
                 <exclusion>
-                    <groupId>io.lettuce</groupId>
-                    <artifactId>lettuce-core</artifactId>
+                    <groupId>org.apache.tomcat</groupId>
+                    <artifactId>tomcat-jdbc</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
-		<dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
+        <!-- HikariCP 连接池依赖 -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <!-- <scope>runtime</scope> -->
         </dependency>
-		
-		
-		
-		<!-- 导出为war需要的相关依赖--> 
-		<!-- <dependency>  
-            <groupId>org.springframework.boot</groupId>  
-            <artifactId>spring-boot-starter-thymeleaf</artifactId> 
-            <exclusions>
-   			<exclusion>
-     			<groupId>org.springframework.boot</groupId>
-     			<artifactId>spring-boot-starter-tomcat</artifactId>
-   			</exclusion>
- 			</exclusions> 
-		  </dependency>  
-	      <dependency>
-	  		 <groupId>javax.servlet</groupId>
-	  			<artifactId>javax.servlet-api</artifactId>
-	  			<scope>provided</scope>
-		  </dependency>
-		  <dependency>
-  			<groupId>org.apache.tomcat</groupId>
-  			<artifactId>tomcat-servlet-api</artifactId>
-  			<version>8.0.36</version>
-  			<scope>provided</scope>
-		  </dependency> --> 
-		<!-- 连接mysql数据库驱动 -->
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<!-- spring boot 内置tomcat -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<!-- 只需引入spring-boot-devtools 即可实现热部署 -->
+        <!-- 连接mysql数据库驱动 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- spring boot 内置tomcat -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- 只需引入spring-boot-devtools 即可实现热部署 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -133,86 +92,121 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-        <!-- Java Mail 依赖 -->
+        
+        
+        
+        <!-- thymeleaf 模板   默认包含spring-boot-starter-web-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <!-- LEGACYHTML5需要搭配一个额外的库NekoHTML才可用,解决严格的html验证问题 -->
+        <dependency>
+            <groupId>net.sourceforge.nekohtml</groupId>
+            <artifactId>nekohtml</artifactId>
+        </dependency>
+        
+        
+        
+        <!-- log4j 配置 -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+        <!-- Sl4j 配置 -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.24</version>
+        </dependency>
+         <!-- security 配置-->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-mail</artifactId>
+		  <groupId>org.springframework.boot</groupId>
+		  <artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-		<!-- net json 这个必须配置jdk的版本号 -->
+		 <!-- Redis 配置 -->
 		<dependency>
-		    <groupId>net.sf.json-lib</groupId>
-		    <artifactId>json-lib</artifactId>
-		    <version>2.4</version>
-		    <classifier>jdk15</classifier>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream -->
-		<!-- xstrem 依赖 -->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.lettuce</groupId>
+                    <artifactId>lettuce-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+		<!-- Jedis 配置  -->
 		<dependency>
-		    <groupId>com.thoughtworks.xstream</groupId>
-		    <artifactId>xstream</artifactId>
-		    <version>1.3.1</version>
-		</dependency>
-		<!-- LEGACYHTML5需要搭配一个额外的库NekoHTML才可用,解决严格的html验证问题 -->
-		<dependency>  
-       		<groupId>net.sourceforge.nekohtml</groupId>  
-      		<artifactId>nekohtml</artifactId>  
-		</dependency>
-		
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-		</dependency>
-		
-		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-actuator -->
-		<!--监控SpringBoot应用程序  -->
-		<dependency>
-    		<groupId>org.springframework.boot</groupId>
-    		<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
-		
-		<!--远程shell(SSh)  -->
-		<!-- <dependency>
-    		<groupId>org.springframework.boot</groupId>
-    		<artifactId>spring-boot-starter-remote-shell</artifactId>
-		</dependency> -->
-		  
-		<!-- 单元测试相关依赖 -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		
-		<!-- 后台验证码相关包（之后可去掉） -->
-		<dependency>
-		    <groupId>nl.captcha</groupId>
-	 		<artifactId>simplecaptcha</artifactId>
-			<version>1.2.1</version>
-	    </dependency>
-	
-	    <!-- 狗皮药膏(打包时起作用) -->
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>2.15.0</version>
-		</dependency>
-		
-		<!-- web-Socket -->
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
+        <!-- web-Socket -->
 		<dependency>  
            <groupId>org.springframework.boot</groupId>  
            <artifactId>spring-boot-starter-websocket</artifactId>  
-       </dependency>  
+        </dependency>  
 		
-		<!-- fastJson -->
-		<dependency>
-		    <groupId>com.alibaba</groupId>
-		    <artifactId>fastjson</artifactId>
-		    <version>1.2.47</version>
-		</dependency>
-		
-		
-		
-		
+
+
+        <!-- fastJson -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.47</version>
+        </dependency>
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.8</version>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-logging</artifactId>
+                    <groupId>commons-logging</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- Maps -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>20.0</version>
+        </dependency>
+        <!-- Java Mail 依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+		<!-- net json 这个必须配置jdk的版本号 -->
+        <dependency>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib</artifactId>
+            <version>2.4</version>
+            <classifier>jdk15</classifier>
+        </dependency>
+        <!-- xstrem 依赖 -->
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.3.1</version>
+        </dependency>
+
+        
+        
+        <!--监控SpringBoot应用程序  -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <!--单元测试相关依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
 	</dependencies>
 
 	<build>

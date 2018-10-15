@@ -11,6 +11,7 @@ public class MindMapApplicationTests {
 
 	@Test
 	public void contextLoads() {
+		System.out.println("Mind_Map Test!");
 	}
 
 }

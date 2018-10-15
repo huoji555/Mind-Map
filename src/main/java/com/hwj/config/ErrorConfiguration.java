@@ -8,12 +8,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 
 
-
 /**
-  * @Description: 配置解析页面
-  * @Create Date: 2017年8月14日上午12:01:03
-  * @Version: V1.00 
-  */
+ * @author Ragty
+ * @describe 配置错误解析页面
+ * @Date  2018.10.15
+ */
 @Configuration
 public class ErrorConfiguration {
 	
