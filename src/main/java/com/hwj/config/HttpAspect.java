@@ -20,9 +20,6 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- *
- */
 @Aspect
 @Component
 public class HttpAspect {
