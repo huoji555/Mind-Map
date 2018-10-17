@@ -1,5 +1,13 @@
 package com.hwj.service;
 
-public interface AdminService {
+import com.hwj.entity.Admin;
 
+public interface AdminService {
+	
+	void save(Admin admin);
+	
+	Admin queryAdminByUsernameOrEmail(String username, String email);
+	
+	int hasMatchAdmin(String username, String password);
+	
 }

@@ -1,6 +1,7 @@
 package com.hwj.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,6 +22,8 @@ public class Admin implements Serializable{
 	private String password;
 	private String email;
     private Integer roleId;
+    private Date createDate;
+	private String ip;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,5 +45,13 @@ public class Admin implements Serializable{
 	@Column(name = "roleId")
 	public Integer getRoleId() {return roleId;}
 	public void setRoleId(Integer roleId) {this.roleId = roleId;}
+	
+	@Column(name = "createDate")
+	public Date getCreateDate() {return createDate;}
+	public void setCreateDate(Date createDate) {this.createDate = createDate;}
+	
+	@Column(name = "ip")
+	public String getIp() {return ip;}
+	public void setIp(String ip) {this.ip = ip;}
     
 }

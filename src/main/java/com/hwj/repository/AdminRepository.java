@@ -8,5 +8,6 @@ public interface AdminRepository extends PagingAndSortingRepository<Admin, Strin
 	
 	Admin queryAdminByUsernameOrEmail(String username,String email);
 	
+	Admin queryAdminByUsernameAndPassword(String username, String password);
 	
 }
