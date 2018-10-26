@@ -47,7 +47,7 @@ function RegsiterController($scope,$http,$window,$rootScope,$timeout) {
 
                 if (status == 200){
                 	alert("注册成功");
-                    //$window.location.href = "auditing.html";
+                    $window.location.href = "index.html";
                 } else if (status == 201) {
                     alert(msg);
                 }
@@ -67,6 +67,13 @@ function RegsiterController($scope,$http,$window,$rootScope,$timeout) {
     	var emailReg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
         if (!(emailReg.test(reg.email.trim()))) {
             alert("邮箱格式不正确");
+            return;
+        }
+
+        var usernameReg = /^[\u4e00-\u9fa5_a-zA-Z0-9-]{3,16}$/;
+
+        if (!(usernameReg.test(reg.username))) {
+            alert("输入的用户名限16个字符，支持中英文、数字、减号或下划线");
             return;
         }
 

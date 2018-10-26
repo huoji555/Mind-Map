@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -11,10 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.google.common.collect.Maps;
 import com.hwj.entity.Admin;
@@ -106,6 +104,7 @@ public class LoginController {
         
         HttpSession session = request.getSession();
         session.setAttribute("admin", userName);
+        session.setAttribute("roleId","2");
         session.setMaxInactiveInterval(6*60*200);
         
         result.put("status",200);
@@ -146,11 +145,12 @@ public class LoginController {
             return new ResultBean<Map<String,Object>>(result);
         }
 
+        int roleId = adminService.queryAdminByUsernameOrEmail(username,"").getRoleId();
+
         HttpSession session = request.getSession();
         session.setAttribute("admin", username);
+        session.setAttribute("roleId",roleId);
         session.setMaxInactiveInterval(6*60*200);
-
-        int roleId = adminService.queryAdminByUsernameOrEmail(username,"").getRoleId();
 
         result.put("status",200);
         result.put("message","登录成功");      //登录成功后，需要判断他的权限（同时加个session）
@@ -179,6 +179,84 @@ public class LoginController {
         result.put("status",200);
         result.put("message","退出成功");
         return new ResultBean<Map<String,Object>>(result);
+    }
+
+
+
+
+    /**
+     * @auther: Ragty
+     * @describe: 判断用户是否登录
+     * @param: [request]
+     * @return: com.hwj.util.ResultBean<java.util.Map<java.lang.String,java.lang.Object>>
+     * @date: 2018/10/26 
+     */
+    @PostMapping("/ifLogin")
+    public ResultBean<Map<String,Object>> ifLogin(HttpServletRequest request) {
+        Map<String,Object> result = Maps.newHashMap();
+        HttpSession session = request.getSession();
+        String adminId = String.valueOf(session.getAttribute("admin"));
+        String roleId = String .valueOf(session.getAttribute("roleId"));
+
+
+        if (adminId.equals("null") || adminId == "null"){
+            result.put("status",201);
+            result.put("roleId","");
+            result.put("adminId","");
+            result.put("message","未登录，非法操作");
+            return new ResultBean<>(result);
+        }
+
+        result.put("status",200);
+        result.put("roleId",roleId);
+        result.put("adminId",adminId);
+        result.put("message","已登录");
+        return new ResultBean<>(result);
+
+    }
+
+
+
+
+    /**
+     * @auther: Ragty
+     * @describe: 修改密码接口
+     * @param: [orignalPwd, newPwd, request]
+     * @return: com.hwj.util.ResultBean<java.util.Map<java.lang.String,java.lang.Object>>
+     * @date: 2018/10/26
+     */
+    @GetMapping("/updatePwd")
+    public ResultBean<Map<String,Object>> updatePwd(@RequestParam String orignalPwd, @RequestParam String newPwd,
+                                                    HttpServletRequest request) {
+
+        Map<String,Object> result = Maps.newHashMap();
+        HttpSession session = request.getSession();
+        String adminId = String.valueOf(session.getAttribute("admin"));
+
+        Admin admin = adminService.queryAdminByUsernameOrEmail(adminId,"");
+        String ip = "";
+        int a = 0;
+
+        a = adminService.hasMatchAdmin(adminId, md5Util.digest(orignalPwd.trim()));
+
+        if (a == 2) {
+            result.put("status",201);
+            result.put("message","原密码不正确");
+            return new ResultBean<>(result);
+        }
+
+        try {
+            ip = getClientIp(request);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        admin.setPassword(md5Util.digest(newPwd));
+        adminService.save(admin);
+
+        result.put("status",200);
+        result.put("message","修改成功");
+        return new ResultBean<>(result);
     }
 
 
@@ -265,6 +343,8 @@ public class LoginController {
         }
         return result;
     }
-	
+
+
+
 	
 }

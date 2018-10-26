@@ -29,7 +29,7 @@ public class AdminServiceImpl implements AdminService{
 		int b = 0;
 		Admin admin = new Admin();
 		admin = adminRepository.queryAdminByUsernameOrEmail(username,"");
-		
+
 		if (admin == null) {
 			return b = 0 ;      //0表示该不存在该用户
 		} else if (adminRepository.queryAdminByUsernameAndPassword(username, password) == null ) {

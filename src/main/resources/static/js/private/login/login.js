@@ -23,7 +23,6 @@ function LoginController($scope,$http,$window,$rootScope) {
                 var status = response.data.data.status;
                 var msg = response.data.data.message;
 
-
                 if (status == 200){
                     if (response.data.data.roleId == "2"){
                         $window.location = "index.html";
