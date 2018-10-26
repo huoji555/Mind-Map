@@ -5,14 +5,14 @@
                 <div class="card p-4">
                     <div class="card-body">
                         <h2>登录</h2>
-                        <p class="text-muted"> 请使用用户名登录</p>
+                        <p class="text-muted"> 请使用邮箱或用户名登录</p>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
                                   <i class="icon-user"></i>
                                 </span>
                             </div>
-                            <input class="form-control" type="text" placeholder="用户名" ng-model="Admin.username">
+                            <input class="form-control" type="text" placeholder="用户名/邮箱" ng-model="Admin.username">
                         </div>
                         <div class="input-group mb-4">
                             <div class="input-group-prepend">
@@ -26,9 +26,6 @@
                             <div class="col-6">
                                 <button class="btn btn-primary px-4" type="button" ng-click="login(Admin)">登录</button>
                             </div>
-                            <!--<div class="col-6 text-right">
-                                <button class="btn btn-primary px-4" type="button" onclick="window.location='register.html'">注册</button>
-                            </div>-->
                         </div>
                     </div>
                 </div>

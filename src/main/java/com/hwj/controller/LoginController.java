@@ -131,6 +131,11 @@ public class LoginController {
 	    Map<String,Object> result = Maps.newHashMap();
 	    String username = admin.getUsername();
 	    String password = md5Util.digest(admin.getPassword());
+	    String email = admin.getEmail();
+
+        if (email != null) {
+            username = adminService.queryAdminByUsernameOrEmail("",email).getUsername();
+        }
 
 	    int a = 0;
 	    a = adminService.hasMatchAdmin(username,password);

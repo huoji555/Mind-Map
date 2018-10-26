@@ -18,6 +18,11 @@ function LoginController($scope,$http,$window,$rootScope) {
             return;
         }
 
+        var emailReg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+        if (emailReg.test( Admin.username )) {
+            Admin.email = Admin.username;
+        }
+
         $http.post("/admin/login",Admin)
             .then(function (response) {
                 var status = response.data.data.status;
