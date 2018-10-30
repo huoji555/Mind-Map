@@ -2,6 +2,7 @@ var indexApp = angular.module('index',['ngRoute']);
 
 indexApp.config(['$routeProvider',function ($routeProvider) {
     $routeProvider.when('/',{templateUrl:"html/Index/indexContent.html",controller:indexController})
+                  .when('/adminMessage',{templateUrl:"html/manger/adminContent.html",controller:adminMessageController})
 }]);
 
 
@@ -13,7 +14,7 @@ indexApp.controller('indexCon',function ($scope,$http,$window,$rootScope) {
     //退出登录
     $rootScope.quit = function () {
 
-        $http.post("/admin/logOut")
+        $http.post("/login/logOut")
             .then(function (response) {
                 var status = response.data.data.status;
                 var msg = response.data.data.message;
@@ -30,7 +31,7 @@ indexApp.controller('indexCon',function ($scope,$http,$window,$rootScope) {
     /*判断是否登录*/
     $rootScope.ifLogin = function () {
 
-        $http.post("/admin/ifLogin")
+        $http.post("/login/ifLogin")
             .then(function (response) {
                 var status = response.data.data.status;
                 var msg = response.data.data.message;
@@ -61,7 +62,7 @@ indexApp.controller('indexCon',function ($scope,$http,$window,$rootScope) {
 
         if (!checkPassword($scope.repPWD)) {alert("请尝试更复杂的密码");return ;}
 
-        $http.get('/admin/updatePwd?orignalPwd='+$scope.orignPwd+'&newPwd='+$scope.repPWD).then(function (response) {
+        $http.get('/login/updatePwd?orignalPwd='+$scope.orignPwd+'&newPwd='+$scope.repPWD).then(function (response) {
 
             var status = response.data.data.status;
             var msg = response.data.data.message;
@@ -123,25 +124,6 @@ indexApp.controller('indexCon',function ($scope,$http,$window,$rootScope) {
         $('.img-avatar').attr('src',canvas.toDataURL("image/png"));
     };
 
-    //判断浏览器是不是IE
-    function checkExp(){
-        if ( navigator.userAgent.match(/rv:(\d+)\..*/) ){
-            return "IE";
-        } else {
-            return "NotIE";
-        }
-    }
-
-    //提示IE用户
-    function ieMsg() {
-        if (checkExp() == "IE") {
-            alert("不支持IE浏览器下载，请尝试别的浏览器");
-            return;
-        }
-    }
-
-    ieMsg();
-
 });
 
 function indexController($scope,$http,$window,$rootScope) {
@@ -152,31 +134,54 @@ function indexController($scope,$http,$window,$rootScope) {
 
 
 /*-------------------------  用户信息查看  ------------------------------*/
-function adminMessageController($scope,$http,$window,$rootScope) {
+function adminMessageController($scope,$http,$window,$rootScope,$filter) {
 
-    /*获取用户信息*/
-    $scope.getMessage = function () {
+    var pageSize = 10;
+    /*获取用户信息(分页，默认查询所有信息)*/
+    $scope.getMessage = function (page,pageSize) {
 
-        $http.get('auditing/getAdminMessage')
+        var firstDate = $filter('date')($("#firstDate").val(),"yyyy-MM-dd");
+        var lastDate = $filter('date')($("#lastDate").val(), "yyyy-MM-dd");
+
+        $http.post('admin/queryAdminByDate?firstDate1='+firstDate+'&lastDate1='+lastDate+'&page='+page+'&size='+pageSize)
             .then(function (response) {
-                $scope.list = response.data.data;
+                $scope.totalNum = response.data.data.totalElements;//数据总数
+                $scope.pages = response.data.data.totalPages;//页数
+                $scope.currPage = response.data.data.number;//当前页
+                $scope.isFirstPage = response.data.data.first;//是否是首页
+                $scope.isLastPage = response.data.data.last;//是否是尾页
+                $scope.lastUpPage = $scope.pages - 1;//倒数第二页
+                $scope.lists = response.data.data.content;
             })
 
     }
 
 
-    $scope.getMessage();
+    $scope.getMessage(0,pageSize);
 
+    $scope.page = function (page,oper) {
 
-    /*显示用户信息*/
-    $scope.showMessage = function (url,type) {
-        $scope.message = url;
+        if(oper == 'first'){ //首页
+            $scope.getMessage(0,pageSize)
+        }
+        if(oper == 'up'){   //上一页
+            if (page == 0){
+                return;
+            }
+            $scope.getMessage(page-1,pageSize);
+        }
+        if(oper == 'next'){ //下一页
+            if (page == $scope.pages-1){
+                return;
+            }
+            $scope.getMessage(page+1,pageSize);
+        }
+        if (oper == 'last'){  //末页
+            $scope.getMessage(page-1,pageSize);
+        }
     }
 
-    /*下载文件*/
-    $scope.download = function (url) {
-        $window.location = url;
-    }
+
 
 }
 

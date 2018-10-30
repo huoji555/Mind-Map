@@ -40,7 +40,7 @@ function RegsiterController($scope,$http,$window,$rootScope,$timeout) {
         }
 
 
-        $http.post('/admin/register',reg)
+        $http.post('/login/register',reg)
             .then(function (response) {
                 var status = response.data.data.status;
                 var msg = response.data.data.message;
@@ -81,7 +81,7 @@ function RegsiterController($scope,$http,$window,$rootScope,$timeout) {
 
         $scope.timeMachine();
 
-        $http.post('/admin/verifyCode',reg)
+        $http.post('/login/verifyCode',reg)
             .then(function (response) {
                 var status = response.data.data.status;
                 var msg = response.data.data.message;
@@ -89,6 +89,7 @@ function RegsiterController($scope,$http,$window,$rootScope,$timeout) {
                 if (status == 200){
                     console.log(msg);
                 } else if(status == 201){
+                    $scope.timing = 5;
                     alert(msg);
                 }
 

@@ -23,7 +23,7 @@ function LoginController($scope,$http,$window,$rootScope) {
             Admin.email = Admin.username;
         }
 
-        $http.post("/admin/login",Admin)
+        $http.post("/login/login",Admin)
             .then(function (response) {
                 var status = response.data.data.status;
                 var msg = response.data.data.message;
@@ -46,7 +46,7 @@ function LoginController($scope,$http,$window,$rootScope) {
     //退出登录
     $scope.quit = function () {
 
-        $http.post("/admin/logOut")
+        $http.post("/login/logOut")
             .then(function (response) {
                 var status = response.data.data.status;
                 var msg = response.data.data.message;

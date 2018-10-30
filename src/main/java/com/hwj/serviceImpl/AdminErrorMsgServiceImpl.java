@@ -21,7 +21,7 @@ public class AdminErrorMsgServiceImpl implements AdminErrorMsgService{
 
 	@Override
 	public Page<AdminErrorMsg> pageException(Integer page, Integer size) {
-		Sort sort = new Sort(Sort.Direction.DESC,"createTime");
+		Sort sort = new Sort(Sort.Direction.DESC,"create_time");
 		PageRequest pageRequest = new PageRequest(page, size,sort);
 		return adminErrorMsgRepository.findAll(pageRequest);
 	}

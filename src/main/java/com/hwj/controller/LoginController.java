@@ -23,7 +23,7 @@ import com.hwj.util.ResultBean;
 import com.hwj.util.SendMail;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/login")
 public class LoginController {
 
 	@Autowired
@@ -280,15 +280,27 @@ public class LoginController {
 		Map<String, Object> result = Maps.newHashMap();
 		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
 
+		String username = String.valueOf(map.get("username"));
 		String email = String.valueOf(map.get("email"));
+
+
+		Admin admin0 = new Admin();
+		admin0 = adminService.queryAdminByUsernameOrEmail(username,"");
+        if(admin0 != null){
+            result.put("status",201);
+            result.put("message","该用户名已被注册过");
+            return new ResultBean<>(result);
+        }
+
+
 		Admin admin = new Admin();
 		admin = adminService.queryAdminByUsernameOrEmail("",email);
-
         if(admin != null){
             result.put("status",201);
             result.put("message","该邮箱已被注册过");
             return new ResultBean<>(result);
         }
+
 
 		verifyCode = createCode();
 		sendMail.send(email, "【Mind Map】", "验证码："+verifyCode+",您正在绑定邮箱，验证码告知他人将导致数据信息被盗，请勿泄露");
