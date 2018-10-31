@@ -43,6 +43,7 @@ indexApp.controller('indexCon',function ($scope,$http,$window,$rootScope) {
                     $window.location = "login.html";
                 }
                 $scope.roleId = roleId;
+                $scope.adminId = adminId;
                 textToImg(adminId);
             })
     }
@@ -156,9 +157,9 @@ function adminMessageController($scope,$http,$window,$rootScope,$filter) {
 
     }
 
-
     $scope.getMessage(0,pageSize);
 
+    /*分页下部*/
     $scope.page = function (page,oper) {
 
         if(oper == 'first'){ //首页
@@ -181,7 +182,37 @@ function adminMessageController($scope,$http,$window,$rootScope,$filter) {
         }
     }
 
+    /*模态框获取信息*/
+    $scope.getAuthorizeInfo = function (username,roleId) {
+        $scope.AutUsername = username;
+        $scope.AutRoleId = roleId;
+    }
 
+    /*系统授权*/
+    $scope.saveAut = function () {
+
+        var autType = $("#autType").val();
+
+        if (autType == 0) {
+            alert("请选择授权类型");
+            return ;
+        }
+
+        $http.post('/admin/updateAuthorize?username='+$scope.AutUsername+'&newRoleId='+autType)
+            .then(function (response) {
+
+                var status = response.data.data.status;
+                var msg = response.data.data.message;
+
+                if( status == 200 ) {
+                    $scope.getMessage($scope.currPage,pageSize);
+                    $scope.AutRoleId = autType;
+                    alert(msg);
+                }
+
+            })
+
+    }
 
 }
 

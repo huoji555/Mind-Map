@@ -1,5 +1,6 @@
 package com.hwj.controller;
 
+import com.google.common.collect.Maps;
 import com.hwj.entity.Admin;
 import com.hwj.repository.AdminRepository;
 import com.hwj.service.AdminService;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/admin")
@@ -41,6 +44,13 @@ public class AdminController {
         Sort sort = new Sort(Sort.Direction.DESC,"create_date");
         Pageable pageable = new PageRequest(Integer.parseInt(page),Integer.parseInt(size),sort);
 
+        HttpSession session = request.getSession();
+        String roleId = String.valueOf(session.getAttribute("roleId"));
+
+        if (roleId == "2") {
+            return new ResultBean<>();
+        }
+
         Date firstDate = null;
         Date lastDate = null;
 
@@ -53,6 +63,31 @@ public class AdminController {
 
         Page<Admin> list = adminService.findAllAdmin(firstDate,lastDate,pageable);
         return new ResultBean<Page<Admin>>(list);
+    }
+
+
+
+
+    /**
+     * @auther: Ragty
+     * @describe: 用户授权
+     * @param: [username, newRoleId]
+     * @return: com.hwj.util.ResultBean<java.util.Map<java.lang.String,java.lang.Object>>
+     * @date: 2018/10/31
+     */
+    @PostMapping("/updateAuthorize")
+    public ResultBean<Map<String,Object>> updateAuthorize(@RequestParam String username, @RequestParam String newRoleId) {
+
+        Map<String,Object> result = Maps.newHashMap();
+
+        Admin admin = adminService.queryAdminByUsernameOrEmail(username,"");
+        admin.setRoleId(Integer.parseInt(newRoleId));
+
+        adminService.save(admin);
+
+        result.put("status",200);
+        result.put("message","授权成功");
+        return new ResultBean<>(result);
     }
 
 

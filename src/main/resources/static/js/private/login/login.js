@@ -29,10 +29,10 @@ function LoginController($scope,$http,$window,$rootScope) {
                 var msg = response.data.data.message;
 
                 if (status == 200){
-                    if (response.data.data.roleId == "2"){
+                    if (response.data.data.roleId == "0" || response.data.data.roleId == "1"){
                         $window.location = "index.html";
-                    } else if (response.data.data.roleId == "1") {
-                        alert("管理员");
+                    } else if (response.data.data.roleId == "2") {
+                        alert("普通用户");
                     }
                 } else if (status == 201){
                     alert(msg);

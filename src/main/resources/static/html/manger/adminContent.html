@@ -14,15 +14,19 @@
 
 <!-- 查询内容 -->
 <table class='table table-responsive-xl table-striped table-bordered table-hover'>
-    <thead><th>用户名</th><th>邮箱</th><th>注册日期</th><th>注册IP</th><th>权限</th></thead>
+    <thead><th>用户名</th><th>邮箱</th><th>注册日期</th><th>注册IP</th><th>权限名称</th><th>授权</th></thead>
     <tr ng-repeat="list in lists">
         <td>{{list.username}}</td>
         <td>{{list.email}}</td>
         <td>{{list.createDate | date:"yyyy-MM-dd HH-mm-ss"}}</td>
         <td>{{list.ip}}</td>
-        <td ng-if="roleId == 0"><a class="badge badge-danger">超级管理员</a></td>
-        <td ng-if="roleId == 1"><a class="badge badge-success">管理员</a></td>
-        <td ng-if="roleId == 2"><a class="badge badge-warning">普通用户</a></td>
+        <td ng-if="list.roleId == 0"><a class="badge badge-danger" style="cursor: pointer">超级管理员</a></td>
+        <td ng-if="list.roleId == 1"><a class="badge badge-success" style="cursor: pointer">管理员</a></td>
+        <td ng-if="list.roleId == 2"><a class="badge badge-warning" style="cursor: pointer">普通用户</a></td>
+        <td ng-if="roleId >= list.roleId "><a class="badge badge-info" style="cursor: no-drop" disabled>无法授权</a></td>
+        <td ng-if="roleId < list.roleId ">
+            <a data-target="#authorize" data-toggle="modal" ng-click="getAuthorizeInfo(list.username,list.roleId)" class="badge badge-info" style="cursor: pointer">授权</a>
+        </td>
     </tr>
 </table>
 
@@ -45,6 +49,52 @@
         <span>第{{currPage+1}}页</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>共{{pages}}页</span>
     </li>
 </ul>
+
+
+<!--授权模态框-->
+<div class="modal fade" id="authorize" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog modal-warning modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">授权</h4>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="form-group col-sm-3">
+                        <label>用户名</label>
+                        <input type="text" class="form-control" ng-model="AutUsername" placeholder="用户名" disabled />
+                    </div>
+                    <div class="form-group col-sm-3">
+                        <label>授权名称</label>
+                        <select id="autType" class="form-control"  required>
+                            <option selected value="0">请选择</option>
+                            <option value="1">管理员</option>
+                            <option value="2" ng-if="roleId == 0">普通用户</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-sm-3">
+                        <label>当前权限</label>
+                        <input type="text" class="form-control" ng-if="AutRoleId == 1" placeholder="管理员" disabled/>
+                        <input type="text" class="form-control" ng-if="AutRoleId == 2" placeholder="普通用户" disabled/>
+                    </div>
+                    <div class="form-group col-sm-3">
+                        <label>授权者</label>
+                        <input type="text" class="form-control" ng-model="adminId" placeholder="授权者" disabled/>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-info" ng-click="saveAut()">授权</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 
 
