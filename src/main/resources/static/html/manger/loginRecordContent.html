@@ -1,0 +1,64 @@
+<!-- 查询组 -->
+<div class="row">
+    <div class="form-group col-sm-5">
+        <input type="text" class="form-control" placeholder="起始日期" id="firstDate"/>
+    </div>
+    <div class="form-group col-sm-5">
+        <input type="text" class="form-control" placeholder="截止日期" id="lastDate"/>
+    </div>
+    <div class="form-group col-sm-2">
+        <button type="button" class="btn btn-primary" ng-click="pagenation(0,20)">查询</button>
+    </div>
+</div>
+
+
+<!-- 展示组 -->
+<table class='table table-responsive-xl table-striped table-bordered table-hover'>
+    <thead><th>用户名</th><th>登录IP</th><th>登录权限</th><th>登录日期</th></thead>
+    <tr ng-repeat="list in lists">
+        <td>{{list.username}}</td>
+        <td>{{list.ip}}</td>
+        <td ng-if="list.roleId == 0"><a class="badge badge-danger" style="cursor: pointer">超级管理员</a></td>
+        <td ng-if="list.roleId == 1"><a class="badge badge-success" style="cursor: pointer">管理员</a></td>
+        <td ng-if="list.roleId == 2"><a class="badge badge-warning" style="cursor: pointer">普通用户</a></td>
+        <td>{{list.loginTime | date: "yyyy-MM-dd HH:mm:ss"}}</td>
+    </tr>
+</table>
+
+
+
+<!--分页底部-->
+<ul class="pagination justify-content-center">
+    <li class="page-item">
+        <a class="page-link" ng-click="page(currPage,'first')" disabled="disabled">
+            <span aria-hidden="true">首页</span>
+        </a>
+    </li>
+    <li class="page-item"><a class="page-link" ng-click="page(currPage,'up')">上一页</a></li>
+    <li class="page-item"><a class="page-link" ng-click="page(currPage,'next')">下一页</a></li>
+    <li class="page-item">
+        <a class="page-link" ng-click="page(pages,'last');" aria-label="Next">
+            <span aria-hidden="true">末页</span>
+        </a>
+    </li>
+    <li style="margin-top: 0.6%; margin-left: 5%;">
+        <span>第{{currPage+1}}页</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>共{{pages}}页</span>
+    </li>
+</ul>
+
+
+
+<!-- 日历脚本 -->
+<script>
+
+    laydate.render({
+        elem: '#firstDate',
+        theme: '#393D49'
+    });
+
+    laydate.render({
+        elem: '#lastDate',
+        theme: '#393D49'
+    });
+
+</script>

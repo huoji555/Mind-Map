@@ -18,7 +18,7 @@
     <tr ng-repeat="list in lists">
         <td>{{list.username}}</td>
         <td>{{list.email}}</td>
-        <td>{{list.createDate | date:"yyyy-MM-dd HH-mm-ss"}}</td>
+        <td>{{list.createDate | date:"yyyy-MM-dd HH:mm:ss"}}</td>
         <td>{{list.ip}}</td>
         <td ng-if="list.roleId == 0"><a class="badge badge-danger" style="cursor: pointer">超级管理员</a></td>
         <td ng-if="list.roleId == 1"><a class="badge badge-success" style="cursor: pointer">管理员</a></td>

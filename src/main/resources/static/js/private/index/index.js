@@ -3,6 +3,7 @@ var indexApp = angular.module('index',['ngRoute']);
 indexApp.config(['$routeProvider',function ($routeProvider) {
     $routeProvider.when('/',{templateUrl:"html/Index/indexContent.html",controller:indexController})
                   .when('/adminMessage',{templateUrl:"html/manger/adminContent.html",controller:adminMessageController})
+                  .when('/loginRecord',{templateUrl:"html/manger/loginRecordContent.html",controller:loginRecordController})
 }]);
 
 
@@ -212,6 +213,61 @@ function adminMessageController($scope,$http,$window,$rootScope,$filter) {
 
             })
 
+    }
+
+}
+
+
+
+
+
+/*-------------------------- 登录信息查看 -------------------------------*/
+function loginRecordController($scope,$http,$window,$rootScope,$filter) {
+
+    var pageSize = 20;
+
+    /*分页信息*/
+    $scope.pagenation = function (page,pageSize) {
+
+        var firstDate = $filter('date')($("#firstDate").val(),"yyyy-MM-dd");
+        var lastDate = $filter('date')($("#lastDate").val(), "yyyy-MM-dd");
+
+        $http.post('admin/queryLoginRecordByDate?firstDate1='+firstDate+'&lastDate1='+lastDate+'&page='+page+'&size='+pageSize)
+            .then(function (response) {
+                $scope.totalNum = response.data.data.totalElements;//数据总数
+                $scope.pages = response.data.data.totalPages;//页数
+                $scope.currPage = response.data.data.number;//当前页
+                $scope.isFirstPage = response.data.data.first;//是否是首页
+                $scope.isLastPage = response.data.data.last;//是否是尾页
+                $scope.lastUpPage = $scope.pages - 1;//倒数第二页
+                $scope.lists = response.data.data.content;
+            })
+
+    }
+
+    $scope.pagenation(0,pageSize);
+
+    /*分页下部*/
+    $scope.page = function (page,oper) {
+
+        if(oper == 'first'){ //首页
+            $scope.pagenation(0,pageSize)
+        }
+        if(oper == 'up'){   //上一页
+            if (page == 0){
+                return;
+            }
+            $scope.pagenation(page-1,pageSize);
+        }
+        if(oper == 'next'){ //下一页
+            if (page == $scope.pages-1){
+                return;
+            }
+            $scope.pagenation(page+1,pageSize);
+        }
+        if (oper == 'last'){  //末页
+            $scope.pagenation(page-1,pageSize);
+        }
     }
 
 }

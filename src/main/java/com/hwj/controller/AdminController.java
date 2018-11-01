@@ -105,7 +105,7 @@ public class AdminController {
     @PostMapping("/queryLoginRecordByDate")
     public ResultBean<Page<LoginRecord>> queryLoginRecordByDate(@RequestParam String firstDate1, @RequestParam String lastDate1,
                                                                 @RequestParam String page, @RequestParam String size,
-                                                                HttpServletRequest request) {
+                                                                HttpServletRequest request) throws Exception{
 
         Map<String,Object> result = Maps.newHashMap();
 
@@ -121,7 +121,7 @@ public class AdminController {
             lastDate =sdf.parse(lastDate1);
         }
 
-        page<LoginRecord> list = loginRecordService.queryLoginRecordByDate(firstDate, lastDate, pageable);
+        Page<LoginRecord> list = loginRecordService.queryLoginRecordByDate(firstDate, lastDate, pageable);
         return new ResultBean<>(list);
     }
 

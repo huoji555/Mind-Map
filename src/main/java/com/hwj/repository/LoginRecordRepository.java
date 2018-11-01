@@ -14,11 +14,11 @@ public interface LoginRecordRepository extends PagingAndSortingRepository<LoginR
 
     @Query( value = "SELECT * from Login_record " +
                     "where 1=1 " +
-                    "and (case when :fistDate != '' and :lastDate != '' then login_time between :firstDate and :lastDate else 1=1 end )" +
+                    "and (case when :firstDate != '' and :lastDate != '' then login_time between :firstDate and :lastDate else 1=1 end )" +
                     "order by ?#{#pageable}",
             countQuery = "SELECT count(*) from Login_record " +
                      "where 1=1 " +
-                     "and (case when :fistDate != '' and :lastDate != '' then login_time between :firstDate and :lastDate else 1=1 end )",
+                     "and (case when :firstDate != '' and :lastDate != '' then login_time between :firstDate and :lastDate else 1=1 end )",
             nativeQuery = true)
     Page<LoginRecord> queryPageByDate(@Param("firstDate") Date firstDate, @Param("lastDate") Date lastDate, Pageable pageable);
 
