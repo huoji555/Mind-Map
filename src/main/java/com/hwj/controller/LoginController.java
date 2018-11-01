@@ -53,7 +53,7 @@ public class LoginController {
 	 * @throws IOException
 	 */
 	@PostMapping("/register")
-	public ResultBean<Map<String, Object>> register(@RequestBody String requestJsonBody, HttpServletRequest request) throws IOException {
+	public ResultBean<Map<String, Object>> register(@RequestBody String requestJsonBody, HttpServletRequest request) throws Exception {
 		
 		Map<String, Object> map = jsonAnalyze.json2Map(requestJsonBody);
 		Map<String, Object> result = Maps.newHashMap();
@@ -106,6 +106,7 @@ public class LoginController {
         admin1.setCreateDate(createDate);
         
         adminService.save(admin1);
+        saveLoginRecord(userName,2,request);
         
         HttpSession session = request.getSession();
         session.setAttribute("admin", userName);
@@ -163,13 +164,7 @@ public class LoginController {
         session.setAttribute("roleId",roleId);
         session.setMaxInactiveInterval(6*60*200);
 
-        LoginRecord loginRecord = new LoginRecord();
-        loginRecord.setIp(getClientIp(request));
-        loginRecord.setLoginTime(currentDate);
-        loginRecord.setUsername(username);
-        loginRecord.setRoleId(roleId);
-
-        loginRecordService.save(loginRecord);
+        saveLoginRecord(username,roleId,request);
 
         result.put("status",200);
         result.put("message","登录成功");      //登录成功后，需要判断他的权限（同时加个session）
@@ -377,5 +372,22 @@ public class LoginController {
 
 
 
-	
+    /**
+     * @auther: Ragty
+     * @describe: 保存用户登录信息
+     * @param: [username, roleId, request]
+     * @return: void
+     * @date: 2018/11/1
+     */
+    public void saveLoginRecord (String username, Integer roleId, HttpServletRequest request) throws Exception{
+
+	    LoginRecord loginRecord = new LoginRecord();
+	    loginRecord.setUsername(username);
+	    loginRecord.setRoleId(roleId);
+	    loginRecord.setIp(getClientIp(request));
+	    loginRecord.setLoginTime(new Date());
+
+	    loginRecordService.save(loginRecord);
+    }
+
 }
