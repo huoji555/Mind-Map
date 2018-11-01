@@ -1,0 +1,114 @@
+<!-- 查询组 -->
+<div class="row">
+    <div class="form-group col-sm-5">
+        <input type="text" class="form-control" placeholder="起始日期" id="firstDate"/>
+    </div>
+    <div class="form-group col-sm-5">
+        <input type="text" class="form-control" placeholder="截止日期" id="lastDate"/>
+    </div>
+    <div class="form-group col-sm-2">
+        <button type="button" class="btn btn-primary" ng-click="pagenation(0,20)">查询</button>
+    </div>
+</div>
+
+
+<!-- 展示组 -->
+<table class='table table-responsive-xl table-striped table-bordered table-hover'>
+    <thead><th>用户IP</th><th>方法类型</th><th>方法名称</th><th>类名</th><th>请求地址</th><th>创建时间</th><th>操作</th></thead>
+    <tr ng-repeat="list in lists">
+        <td>{{list.adminIp}}</td>
+        <td ng-if="list.method_type == 'POST'"><a class="badge badge-warning" style="cursor: pointer">POST</a></td>
+        <td ng-if="list.method_type == 'GET'"><a class="badge badge-info" style="cursor: pointer">GET</a></td>
+        <td>{{list.method_name}}</td>
+        <td>{{list.controller_name}}</td>
+        <td>{{list.url}}</td>
+        <td>{{list.create_time | date: "yyyy-MM-dd HH:mm:ss"}}</td>
+        <td>
+            <a ng-click="detailInfo(list.adminIp,list.params,list.error_msg,list.url,list.create_time)"
+               data-target="#exceptionModal" data-toggle="modal" class="badge badge-secondary" style="cursor: pointer">详情</a>
+        </td>
+    </tr>
+</table>
+
+
+
+<!--分页底部-->
+<ul class="pagination justify-content-center">
+    <li class="page-item">
+        <a class="page-link" ng-click="page(currPage,'first')" disabled="disabled">
+            <span aria-hidden="true">首页</span>
+        </a>
+    </li>
+    <li class="page-item"><a class="page-link" ng-click="page(currPage,'up')">上一页</a></li>
+    <li class="page-item"><a class="page-link" ng-click="page(currPage,'next')">下一页</a></li>
+    <li class="page-item">
+        <a class="page-link" ng-click="page(pages,'last');" aria-label="Next">
+            <span aria-hidden="true">末页</span>
+        </a>
+    </li>
+    <li style="margin-top: 0.6%; margin-left: 5%;">
+        <span>第{{currPage+1}}页</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>共{{pages}}页</span>
+    </li>
+</ul>
+
+
+
+<!--模态框-->
+<div class="modal fade" id="exceptionModal" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog modal-warning modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">详细信息</h4>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="col">
+                    <div class="form-group col-sm-3">
+                        <label class="badge badge-success">用户IP</label>
+                        <div>{{excMsgIP}}</div>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label class="badge badge-light">请求时间</label>
+                        <div>{{excMsgTime | date: "yyyy-MM-dd HH:mm:ss"}}</div>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label class="badge badge-warning">请求地址</label>
+                        <div>{{excMsgUrl}}</div>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label class="badge badge-info">请求参数</label>
+                        <div>{{excMsgParams}}</div>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label class="badge badge-danger">异常信息</label>
+                        <div>{{excMsgErrorMsg}}</div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<!-- 日历脚本 -->
+<script>
+
+    laydate.render({
+        elem: '#firstDate',
+        theme: '#393D49'
+    });
+
+    laydate.render({
+        elem: '#lastDate',
+        theme: '#393D49'
+    });
+
+</script>

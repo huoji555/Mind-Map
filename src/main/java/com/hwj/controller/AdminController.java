@@ -2,8 +2,10 @@ package com.hwj.controller;
 
 import com.google.common.collect.Maps;
 import com.hwj.entity.Admin;
+import com.hwj.entity.AdminErrorMsg;
 import com.hwj.entity.LoginRecord;
 import com.hwj.repository.AdminRepository;
+import com.hwj.service.AdminErrorMsgService;
 import com.hwj.service.AdminService;
 import com.hwj.service.LoginRecordService;
 import com.hwj.util.ResultBean;
@@ -32,6 +34,8 @@ public class AdminController {
     private AdminService adminService;
     @Autowired
     private LoginRecordService loginRecordService;
+    @Autowired
+    private AdminErrorMsgService adminErrorMsgService;
 
 
     /**
@@ -122,6 +126,38 @@ public class AdminController {
         }
 
         Page<LoginRecord> list = loginRecordService.queryLoginRecordByDate(firstDate, lastDate, pageable);
+        return new ResultBean<>(list);
+    }
+
+
+
+    /**
+     * @auther: Ragty
+     * @describe: 查询异常信息
+     * @param: [firstDate1, lastDate1, page, size, request]
+     * @return: com.hwj.util.ResultBean<org.springframework.data.domain.Page<com.hwj.entity.AdminErrorMsg>>
+     * @date: 2018/11/1
+     */
+    @PostMapping("/queryExpectionMsg")
+    public ResultBean<Page<AdminErrorMsg>> queryExceptionMsg(@RequestParam String firstDate1, @RequestParam String lastDate1,
+                                                             @RequestParam String page, @RequestParam String size,
+                                                             HttpServletRequest request) throws Exception{
+
+        Map<String,Object> result = Maps.newHashMap();
+
+        Sort sort = new Sort(Sort.Direction.DESC,"create_time");
+        Pageable pageable = new PageRequest(Integer.parseInt(page), Integer.parseInt(size), sort);
+
+        Date firstDate = null;
+        Date lastDate = null;
+
+        if (firstDate1 != "" && lastDate1 != "") {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            firstDate = sdf.parse(firstDate1);
+            lastDate =sdf.parse(lastDate1);
+        }
+
+        Page<AdminErrorMsg> list = adminErrorMsgService.pageException(firstDate,lastDate,pageable);
         return new ResultBean<>(list);
     }
 
