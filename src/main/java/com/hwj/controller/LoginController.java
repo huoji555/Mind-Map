@@ -3,6 +3,7 @@ package com.hwj.controller;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +12,8 @@ import java.util.Random;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.hwj.entity.LoginRecord;
+import com.hwj.service.LoginRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +31,8 @@ public class LoginController {
 
 	@Autowired
 	private AdminService adminService;
+	@Autowired
+    private LoginRecordService loginRecordService;
 	@Autowired
 	private MD5Util md5Util;
 	@Autowired
@@ -126,7 +131,7 @@ public class LoginController {
      * @return
      */
 	@PostMapping("/login")
-    public ResultBean<Map<String,Object>> login(@RequestBody Admin admin, HttpServletRequest request) {
+    public ResultBean<Map<String,Object>> login(@RequestBody Admin admin, HttpServletRequest request) throws Exception{
 
 	    Map<String,Object> result = Maps.newHashMap();
 	    String username = admin.getUsername();
@@ -151,11 +156,20 @@ public class LoginController {
         }
 
         int roleId = adminService.queryAdminByUsernameOrEmail(username,"").getRoleId();
+        Date currentDate = new Date();
 
         HttpSession session = request.getSession();
         session.setAttribute("admin", username);
         session.setAttribute("roleId",roleId);
         session.setMaxInactiveInterval(6*60*200);
+
+        LoginRecord loginRecord = new LoginRecord();
+        loginRecord.setIp(getClientIp(request));
+        loginRecord.setLoginTime(currentDate);
+        loginRecord.setUsername(username);
+        loginRecord.setRoleId(roleId);
+
+        loginRecordService.save(loginRecord);
 
         result.put("status",200);
         result.put("message","登录成功");      //登录成功后，需要判断他的权限（同时加个session）
