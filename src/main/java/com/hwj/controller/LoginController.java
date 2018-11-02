@@ -14,16 +14,13 @@ import javax.servlet.http.HttpSession;
 
 import com.hwj.entity.LoginRecord;
 import com.hwj.service.LoginRecordService;
+import com.hwj.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.google.common.collect.Maps;
 import com.hwj.entity.Admin;
 import com.hwj.service.AdminService;
-import com.hwj.util.JsonAnalyze;
-import com.hwj.util.MD5Util;
-import com.hwj.util.ResultBean;
-import com.hwj.util.SendMail;
 
 @RestController
 @RequestMapping("/login")
@@ -34,7 +31,7 @@ public class LoginController {
 	@Autowired
     private LoginRecordService loginRecordService;
 	@Autowired
-	private MD5Util md5Util;
+    private PBKDF2Util pbkdf2Util;
 	@Autowired
 	private JsonAnalyze jsonAnalyze;
 	@Autowired
@@ -97,13 +94,16 @@ public class LoginController {
         }catch (Exception e){
             e.printStackTrace();
         }
-        
+
+        String salt = pbkdf2Util.generateSalt();   //加盐
+
         admin1.setUsername(userName);
-        admin1.setPassword(md5Util.digest(password));
+        admin1.setPassword(pbkdf2Util.getEncryptedPassword(password,salt));    //慢哈希比较
         admin1.setEmail(email);
         admin1.setRoleId(2);
         admin1.setIp(ip);
         admin1.setCreateDate(createDate);
+        admin1.setSalt(salt);
         
         adminService.save(admin1);
         saveLoginRecord(userName,2,request);
@@ -136,12 +136,16 @@ public class LoginController {
 
 	    Map<String,Object> result = Maps.newHashMap();
 	    String username = admin.getUsername();
-	    String password = md5Util.digest(admin.getPassword());
+	    String password = admin.getPassword();
 	    String email = admin.getEmail();
 
         if (email != null) {
             username = adminService.queryAdminByUsernameOrEmail("",email).getUsername();
         }
+
+        Admin admin1 = adminService.queryAdminByUsernameOrEmail(username,"");
+        String salt = admin1.getSalt();
+        password = pbkdf2Util.getEncryptedPassword(password,salt);
 
 	    int a = 0;
 	    a = adminService.hasMatchAdmin(username,password);
@@ -156,7 +160,7 @@ public class LoginController {
             return new ResultBean<Map<String,Object>>(result);
         }
 
-        int roleId = adminService.queryAdminByUsernameOrEmail(username,"").getRoleId();
+        int roleId = admin1.getRoleId();
         Date currentDate = new Date();
 
         HttpSession session = request.getSession();
@@ -241,17 +245,19 @@ public class LoginController {
      */
     @GetMapping("/updatePwd")
     public ResultBean<Map<String,Object>> updatePwd(@RequestParam String orignalPwd, @RequestParam String newPwd,
-                                                    HttpServletRequest request) {
+                                                    HttpServletRequest request) throws Exception{
 
         Map<String,Object> result = Maps.newHashMap();
         HttpSession session = request.getSession();
         String adminId = String.valueOf(session.getAttribute("admin"));
 
         Admin admin = adminService.queryAdminByUsernameOrEmail(adminId,"");
+        String salt = admin.getSalt();
+        String password = pbkdf2Util.getEncryptedPassword(orignalPwd.trim(),salt);
         String ip = "";
         int a = 0;
 
-        a = adminService.hasMatchAdmin(adminId, md5Util.digest(orignalPwd.trim()));
+        a = adminService.hasMatchAdmin(adminId,password);
 
         if (a == 2) {
             result.put("status",201);
@@ -265,7 +271,10 @@ public class LoginController {
             e.printStackTrace();
         }
 
-        admin.setPassword(md5Util.digest(newPwd));
+        String newSalt = pbkdf2Util.generateSalt();
+
+        admin.setPassword(pbkdf2Util.getEncryptedPassword(newPwd.trim(),newSalt));
+        admin.setSalt(newSalt);
         adminService.save(admin);
 
         result.put("status",200);

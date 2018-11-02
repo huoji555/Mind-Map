@@ -46,7 +46,7 @@ function RegsiterController($scope,$http,$window,$rootScope,$timeout) {
                 var msg = response.data.data.message;
 
                 if (status == 200){
-                	alert("注册成功");
+                	alert("普通用户");
                     $window.location.href = "index.html";
                 } else if (status == 201) {
                     alert(msg);

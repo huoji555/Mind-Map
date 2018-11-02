@@ -23,9 +23,9 @@
         <td ng-if="list.roleId == 0"><a class="badge badge-danger" style="cursor: pointer">超级管理员</a></td>
         <td ng-if="list.roleId == 1"><a class="badge badge-success" style="cursor: pointer">管理员</a></td>
         <td ng-if="list.roleId == 2"><a class="badge badge-warning" style="cursor: pointer">普通用户</a></td>
-        <td ng-if="roleId >= list.roleId "><a class="badge badge-info" style="cursor: no-drop" disabled>无法授权</a></td>
+        <td ng-if="roleId >= list.roleId "><a class="badge badge-secondary" style="cursor: no-drop" disabled>无法授权</a></td>
         <td ng-if="roleId < list.roleId ">
-            <a data-target="#authorize" data-toggle="modal" ng-click="getAuthorizeInfo(list.username,list.roleId)" class="badge badge-info" style="cursor: pointer">授权</a>
+            <a data-target="#authorize" data-toggle="modal" ng-click="getAuthorizeInfo(list.username,list.roleId)" class="badge badge-secondary" style="cursor: pointer">授权</a>
         </td>
     </tr>
 </table>

@@ -24,8 +24,10 @@ public class Admin implements Serializable{
     private Integer roleId;
     private Date createDate;
 	private String ip;
+	private String salt;
 
-    @Id
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getId() {return id;}
 	public void setId(Integer id) {this.id = id;}
@@ -53,5 +55,9 @@ public class Admin implements Serializable{
 	@Column(name = "ip")
 	public String getIp() {return ip;}
 	public void setIp(String ip) {this.ip = ip;}
+
+	@Column(name = "salt")
+	public String getSalt() { return salt; }
+	public void setSalt(String salt) { this.salt = salt; }
     
 }

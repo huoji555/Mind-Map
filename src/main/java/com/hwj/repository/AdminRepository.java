@@ -16,7 +16,7 @@ public interface AdminRepository extends PagingAndSortingRepository<Admin, Strin
 
 	Admin queryAdminByUsernameAndPassword(String username, String password);
 
-	@Query( value = "select id, username, null as password, email, ip, create_date, role_id from admin " +
+	@Query( value = "select id, username, null as password, null as salt, email, ip, create_date, role_id from admin " +
 			        "where 1=1 " +
 			        "and (case when :firstDate != '' and :lastDate != '' then create_date between :firstDate and :lastDate else 1=1 end ) " +
 			        "order by ?#{#pageable}",
