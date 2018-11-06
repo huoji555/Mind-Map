@@ -144,8 +144,12 @@ public class LoginController {
         }
 
         Admin admin1 = adminService.queryAdminByUsernameOrEmail(username,"");
-        String salt = admin1.getSalt();
-        password = pbkdf2Util.getEncryptedPassword(password,salt);
+        String salt = null;
+
+        if (admin1 != null) {
+            salt = admin1.getSalt();
+            password = pbkdf2Util.getEncryptedPassword(password,salt);
+        }
 
 	    int a = 0;
 	    a = adminService.hasMatchAdmin(username,password);
