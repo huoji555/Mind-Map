@@ -2237,7 +2237,7 @@
   height: 32px;
   margin: 0 10px 10px 0;
 }
-.messager-error {
+/*.messager-error {
   background: url('images/messager_icons.png') no-repeat scroll -64px 0;
 }
 .messager-info {
@@ -2248,16 +2248,16 @@
 }
 .messager-warning {
   background: url('images/messager_icons.png') no-repeat scroll -96px 0;
-}
+}*/
 .messager-progress {
-  padding: 10px;
+  padding: 5px;
 }
 .messager-p-msg {
   margin-bottom: 5px;
 }
 .messager-body .messager-input {
   width: 100%;
-  padding: 1px 0;
+  padding: 2px 0;
   border: 1px solid #95B8E7;
 }
 .tree {
