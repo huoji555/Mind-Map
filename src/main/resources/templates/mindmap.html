@@ -29,6 +29,19 @@
         </ul>
     </div>
 
+    <!-- 右键菜单 -->
+    <div id="mm" class="easyui-menu" style="width:120px; height:auth;" hidden="hidden">
+    <div data-options="iconCls:'icon-pencil'" onClick="add_node2()" style="height:15px;padding:5px 0;">新建子标签</div>
+    <div data-options="iconCls:'icon-wrench'" onClick="modify_node()" style="height:15px;padding:5px 0;" >修改标签名</div>
+    <div class="menu-sep"></div>
+    <div data-options="iconCls:'icon-trash'" onclick="deleteNodeByBatch()" style="height:15px;padding:5px 0;">删除该标签</div>
+    <div class="menu-sep"></div>
+    <div data-options="iconCls:'icon-map'" onclick="open_zijiedian()" style="height:15px;padding:5px 0;">显示子节点</div>
+    <div class="menu-sep"></div>
+    <div data-options="iconCls:'icon-graph'" onclick="open_mindnode2()" style="height:15px;padding:5px 0;">显示完整图</div>
+    </div>
+    <span class="icon-"></span>
+
     <!-- 图谱加载框 -->
     <div id="main-container"></div>
     <div id="jsmind_container" style="width:95%;margin-left:55px;height:600px;"></div>
@@ -45,7 +58,6 @@
     <script type="text/javascript" src="js/angular.min.js"></script>
     <script type="text/javascript" src="js/angular-route.js"></script>
     <script type="text/javascript" src="js/private/mind/mind.js"></script>
-
 
 
 </body>

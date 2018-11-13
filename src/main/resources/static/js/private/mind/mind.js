@@ -19,9 +19,8 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
             editable : true
         }
         jm = new jsMind(options);
-        //jm.show(mind);
+        jm.show(mind);
     }
-
     $scope.open_empty();
 
     //新建图谱
@@ -47,10 +46,22 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
         })
     }
 
+
+
 });
 
 
 function MindController($scope,$http,$window,$rootScope) {
 
-
 }
+
+$(function () {
+    $("jmnode").on('contextmenu', function(e) {
+        e.preventDefault();
+        $('#mm').menu('show', { //菜单EasyUI
+            left : e.pageX,
+            top : e.pageY,
+            hideOnUnhover : false
+        });
+    });
+});

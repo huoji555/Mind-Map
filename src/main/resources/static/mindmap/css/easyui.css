@@ -2025,7 +2025,7 @@
 }
 .menu-text {
   height: 20px;
-  line-height: 20px;
+  /*line-height: 20px;*/
   float: left;
   padding-left: 28px;
 }
