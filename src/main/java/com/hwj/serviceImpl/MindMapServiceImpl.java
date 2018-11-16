@@ -81,6 +81,18 @@ public class MindMapServiceImpl implements MindMapService {
 
     /**
      * @auther: Ragty
+     * @describe: 根据mapid查询实体
+     * @param: [mapid]
+     * @return: com.hwj.entity.MindMap
+     * @date: 2018/11/16
+     */
+    @Override
+    public MindMap queryMindByMapid(String mapid) { return mindMapRepository.queryMindMapByMapid(mapid); }
+
+
+
+    /**
+     * @auther: Ragty
      * @describe: 移除对象转换后的非法符号(工具方法)
      * @param: [datas]
      * @return: java.lang.String
@@ -97,5 +109,7 @@ public class MindMapServiceImpl implements MindMapService {
 
         return datas;
     }
+
+
 
 }

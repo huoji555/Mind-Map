@@ -12,4 +12,6 @@ public interface MindMapService {
 
     String openMind (List<MindNode> list);
 
+    MindMap queryMindByMapid(String mapid);
+
 }

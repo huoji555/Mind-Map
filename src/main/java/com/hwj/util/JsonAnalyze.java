@@ -1,8 +1,10 @@
 package com.hwj.util;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hwj.vo.MindNode;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -70,7 +72,6 @@ public class JsonAnalyze {
 	}
 
 	// 将Map数据转换成JSON数据
-
 	public String map2Json(Map<String, Object> map) throws IOException {
 		String json = new String();
 		try {
@@ -84,7 +85,6 @@ public class JsonAnalyze {
 	}
 
 	// 将List<Map>数据转换成JSON数据
-
 	public String Listmap2Json(List<Map<String, String>> maps)
 			throws IOException {
 		String json = new String();
@@ -131,6 +131,20 @@ public class JsonAnalyze {
 			e.printStackTrace();
 		}
 		return json;
+	}
+
+	// 将String转换为list<MindNode>
+	public  List<MindNode>  parseList(String str) throws Exception{
+
+		List<MindNode> mindList = null;
+		try {
+			mindList = objectMapper.readValue(str, new TypeReference<List<MindNode>>(){});
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+
+		return mindList;
 	}
 
 
