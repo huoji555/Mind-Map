@@ -11,6 +11,7 @@ public class MindMap implements Serializable {
     private static final long serialVersionUID = -4169287576837116459L;
     private Integer id;
     private String mapid;          //图谱ID
+    private String mapname;        //图谱名称
     private String userid;         //图谱作者
     private String mapList;        //图谱数据(内容)
     private Date createDate;       //创建时间
@@ -25,6 +26,10 @@ public class MindMap implements Serializable {
     @Column(name = "mapid")
     public String getMapid() { return mapid; }
     public void setMapid(String mapid) { this.mapid = mapid; }
+
+    @Column(name = "mapname")
+    public String getMapname() { return mapname; }
+    public void setMapname(String mapname) { this.mapname = mapname; }
 
     @Column(name = "userid")
     public String getUserid() { return userid; }

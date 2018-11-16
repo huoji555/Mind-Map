@@ -63,6 +63,7 @@ public class MindMapController {
 
         MindMap mindMap = new MindMap();
         mindMap.setMapid(mapid);
+        mindMap.setMapname(nodeName);
         mindMap.setMapList(jsonAnalyze.list2Json(mapList));
         mindMap.setUserid(adminId);
         mindMap.setCreateDate(new Date());
@@ -130,6 +131,61 @@ public class MindMapController {
     }
 
 
+
+    /**
+     * @auther: Ragty
+     * @describe: 修改节点名称
+     * @param: [nodeid, nodename, mapid, request]
+     * @return: com.hwj.util.ResultBean<java.util.Map<java.lang.String,java.lang.Object>>
+     * @date: 2018/11/16
+     */
+    @PostMapping("/modifyNode")
+    public ResultBean<Map<String,Object>> modifyNode(@RequestParam String nodeid, @RequestParam String nodename,
+                                                     @RequestParam String mapid, HttpServletRequest request) throws Exception{
+
+        Map<String,Object> result = Maps.newHashMap();
+        HttpSession session = request.getSession();
+        String adminId = String.valueOf(session.getAttribute("admin"));
+
+
+        if (adminId.equals("null") || adminId == "null") {
+            result.put("status",201);
+            result.put("message","登录超时");
+            return new ResultBean<>(result);
+        }
+
+        MindMap mindMap = mindMapService.queryMindByMapid(mapid);
+        String mindUser = mindMap.getUserid();
+        String mapList = mindMap.getMapList();
+
+        if (!adminId.equals(mindUser)){
+            result.put("status",201);
+            result.put("message","不是您的图");
+            return new ResultBean<>(result);
+        }
+
+        List<MindNode> list = jsonAnalyze.parseList(mapList);
+
+        for (int i=0; i<list.size(); i++) {
+            MindNode mindNode = list.get(i);
+
+            if (mindNode.getId().equals(nodeid)){
+                mindNode.setTopic(nodename);
+                list.set(i,mindNode);
+            }
+        }
+
+        //if it's roottid ,modify the mapname
+        if (mapid.equals(nodeid)) { mindMap.setMapname(nodename); }
+
+        mindMap.setMapList(jsonAnalyze.list2Json(list));
+        mindMap.setUpdateDate(new Date());
+        mindMapService.save(mindMap);
+
+        result.put("status",200);
+        result.put("message","修改成功");
+        return new ResultBean<>(result);
+    }
 
 
 
