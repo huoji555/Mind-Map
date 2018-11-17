@@ -102,9 +102,18 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
                 jm.update_node(selected_id,r);
 
                 $http.post('/mindmap/modifyNode?nodeid='+selected_id+'&nodename='+r+'&mapid='+mapid).
-                        then(function (response) {
-                            alert("test success");
-                        });
+                    then(function (response) {
+
+                        var status = response.data.data.status;
+                        var msg = response.data.data.message;
+
+                        if (status == 200) {
+                            console.log(msg);
+                        } else if (status == 201) {
+                            alert(msg);
+                        }
+
+                    });
             }
         },""+selected_name+"");
 

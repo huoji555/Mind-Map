@@ -164,14 +164,15 @@ public class MindMapController {
             return new ResultBean<>(result);
         }
 
+        //use the ListIterator (iterator update)
         List<MindNode> list = jsonAnalyze.parseList(mapList);
 
-        for (int i=0; i<list.size(); i++) {
-            MindNode mindNode = list.get(i);
+        for (ListIterator<MindNode> it = list.listIterator(); it.hasNext();) {
+            MindNode mindNode =  it.next();
 
             if (mindNode.getId().equals(nodeid)){
                 mindNode.setTopic(nodename);
-                list.set(i,mindNode);
+                it.set(mindNode);
             }
         }
 
