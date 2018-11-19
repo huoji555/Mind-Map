@@ -49,10 +49,7 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
     //右键菜单---新建子标签
     $scope.addNode = function () {
         
-        $.messager.defaults = {
-            ok : "是",
-            cancel : "否"
-        };
+        $.messager.defaults = {ok : "是", cancel : "否"};
         
         $.messager.prompt('新增子标签','请输入子标签名称',function (options) {
 
@@ -87,13 +84,10 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
     //右键菜单---修改子标签
     $scope.modifyNode = function () {
 
-        $.messager.defaults = {
-            ok : "是",
-            cancel : "否"
-        };
-
         var selected_id = get_selected_nodeid();
         var selected_name = get_selected_nodeName();
+        $.messager.defaults = {ok : "是", cancel : "否"};
+
         $.messager.prompt('编辑标签','请输入新的标签名',function (options) {
 
             var r = loap(options);
@@ -116,6 +110,43 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
                     });
             }
         },""+selected_name+"");
+
+    }
+    
+    //右键菜单---删除节点
+    $scope.deleteNode = function () {
+
+        $.messager.defaults = {ok : "是", cancel : "否"};
+
+        $.messager.confirm("操作提示", "您确定要执行操作吗？", function(r) {
+
+            if (r) {
+                var selected_node = jm.get_selected_node();
+                var selected_id = get_selected_nodeid();
+
+                if(selected_ifRoot()){
+                    //fresh page
+                    $window.location.reload();
+                } else {
+                    jm.remove_node(selected_node);
+                }
+
+                $http.post('/mindmap/deleteNode?nodeid='+selected_id+'&mapid='+mapid).then(function (response) {
+
+                    var status = response.data.data.status;
+                    var msg = response.data.data.message;
+
+                    if (status == 200) {
+                        console.log(msg);
+                    } else if (status == 201) {
+                        alert(msg);
+                    }
+
+                })
+
+            }
+
+        });
 
     }
 

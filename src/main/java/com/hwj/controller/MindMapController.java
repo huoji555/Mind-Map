@@ -190,4 +190,63 @@ public class MindMapController {
 
 
 
+
+    /**
+     * @auther: Ragty
+     * @describe: 删除节点
+     * @param: [nodeid, mapid, request]
+     * @return: com.hwj.util.ResultBean<java.util.Map<java.lang.String,java.lang.Object>>
+     * @date: 2018/11/17
+     */
+    @PostMapping("/deleteNode")
+    public ResultBean<Map<String,Object>> deleteNode(@RequestParam String nodeid, @RequestParam String mapid,
+                                                     HttpServletRequest request) throws Exception{
+
+        Map<String,Object> result = Maps.newHashMap();
+        HttpSession session = request.getSession();
+        String adminId = String.valueOf(session.getAttribute("admin"));
+
+        if (adminId.equals("null") || adminId == "null") {
+            result.put("status",201);
+            result.put("message","登录超时");
+            return new ResultBean<>(result);
+        }
+
+        if (nodeid.equals(mapid)) {
+            mindMapService.deleteMap(mapid);
+            result.put("status",200);
+            result.put("message","删除成功");
+            return new ResultBean<>(result);
+        }
+
+        MindMap mindMap = mindMapService.queryMindByMapid(mapid);
+        String mindUser = mindMap.getUserid();
+        String mapList = mindMap.getMapList();
+
+        if (!adminId.equals(mindUser)){
+            result.put("status",201);
+            result.put("message","不是您的图");
+            return new ResultBean<>(result);
+        }
+
+        //获取自己以及之后的节点
+        List<MindNode> list = jsonAnalyze.parseList(mapList);
+        List<MindNode> storage = new ArrayList<>();
+
+        //之后是循环操作这个，删除每个节点上的数据
+        List<MindNode> delList = mindMapService.getChild(list,nodeid,storage);
+
+        List<MindNode> delAfter = mindMapService.getNope(delList,list);
+
+        mindMap.setMapList(jsonAnalyze.list2Json(delAfter));
+        mindMap.setUpdateDate(new Date());
+        mindMapService.save(mindMap);
+
+        result.put("status",200);
+        result.put("message","删除成功");
+        return new ResultBean<>(result);
+
+    }
+
+
 }

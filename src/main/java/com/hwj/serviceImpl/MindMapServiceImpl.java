@@ -26,6 +26,20 @@ public class MindMapServiceImpl implements MindMapService {
 
 
 
+
+    /**
+     * @auther: Ragty
+     * @describe: 删除方法
+     * @param: [mapid]
+     * @return: void
+     * @date: 2018/11/17
+     */
+    @Override
+    public void deleteMap(String mapid) { mindMapRepository.deleteMindMapByMapid(mapid); }
+
+
+
+
     /**
      * @auther: Ragty
      * @describe: 打开知识图谱(返回可供前端显示的JOSN数据)
@@ -89,6 +103,89 @@ public class MindMapServiceImpl implements MindMapService {
     @Override
     public MindMap queryMindByMapid(String mapid) { return mindMapRepository.queryMindMapByMapid(mapid); }
 
+
+
+
+    /**
+     * @auther: Ragty
+     * @describe: 获取所选子节点后的子节点
+     * @param: [list, nodeid, storage]
+     * @return: java.util.List<com.hwj.vo.MindNode>
+     * @date: 2018/11/19
+     */
+    @Override
+    public List<MindNode> getChild(List<MindNode> list, String nodeid, List<MindNode> storage) {
+
+        judgeHaveChild(list, nodeid, storage);
+
+        for (ListIterator<MindNode> it = list.listIterator(); it.hasNext();) {
+            MindNode mindNode = it.next();
+            if (mindNode.getId().equals(nodeid)) {
+                storage.add(mindNode);
+            }
+        }
+
+        return storage;
+    }
+
+
+
+
+    /**
+     * @auther: Ragty
+     * @describe: 获取子节点工具(not contain select_node)
+     * @param: [list, nodeid, storage]
+     * @return: java.util.List<com.hwj.vo.MindNode>
+     * @date: 2018/11/19
+     */
+    private List<MindNode> judgeHaveChild(List<MindNode> list, String nodeid, List<MindNode> storage){
+
+        String parentid = null;
+
+        for(Iterator it = list.iterator(); it.hasNext();){
+            MindNode mindNode = (MindNode) it.next();
+            if(mindNode.getParentid().equals(nodeid)){
+                parentid = mindNode.getId();            //repeat too many times
+
+                try {
+                    if( !parentid.equals(null) ){
+                        judgeHaveChild(list, parentid, storage);
+                    }
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
+
+                storage.add(mindNode);
+            }
+        }
+
+        return storage;
+    }
+
+
+
+
+    /**
+     * @auther: Ragty
+     * @describe: 获取删除后所剩的数据
+     * @param: [less, more]
+     * @return: java.util.List<com.hwj.vo.MindNode>
+     * @date: 2018/11/19
+     */
+    public List<MindNode> getNope(List<MindNode> less, List<MindNode> more ){
+
+        Set<MindNode> les = new HashSet<MindNode>(less);
+        Set<MindNode> mor = new HashSet<MindNode>(more);
+        List<MindNode> target = new ArrayList<MindNode>();
+
+        Iterator<MindNode> it = mor.iterator();
+
+        while (it.hasNext()) {
+            MindNode mind = it.next();
+            if( les.add(mind) ) { target.add(mind); }
+        }
+        return target;
+    }
 
 
     /**
