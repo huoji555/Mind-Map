@@ -12,7 +12,7 @@ public interface MindMapService {
 
     void deleteMap(String mapid);
 
-    String openMind (List<MindNode> list);
+    String openMind (List<MindNode> list, String fakeRoot);
 
     MindMap queryMindByMapid(String mapid);
 

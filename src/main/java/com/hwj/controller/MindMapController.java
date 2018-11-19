@@ -72,7 +72,7 @@ public class MindMapController {
         mindMapService.save(mindMap);
 
         result.put("status", 200);
-        result.put("datas", mindMapService.openMind(mapList));
+        result.put("datas", mindMapService.openMind(mapList,null));
         result.put("mapid", mapid);
 
         return new ResultBean<>(result);
@@ -247,6 +247,44 @@ public class MindMapController {
         return new ResultBean<>(result);
 
     }
+
+
+
+
+    /**
+     * @auther: Ragty
+     * @describe: 显示子节点
+     * @param: [nodeid, mapid]
+     * @return: com.hwj.util.ResultBean<java.util.Map<java.lang.String,java.lang.Object>>
+     * @date: 2018/11/19
+     */
+    @PostMapping("/getChildMap")
+    public ResultBean<Map<String,Object>> getChildMap(@RequestParam String nodeid,
+                                                      @RequestParam String mapid) throws Exception{
+
+        Map<String,Object> result = Maps.newHashMap();
+
+        MindMap mindMap = mindMapService.queryMindByMapid(mapid);
+        String mapList = mindMap.getMapList();
+
+        List<MindNode> list = jsonAnalyze.parseList(mapList);
+        List<MindNode> storage = new ArrayList<>();
+        List<MindNode> childList = mindMapService.getChild(list,nodeid,storage);
+        String parentid = null;
+
+        for (Iterator<MindNode> it = childList.iterator(); it.hasNext();) {
+            MindNode mindNode = it.next();
+
+            if ( mindNode.getId().equals(nodeid) ) {
+                parentid = mindNode.getParentid();
+            }
+        }
+
+        result.put("status", 200);
+        result.put("datas", mindMapService.openMind(childList,parentid));
+        return new ResultBean<>(result);
+    }
+
 
 
 }

@@ -48,10 +48,14 @@ public class MindMapServiceImpl implements MindMapService {
      * @date: 2018/11/12
      */
     @Override
-    public String openMind(List<MindNode> list) {
+    public String openMind(List<MindNode> list, String fakeRoot) {
 
         Map<String,Object> data = Maps.newHashMap();
         Map<String,Object> meta = Maps.newHashMap();
+
+        if ( fakeRoot == null ) {
+            fakeRoot = "00100";
+        }
 
         meta.put("name", "jsMind remote");
         meta.put("author", "hizzgdev@163.com");
@@ -59,7 +63,8 @@ public class MindMapServiceImpl implements MindMapService {
 
         HashMap nodeList = new HashMap();
         for (int i = 0; i<list.size(); i++) {
-            MindNode mindNode = list.get(i);
+            MindNode mindNode = new MindNode();
+            mindNode = list.get(i);
             nodeList.put(mindNode.getId(),mindNode);
         }
 
@@ -69,7 +74,7 @@ public class MindMapServiceImpl implements MindMapService {
         for (Iterator it = entrySet.iterator();it.hasNext();){
             MindNode node = (MindNode) ( (Map.Entry) it.next()).getValue();
 
-            if ( (node.getParentid() == null) || (node.getParentid() == "00100") ) {
+            if ( (node.getParentid() == null) || (node.getParentid() == "00100") || (node.getParentid() == fakeRoot) ) {
                 root = node;
             } else {
                 try {
@@ -167,7 +172,7 @@ public class MindMapServiceImpl implements MindMapService {
 
     /**
      * @auther: Ragty
-     * @describe: 获取删除后所剩的数据
+     * @describe: 获取删除后所剩的数据 O(1)
      * @param: [less, more]
      * @return: java.util.List<com.hwj.vo.MindNode>
      * @date: 2018/11/19
