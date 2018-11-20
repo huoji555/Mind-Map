@@ -170,6 +170,25 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
 
     }
 
+    //右键菜单---显示完整图谱
+    $scope.openMap = function () {
+
+        $http.post('/mindmap/openMap?mapid='+mapid).then(function (response) {
+
+            var status = response.data.data.status;
+
+            if (status == 200) {
+                var datas = eval('('+ response.data.data.datas +')');
+                mapid = response.data.data.mapid;
+                jm.show(datas);
+            } else {
+                alert("服务器异常");
+            }
+
+        })
+
+    }
+
 
     //特殊字符转义(解决建立新标签的问题)
     function loap(options){

@@ -287,4 +287,30 @@ public class MindMapController {
 
 
 
+
+
+    /**
+     * @auther: Ragty
+     * @describe: 打开完整图谱
+     * @param: [mapid]
+     * @return: com.hwj.util.ResultBean<java.util.Map<java.lang.String,java.lang.Object>>
+     * @date: 2018/11/20
+     */
+    @PostMapping("/openMap")
+    public ResultBean<Map<String,Object>> openMap(@RequestParam String mapid) throws Exception{
+
+        Map<String,Object> result = Maps.newHashMap();
+        MindMap mindMap = mindMapService.queryMindByMapid(mapid);
+
+        List<MindNode> list = jsonAnalyze.parseList(mindMap.getMapList());
+
+        result.put("status", 200);
+        result.put("datas", mindMapService.openMind(list,null));
+        result.put("mapid",mindMap.getMapid());
+        return new ResultBean<>(result);
+
+    }
+
+
+
 }

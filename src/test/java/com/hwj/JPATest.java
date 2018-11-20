@@ -1,5 +1,7 @@
 package com.hwj;
 
+import com.google.common.collect.Maps;
+import com.hwj.util.JsonAnalyze;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,10 @@ import com.hwj.entity.Admin;
 import com.hwj.repository.AdminRepository;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -22,7 +27,9 @@ public class JPATest {
 	
 	@Autowired
 	private AdminRepository adminRepository;
-	
+	@Autowired
+	private JsonAnalyze jsonAnalyze;
+
 	@Test
 	public void testJpa() throws Exception{
 		Admin admin = adminRepository.queryAdminByUsernameOrEmail("hwj23", "23");
@@ -38,6 +45,7 @@ public class JPATest {
 
 		System.out.println(list.toString());
 		System.out.println(list.getSize());
+
 
 	}
 }

@@ -74,7 +74,7 @@ public class MindMapServiceImpl implements MindMapService {
         for (Iterator it = entrySet.iterator();it.hasNext();){
             MindNode node = (MindNode) ( (Map.Entry) it.next()).getValue();
 
-            if ( (node.getParentid() == null) || (node.getParentid() == "00100") || (node.getParentid() == fakeRoot) ) {
+            if ( (node.getParentid().equals(null)) || (node.getParentid().equals("00100")) || (node.getParentid().equals(fakeRoot)) ) {
                 root = node;
             } else {
                 try {
