@@ -1,6 +1,8 @@
 package com.hwj;
 
 import com.google.common.collect.Maps;
+import com.hwj.entity.MindMap;
+import com.hwj.service.MindMapService;
 import com.hwj.util.JsonAnalyze;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +30,8 @@ public class JPATest {
 	@Autowired
 	private AdminRepository adminRepository;
 	@Autowired
+	private MindMapService mindMapService;
+	@Autowired
 	private JsonAnalyze jsonAnalyze;
 
 	@Test
@@ -37,11 +41,19 @@ public class JPATest {
 
 		Sort sort = new Sort(Sort.Direction.DESC,"create_date");
 		Pageable pageable = new PageRequest(1,3,sort);
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date firstDate = sdf.parse("2018-9-18");
-		Date lastDate =sdf.parse("2018-11-27");
 
-		Page<Admin> list = adminRepository.queryAdminsByDate(null,null,pageable);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date firstDate = sdf.parse("2018-11-19");
+		Date lastDate =sdf.parse("2018-11-20");
+
+		Sort sort1 = new Sort(Sort.Direction.DESC,"update_date");
+		Pageable pageable1 = new PageRequest(0,100,sort1);
+		//Page<Admin> list = adminRepository.queryAdminsByDate(null,null,pageable);
+		Page<MindMap> list = mindMapService.queryMindMapByPage("","",firstDate, lastDate, pageable1);
+
+		list.forEach(mindMap -> {
+			System.out.println(mindMap.getId()+"^^^"+mindMap.getUpdateDate());
+		});
 
 		System.out.println(list.toString());
 		System.out.println(list.getSize());
