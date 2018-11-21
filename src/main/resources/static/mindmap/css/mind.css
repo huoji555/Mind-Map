@@ -1,4 +1,4 @@
-/* 加载思维导图页面的css样式 */
+/* 加载思维导图页面的css样式(侧导航栏) */
 .l_nav{
     position:fixed;
     left:0;
@@ -34,7 +34,7 @@
     cursor:pointer;
 }
 
-/*背景表格样式*/
+/*背景样式*/
 .main-container{
     background: -webkit-linear-gradient(left, rgba(218, 189, 211, 0.72), #DAB69D, #B4CCC2, #91CCB6);
     background: -o-linear-gradient(left, rgba(218, 189, 211, 0.72), #DAB69D, #B4CCC2, #91CCB6);
@@ -44,4 +44,13 @@
 
 .table-hover > tbody > tr:hover {
     background-color: rgba(255, 255, 255, 0.23);
+}
+
+.link-style{
+    color: #337ab7;
+
+}
+.link-style:hover{
+    cursor: pointer;  /* 鼠标样式，手的形状 */
+    text-decoration: underline;   /* 文字的下划线 */
 }

@@ -1,7 +1,7 @@
 var mind = angular.module('mind',['ngRoute']);
 
 mind.config(['$routeProvider',function ($routeProvider) {
-    //$routeProvider.when('/',{templateUrl:"html/mind/mindContent.html",controller:MindController})
+    $routeProvider.when('/',{templateUrl:"html/mind/myMapContent.html",controller:myMapController})
 }]);
 
 
@@ -19,7 +19,7 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
             editable : true
         }
         jm = new jsMind(options);
-        jm.show(mind);
+        //jm.show(mind);
     }
     $scope.open_empty();
 
@@ -242,21 +242,66 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
 });
 
 
-function MindController($scope,$http,$window,$rootScope) {
+/*------------- 加载我的图谱 ---------------*/
+function myMapController($scope,$http,$window,$rootScope) {
+
+    var pageSize = 15;
+
+    $("#jsmind_container").hide();
+
+    $scope.pagenation = function (page,pageSzie) {
+
+        $http.get('mindmap/getMyMap?page='+page+'&size='+pageSzie)
+            .then(function (response) {
+                $scope.totalNum = response.data.data.totalElements;//数据总数
+                $scope.pages = response.data.data.totalPages;//页数
+                $scope.currPage = response.data.data.number;//当前页
+                $scope.isFirstPage = response.data.data.first;//是否是首页
+                $scope.isLastPage = response.data.data.last;//是否是尾页
+                $scope.lastUpPage = $scope.pages - 1;//倒数第二页
+                $scope.lists = response.data.data.content;
+            })
+
+    }
+
+    $scope.pagenation(0,pageSize);
+
+    $scope.page = function (page,oper) {
+
+        if(oper == 'first'){ //首页
+            $scope.pagenation(0,pageSize)
+        }
+        if(oper == 'up'){   //上一页
+            if (page == 0){
+                return;
+            }
+            $scope.pagenation(page-1,pageSize);
+        }
+        if(oper == 'next'){ //下一页
+            if (page == $scope.pages-1){
+                return;
+            }
+            $scope.pagenation(page+1,pageSize);
+        }
+        if (oper == 'last'){  //末页
+            $scope.pagenation(page-1,pageSize);
+        }
+    }
+
 
 }
 
 
-        //右键菜单
-        $(function () {
+//右键菜单
+$(function () {
 
-            $("jmnodes").on('contextmenu', function(e) {
-                e.preventDefault();
-                $('#mm').menu('show', { //菜单EasyUI
-                    left : e.pageX,
-                    top : e.pageY,
-                    hideOnUnhover : false
-                });
-            });
+    $("jmnodes").on('contextmenu', function(e) {
+        e.preventDefault();
+        $('#mm').menu('show', { //菜单EasyUI
+            left : e.pageX,
+            top : e.pageY,
+            hideOnUnhover : false
         });
+    });
+});
 

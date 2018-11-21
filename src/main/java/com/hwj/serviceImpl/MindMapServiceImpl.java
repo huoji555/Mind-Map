@@ -7,6 +7,8 @@ import com.hwj.service.MindMapService;
 import com.hwj.util.JsonAnalyze;
 import com.hwj.vo.MindNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -98,6 +100,7 @@ public class MindMapServiceImpl implements MindMapService {
 
 
 
+
     /**
      * @auther: Ragty
      * @describe: 根据mapid查询实体
@@ -107,6 +110,21 @@ public class MindMapServiceImpl implements MindMapService {
      */
     @Override
     public MindMap queryMindByMapid(String mapid) { return mindMapRepository.queryMindMapByMapid(mapid); }
+
+
+
+
+    /**
+     * @auther: Ragty
+     * @describe:多条件分页查询
+     * @param: [userid, mapname, firstDate, lastDate]
+     * @return: org.springframework.data.domain.Page<com.hwj.entity.MindMap>
+     * @date: 2018/11/20
+     */
+    @Override
+    public Page<MindMap> queryMindMapByPage(String userid, String mapname, Date firstDate, Date lastDate, Pageable pageable) {
+        return mindMapRepository.queryMindMapByPage(userid, mapname, firstDate, lastDate, pageable);
+    }
 
 
 
@@ -191,6 +209,9 @@ public class MindMapServiceImpl implements MindMapService {
         }
         return target;
     }
+
+
+
 
 
     /**

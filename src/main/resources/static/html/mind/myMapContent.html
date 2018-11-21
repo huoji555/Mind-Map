@@ -1,0 +1,16 @@
+<div style="width:95%;margin-left:55px;height:600px;">
+    <table class='table table-hover' style="margin-top: 35px">
+        <thead style="background-color: #f9f6f8"><tr><th>图谱名称</th><th>用户</th><th>创建时间</th><th>查看</th><th>分享</th><th>删除</th></tr></thead>
+        <tbody ng-repeat="list in lists">
+        <tr>
+            <td>{{list.mapname}}</td>
+            <td>{{list.userid}}</td>
+            <td>{{list.createDate | date:"yyyy-MM-dd HH:mm:ss"}}</td>
+            <td><span class='link-style'>查看</span></td>
+            <td><span class='link-style'>分享</span></td>
+            <td><span class='link-style'>删除</span></td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>

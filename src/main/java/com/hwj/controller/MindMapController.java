@@ -7,11 +7,12 @@ import com.hwj.util.JsonAnalyze;
 import com.hwj.util.ResultBean;
 import com.hwj.vo.MindNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.listener.Topic;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -309,6 +310,30 @@ public class MindMapController {
         result.put("mapid",mindMap.getMapid());
         return new ResultBean<>(result);
 
+    }
+
+
+
+
+    /**
+     * @auther: Ragty
+     * @describe: 获取自己的知识图谱
+     * @param: [userid, mapname, firstDate, lastDate, request]
+     * @return: com.hwj.util.ResultBean<org.springframework.data.domain.Page<com.hwj.entity.MindMap>>
+     * @date: 2018/11/20
+     */
+    @GetMapping("/getMyMap")
+    public ResultBean<Page<MindMap>> getMyMap(@RequestParam String page, @RequestParam String size,
+                                              HttpServletRequest request) throws Exception{
+
+        HttpSession session = request.getSession();
+        String adminId = String.valueOf(session.getAttribute("admin"));
+
+        Sort sort = new Sort(Sort.Direction.DESC,"update_date");
+        Pageable pageable = new PageRequest(Integer.parseInt(page), Integer.parseInt(size), sort);
+
+        Page<MindMap> list = mindMapService.queryMindMapByPage(adminId, "", null, null, pageable);
+        return new ResultBean<>(list);
     }
 
 
