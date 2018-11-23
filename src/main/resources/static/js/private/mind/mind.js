@@ -2,17 +2,93 @@ var mind = angular.module('mind',['ngRoute']);
 
 mind.config(['$routeProvider',function ($routeProvider) {
     $routeProvider.when('/',{templateUrl:"html/mind/myMapContent.html",controller:myMapController})
+                  .when('/myMap',{templateUrl:"html/mind/myMapContent.html",controller:myMapController})
+                  .when('/openMap',{templateUrl:"html/mind/mindContent.html",controller:openMapController})
 }]);
 
 
+var jm = null;
+var mapid = null;
+
 mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
 
-    var jm = null;
-    var mapid = null;
-
     //加载知识图谱引用
-    $scope.open_empty = function () {
+    /*$scope.open_empty = function () {
         var mind = {'data':{'id':'20180725213742','topic':'秋宁','color':'浅紫','children':[{'id':'2018625213717','topic':'可爱','color':'天蓝'},{'id':'2018625213713','topic':'美','color':'郁金色'}]},'meta':{'author':'hizzgdev@163.com','name':'jsMindremote','version':'0.2'},'format':'node_tree'};
+        var options = {
+            container : 'jsmind_container',
+            theme : 'greensea',
+            editable : true
+        }
+        jm = new jsMind(options);
+        //jm.show(mind);
+    }*/
+    //$scope.open_empty();
+
+});
+
+
+/*------------- 加载我的图谱 ---------------*/
+function myMapController($scope,$http,$window,$rootScope) {
+
+    var pageSize = 12;
+
+    //分页部分
+    $scope.pagenation = function (page,pageSzie) {
+
+        $http.get('mindmap/getMyMap?page='+page+'&size='+pageSzie)
+            .then(function (response) {
+                $scope.totalNum = response.data.data.totalElements;//数据总数
+                $scope.pages = response.data.data.totalPages;//页数
+                $scope.currPage = response.data.data.number;//当前页
+                $scope.isFirstPage = response.data.data.first;//是否是首页
+                $scope.isLastPage = response.data.data.last;//是否是尾页
+                $scope.lastUpPage = $scope.pages - 1;//倒数第二页
+                $scope.lists = response.data.data.content;
+            })
+
+    }
+
+    $scope.pagenation(0,pageSize);
+
+    $scope.page = function (page,oper) {
+
+        if(oper == 'first'){ //首页
+            $scope.pagenation(0,pageSize)
+        }
+        if(oper == 'up'){   //上一页
+            if (page == 0){
+                return;
+            }
+            $scope.pagenation(page-1,pageSize);
+        }
+        if(oper == 'next'){ //下一页
+            if (page == $scope.pages-1){
+                return;
+            }
+            $scope.pagenation(page+1,pageSize);
+        }
+        if (oper == 'last'){  //末页
+            $scope.pagenation(page-1,pageSize);
+        }
+    }
+
+    $scope.openMyMap = function (x) {
+
+        mapid = x;
+        $scope.openMap();
+
+    }
+
+}
+
+
+
+/*------------- 打开知识图谱 ---------------*/
+function openMapController($scope,$http,$window,$rootScope) {
+
+    $scope.open_empty = function () {
+        var mind = {'data':{'id':'20180725213742','topic':'x','color':'浅紫','children':[{'id':'2018625213717','topic':'y','color':'天蓝'},{'id':'2018625213713','topic':'z','color':'郁金色'}]},'meta':{'author':'hizzgdev@163.com','name':'jsMindremote','version':'0.2'},'format':'node_tree'};
         var options = {
             container : 'jsmind_container',
             theme : 'greensea',
@@ -24,7 +100,7 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
     $scope.open_empty();
 
     //新建图谱
-    $scope.newMap = function () {
+    $rootScope.newMap = function () {
 
         $.messager.prompt('新建图谱','请输入图谱名称',function (r) {
             if (r) {
@@ -47,10 +123,10 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
     }
 
     //右键菜单---新建子标签
-    $scope.addNode = function () {
-        
+    $rootScope.addNode = function () {
+
         $.messager.defaults = {ok : "是", cancel : "否"};
-        
+
         $.messager.prompt('新增子标签','请输入子标签名称',function (options) {
 
             var r = loap(options);
@@ -72,17 +148,17 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
                         } else if (status == 201) {
                             alert(msg);
                         }
-                        
+
                     })
 
             }
         });
 
-        
+
     }
 
     //右键菜单---修改子标签
-    $scope.modifyNode = function () {
+    $rootScope.modifyNode = function () {
 
         var selected_id = get_selected_nodeid();
         var selected_name = get_selected_nodeName();
@@ -96,25 +172,25 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
                 jm.update_node(selected_id,r);
 
                 $http.post('/mindmap/modifyNode?nodeid='+selected_id+'&nodename='+r+'&mapid='+mapid).
-                    then(function (response) {
+                then(function (response) {
 
-                        var status = response.data.data.status;
-                        var msg = response.data.data.message;
+                    var status = response.data.data.status;
+                    var msg = response.data.data.message;
 
-                        if (status == 200) {
-                            console.log(msg);
-                        } else if (status == 201) {
-                            alert(msg);
-                        }
+                    if (status == 200) {
+                        console.log(msg);
+                    } else if (status == 201) {
+                        alert(msg);
+                    }
 
-                    });
+                });
             }
         },""+selected_name+"");
 
     }
-    
+
     //右键菜单---删除节点
-    $scope.deleteNode = function () {
+    $rootScope.deleteNode = function () {
 
         $.messager.defaults = {ok : "是", cancel : "否"};
 
@@ -151,7 +227,7 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
     }
 
     //右键菜单---显示子节点
-    $scope.showChild = function () {
+    $rootScope.showChild = function () {
 
         var selected_id = get_selected_nodeid();
 
@@ -171,7 +247,7 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
     }
 
     //右键菜单---显示完整图谱
-    $scope.openMap = function () {
+    $rootScope.openMap = function () {
 
         $http.post('/mindmap/openMap?mapid='+mapid).then(function (response) {
 
@@ -239,69 +315,14 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
         }
     }
 
-});
-
-
-/*------------- 加载我的图谱 ---------------*/
-function myMapController($scope,$http,$window,$rootScope) {
-
-    var pageSize = 15;
-
-    $("#jsmind_container").hide();
-
-    $scope.pagenation = function (page,pageSzie) {
-
-        $http.get('mindmap/getMyMap?page='+page+'&size='+pageSzie)
-            .then(function (response) {
-                $scope.totalNum = response.data.data.totalElements;//数据总数
-                $scope.pages = response.data.data.totalPages;//页数
-                $scope.currPage = response.data.data.number;//当前页
-                $scope.isFirstPage = response.data.data.first;//是否是首页
-                $scope.isLastPage = response.data.data.last;//是否是尾页
-                $scope.lastUpPage = $scope.pages - 1;//倒数第二页
-                $scope.lists = response.data.data.content;
-            })
-
-    }
-
-    $scope.pagenation(0,pageSize);
-
-    $scope.page = function (page,oper) {
-
-        if(oper == 'first'){ //首页
-            $scope.pagenation(0,pageSize)
-        }
-        if(oper == 'up'){   //上一页
-            if (page == 0){
-                return;
-            }
-            $scope.pagenation(page-1,pageSize);
-        }
-        if(oper == 'next'){ //下一页
-            if (page == $scope.pages-1){
-                return;
-            }
-            $scope.pagenation(page+1,pageSize);
-        }
-        if (oper == 'last'){  //末页
-            $scope.pagenation(page-1,pageSize);
-        }
-    }
-
-
 }
 
 
-//右键菜单
-$(function () {
 
-    $("jmnodes").on('contextmenu', function(e) {
-        e.preventDefault();
-        $('#mm').menu('show', { //菜单EasyUI
-            left : e.pageX,
-            top : e.pageY,
-            hideOnUnhover : false
-        });
-    });
-});
+
+
+
+
+
+
 

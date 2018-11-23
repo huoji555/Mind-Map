@@ -15,51 +15,46 @@
 </head>
 <body ng-app="mind" ng-controller="mindControl" class="main-container">
 
-    <!-- 侧导航栏 -->
-    <div class="l_nav">
-        <ul>
-            <li ng-click="newMap()" title="新建" ><i class="icon-note hovli bigger-120"></i></li>
-            <li ng-click="test()" title="我的知识图谱"><span class="icon-user hovli"></span></li>
-            <li onclick="getShareMindMap(1)" title="查看分享图谱"><i class="icon-clock hovli bigger-120"></i></li>
-            <li onclick="BrowseFolder();" title="打开文件"><i class="icon-folder hovli bigger-120"></i></li>
-            <input type="file" id="file_input" onchange="open_file();" style="display:none;"  accept=".jm">
-            <li onclick="save_file();" title="生成文件"><i class="icon-doc hovli bigger-120"></i></li>
-            <li onclick="screen_shot();" title="生成图片"><i class="icon-camera hovli"></i></li>
-            <li onclick="chat();" title="讨论"><i class="icon-bubbles hovli bigger-120"></i></li>
-            <li onclick="sharemindmap();" title="分享"><i class="icon-share hovli bigger-120"></i></li>
-        </ul>
-    </div>
+<!-- 侧导航栏 -->
+<div class="l_nav">
+    <ul>
+        <a ng-click="newMap()" href="mindmap.html#!openMap"><li title="新建" ><i class="icon-note hovli bigger-120"></i></li></a>
+        <a href="mindmap.html#!myMap"><li title="我的知识图谱"><i class="icon-user hovli"></i></li></a>
+        <li onclick="getShareMindMap(1)" title="查看分享图谱"><i class="icon-clock hovli bigger-120"></i></li>
+        <li onclick="BrowseFolder();" title="打开文件"><i class="icon-folder hovli bigger-120"></i></li>
+        <input type="file" id="file_input" onchange="open_file();" style="display:none;"  accept=".jm">
+        <li onclick="save_file();" title="生成文件"><i class="icon-doc hovli bigger-120"></i></li>
+        <li onclick="screen_shot();" title="生成图片"><i class="icon-camera hovli"></i></li>
+        <li onclick="chat();" title="讨论"><i class="icon-bubbles hovli bigger-120"></i></li>
+        <li onclick="sharemindmap();" title="分享"><i class="icon-share hovli bigger-120"></i></li>
+    </ul>
+</div>
 
-    <!-- 右键菜单 -->
-    <div id="mm" class="easyui-menu" style="width:120px; height:auth;" hidden="hidden">
-    <div data-options="iconCls:'icon-pencil'" ng-click="addNode()" style="height:15px;padding:5px 0;">新建子标签</div>
-    <div data-options="iconCls:'icon-wrench'" ng-click="modifyNode()" style="height:15px;padding:5px 0;" >修改标签名</div>
+<!-- 右键菜单 -->
+<div id="mm" class="easyui-menu" style="width:120px; height:auto;" hidden="hidden">
+    <div data-options="iconCls:'icon-pencil'" ng-click="addNode()" style="height:23px;padding:5px 0;">新建子标签</div>
+    <div data-options="iconCls:'icon-wrench'" ng-click="modifyNode()" style="height:23px;padding:5px 0;" >修改标签名</div>
     <div class="menu-sep"></div>
-    <div data-options="iconCls:'icon-trash'" ng-click="deleteNode()" style="height:15px;padding:5px 0;">删除该标签</div>
+    <div data-options="iconCls:'icon-trash'" ng-click="deleteNode()" style="height:23px;padding:5px 0;">删除该标签</div>
     <div class="menu-sep"></div>
-    <div data-options="iconCls:'icon-map'" ng-click="showChild()" style="height:15px;padding:5px 0;">显示子节点</div>
+    <div data-options="iconCls:'icon-map'" ng-click="showChild()" style="height:23px;padding:5px 0;">显示子节点</div>
     <div class="menu-sep"></div>
-    <div data-options="iconCls:'icon-graph'" ng-click="openMap()" style="height:15px;padding:5px 0;">显示完整图</div>
-    </div>
+    <div data-options="iconCls:'icon-graph'" ng-click="openMap()" style="height:23px;padding:5px 0;">显示完整图</div>
+</div>
 
-    <!-- 图谱加载框 -->
-    <div id="main-container"></div>
-    <div id="jsmind_container" style="width:95%;margin-left:55px;height:600px;"></div>
+<div ng-view ></div>
 
-    <div ng-view ></div>
-
-    <!--mindjs-->
-    <script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
-    <script type="text/javascript" src="mindmap/jquery.easyui.min.js"></script>
-    <script src="mindmap/jsmind.js"></script>
-    <script src="mindmap/jsmind.draggable.js"></script>
-    <script src="mindmap/jsmind.screenshot.js"></script>
-    <!-- 基础js -->
-    <script type="text/javascript" src="js/angular.min.js"></script>
-    <script type="text/javascript" src="js/angular-route.js"></script>
-    <script type="text/javascript" src="js/bootstrap.js"></script>
-    <script type="text/javascript" src="js/private/mind/mind.js"></script>
-
+<!--mindjs-->
+<script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src="mindmap/jquery.easyui.min.js"></script>
+<script src="mindmap/jsmind.js"></script>
+<!--<script src="mindmap/jsmind.draggable.js"></script>-->
+<script src="mindmap/jsmind.screenshot.js"></script>
+<!-- 基础js -->
+<script type="text/javascript" src="js/angular.min.js"></script>
+<script type="text/javascript" src="js/angular-route.js"></script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
+<script type="text/javascript" src="js/private/mind/mind.js"></script>
 
 </body>
 </html>
