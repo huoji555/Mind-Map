@@ -1,4 +1,7 @@
 var mind = angular.module('mind',['ngRoute']);
+var jm = null;          //JSMind options
+var mapid = null;       //The MapId
+var type = 0;           //check the browser fresh status
 
 mind.config(['$routeProvider',function ($routeProvider) {
     $routeProvider.when('/',{templateUrl:"html/mind/myMapContent.html",controller:myMapController})
@@ -7,14 +10,13 @@ mind.config(['$routeProvider',function ($routeProvider) {
 }]);
 
 
-var jm = null;
-var mapid = null;
 
+/*------------- 整体页面控制器 -------------*/
 mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
 
-    //加载知识图谱引用
-    /*$scope.open_empty = function () {
-        var mind = {'data':{'id':'20180725213742','topic':'秋宁','color':'浅紫','children':[{'id':'2018625213717','topic':'可爱','color':'天蓝'},{'id':'2018625213713','topic':'美','color':'郁金色'}]},'meta':{'author':'hizzgdev@163.com','name':'jsMindremote','version':'0.2'},'format':'node_tree'};
+    //初始化JsMind
+    $rootScope.open_empty = function () {
+        var mind = {'data':{'id':'20180725213742','topic':'x','color':'浅紫','children':[{'id':'2018625213717','topic':'y','color':'天蓝'},{'id':'2018625213713','topic':'z','color':'郁金色'}]},'meta':{'author':'hizzgdev@163.com','name':'jsMindremote','version':'0.2'},'format':'node_tree'};
         var options = {
             container : 'jsmind_container',
             theme : 'greensea',
@@ -22,13 +24,57 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
         }
         jm = new jsMind(options);
         //jm.show(mind);
-    }*/
-    //$scope.open_empty();
+    }
+
+    //新建图谱
+    $rootScope.newMap = function () {
+
+        $.messager.prompt('新建图谱','请输入图谱名称',function (r) {
+            if (r) {
+                type += 1;
+                $window.location = "mindmap.html#!openMap";
+
+                $http.post('/mindmap/newMap?nodeName='+r).then(function (response) {
+
+                    var status = response.data.data.status;
+
+                    if (status == 200) {
+                        var datas = eval('('+ response.data.data.datas +')');
+                        mapid = response.data.data.mapid;
+                        jm.show(datas);
+                    } else if (status == 201) {
+                        alert(response.data.data.message);
+                    }
+
+                })
+            }
+        })
+    }
+
+    //显示完整图谱
+    $rootScope.openMap = function () {
+
+        $http.post('/mindmap/openMap?mapid='+mapid).then(function (response) {
+
+            var status = response.data.data.status;
+
+            if (status == 200) {
+                var datas = eval('('+ response.data.data.datas +')');
+                mapid = response.data.data.mapid;
+                jm.show(datas);
+            } else {
+                alert("服务器异常");
+            }
+
+        })
+
+    }
+
 
 });
 
 
-/*------------- 加载我的图谱 ---------------*/
+/*------------- 加载我的图谱(list) ---------*/
 function myMapController($scope,$http,$window,$rootScope) {
 
     var pageSize = 12;
@@ -76,7 +122,11 @@ function myMapController($scope,$http,$window,$rootScope) {
     $scope.openMyMap = function (x) {
 
         mapid = x;
-        $scope.openMap();
+        type += 1;
+        $window.location = "mindmap.html#!openMap";
+
+        $rootScope.openMap();
+        console.log("test success");
 
     }
 
@@ -87,40 +137,15 @@ function myMapController($scope,$http,$window,$rootScope) {
 /*------------- 打开知识图谱 ---------------*/
 function openMapController($scope,$http,$window,$rootScope) {
 
-    $scope.open_empty = function () {
-        var mind = {'data':{'id':'20180725213742','topic':'x','color':'浅紫','children':[{'id':'2018625213717','topic':'y','color':'天蓝'},{'id':'2018625213713','topic':'z','color':'郁金色'}]},'meta':{'author':'hizzgdev@163.com','name':'jsMindremote','version':'0.2'},'format':'node_tree'};
-        var options = {
-            container : 'jsmind_container',
-            theme : 'greensea',
-            editable : true
+    $rootScope.open_empty();
+
+    //刷新浏览器状态(刷新状态为0，不显示数据，跳回列表界面)
+    function checkFreshStatus() {
+        if (type == 0) {
+            $window.location = "mindmap.html#!myMap";
         }
-        jm = new jsMind(options);
-        //jm.show(mind);
     }
-    $scope.open_empty();
-
-    //新建图谱
-    $rootScope.newMap = function () {
-
-        $.messager.prompt('新建图谱','请输入图谱名称',function (r) {
-            if (r) {
-
-                $http.post('/mindmap/newMap?nodeName='+r).then(function (response) {
-
-                    var status = response.data.data.status;
-
-                    if (status == 200) {
-                        var datas = eval('('+ response.data.data.datas +')');
-                        mapid = response.data.data.mapid;
-                        jm.show(datas);
-                    } else if (status == 201) {
-                        alert(response.data.data.message);
-                    }
-
-                })
-            }
-        })
-    }
+    checkFreshStatus();
 
     //右键菜单---新建子标签
     $rootScope.addNode = function () {
@@ -237,25 +262,6 @@ function openMapController($scope,$http,$window,$rootScope) {
 
             if (status == 200) {
                 var datas = eval('('+ response.data.data.datas +')');
-                jm.show(datas);
-            } else {
-                alert("服务器异常");
-            }
-
-        })
-
-    }
-
-    //右键菜单---显示完整图谱
-    $rootScope.openMap = function () {
-
-        $http.post('/mindmap/openMap?mapid='+mapid).then(function (response) {
-
-            var status = response.data.data.status;
-
-            if (status == 200) {
-                var datas = eval('('+ response.data.data.datas +')');
-                mapid = response.data.data.mapid;
                 jm.show(datas);
             } else {
                 alert("服务器异常");
