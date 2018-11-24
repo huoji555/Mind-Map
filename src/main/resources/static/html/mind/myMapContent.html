@@ -8,7 +8,7 @@
             <td>{{list.createDate | date:"yyyy-MM-dd HH:mm:ss"}}</td>
             <td><span class='link-style' ng-click="openMyMap(list.mapid)">查看</span></td>
             <td><span class='link-style'>分享</span></td>
-            <td><span class='link-style'>删除</span></td>
+            <td><span class='link-style' ng-click="delMyMap(list.mapid)">删除</span></td>
         </tr>
         </tbody>
     </table>

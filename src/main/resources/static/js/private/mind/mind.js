@@ -119,14 +119,34 @@ function myMapController($scope,$http,$window,$rootScope) {
         }
     }
 
+    //打开我的图谱
     $scope.openMyMap = function (x) {
 
         mapid = x;
         type += 1;
         $window.location = "mindmap.html#!openMap";
-
         $rootScope.openMap();
-        console.log("test success");
+
+    }
+
+    //删除我的图谱
+    $scope.delMyMap = function (x) {
+
+        $http.post('/mindmap/deleteNode?nodeid='+ x +'&mapid='+ x).then(function (response) {
+
+            var status = response.data.data.status;
+            var msg = response.data.data.message;
+
+            if (status == 200) {
+                if ($scope.lists.length == 1) {
+                    $scope.currPage -= 1;
+                }
+                $scope.pagenation($scope.currPage,pageSize);
+            } else if (status == 201) {
+                alert(msg);
+            }
+
+        })
 
     }
 
