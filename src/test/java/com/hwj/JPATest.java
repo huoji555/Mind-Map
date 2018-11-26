@@ -2,7 +2,9 @@ package com.hwj;
 
 import com.google.common.collect.Maps;
 import com.hwj.entity.MindMap;
+import com.hwj.repository.ShareMapRepository;
 import com.hwj.service.MindMapService;
+import com.hwj.service.ShareMapService;
 import com.hwj.util.JsonAnalyze;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,6 +35,9 @@ public class JPATest {
 	private MindMapService mindMapService;
 	@Autowired
 	private JsonAnalyze jsonAnalyze;
+	@Autowired
+	private ShareMapService shareMapService;
+
 
 	@Test
 	public void testJpa() throws Exception{
@@ -57,6 +62,8 @@ public class JPATest {
 
 		System.out.println(list.toString());
 		System.out.println(list.getSize());
+
+
 
 
 	}

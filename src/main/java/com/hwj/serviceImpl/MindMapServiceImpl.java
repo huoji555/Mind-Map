@@ -41,6 +41,18 @@ public class MindMapServiceImpl implements MindMapService {
 
 
 
+    /**
+     * @auther: Ragty
+     * @describe: 修改方法
+     * @param: [mapList, updateDate, id]
+     * @return: void
+     * @date: 2018/11/26
+     */
+    @Override
+    public void updateMindMap(String mapList, Date updateDate, String mapname, Integer id) { mindMapRepository.updateMindMap(mapList, updateDate, mapname, id); }
+
+
+
 
     /**
      * @auther: Ragty

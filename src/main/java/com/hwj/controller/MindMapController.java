@@ -122,9 +122,7 @@ public class MindMapController {
         List<MindNode> list = jsonAnalyze.parseList(mapList);
         list.add(mindNode);
 
-        mindMap.setMapList(jsonAnalyze.list2Json(list));
-        mindMap.setUpdateDate(new Date());
-        mindMapService.save(mindMap);
+        mindMapService.updateMindMap(jsonAnalyze.list2Json(list), new Date(), null, mindMap.getId());
 
         result.put("status",200);
         result.put("message","修改成功");
@@ -158,6 +156,7 @@ public class MindMapController {
         MindMap mindMap = mindMapService.queryMindByMapid(mapid);
         String mindUser = mindMap.getUserid();
         String mapList = mindMap.getMapList();
+        String mapname = null;
 
         if (!adminId.equals(mindUser)){
             result.put("status",201);
@@ -178,11 +177,9 @@ public class MindMapController {
         }
 
         //if it's roottid ,modify the mapname
-        if (mapid.equals(nodeid)) { mindMap.setMapname(nodename); }
+        if (mapid.equals(nodeid)) { mapname = nodename; }
 
-        mindMap.setMapList(jsonAnalyze.list2Json(list));
-        mindMap.setUpdateDate(new Date());
-        mindMapService.save(mindMap);
+        mindMapService.updateMindMap(jsonAnalyze.list2Json(list), new Date(), mapname, mindMap.getId());
 
         result.put("status",200);
         result.put("message","修改成功");
@@ -239,9 +236,7 @@ public class MindMapController {
 
         List<MindNode> delAfter = mindMapService.getNope(delList,list);
 
-        mindMap.setMapList(jsonAnalyze.list2Json(delAfter));
-        mindMap.setUpdateDate(new Date());
-        mindMapService.save(mindMap);
+        mindMapService.updateMindMap(jsonAnalyze.list2Json(delAfter),new Date(), null, mindMap.getId());
 
         result.put("status",200);
         result.put("message","删除成功");

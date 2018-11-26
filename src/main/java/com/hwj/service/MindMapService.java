@@ -15,6 +15,8 @@ public interface MindMapService {
 
     void deleteMap(String mapid);
 
+    void updateMindMap(String mapList, Date updateDate, String mapname, Integer id);
+
     String openMind (List<MindNode> list, String fakeRoot);
 
     MindMap queryMindByMapid(String mapid);

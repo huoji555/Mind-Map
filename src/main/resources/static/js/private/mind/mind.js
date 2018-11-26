@@ -247,7 +247,7 @@ function openMapController($scope,$http,$window,$rootScope) {
 
                 if(selected_ifRoot()){
                     //fresh page
-                    $window.location.reload();
+                    $window.location = "mindmap.html#!myMap";
                 } else {
                     jm.remove_node(selected_node);
                 }
