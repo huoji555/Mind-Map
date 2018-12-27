@@ -43,7 +43,7 @@ public interface MindMapRepository extends JpaRepository<MindMap,String> , Pagin
     @Transactional
     @Modifying
     @Query(value = "update mind_map set map_list = :mapList, update_date = :updateDate, " +
-            "mapname = IF(:mapname = '', mapname, :mapname) " +
+            "mapname = IF(:mapname is null, mapname, :mapname) " +
             " where id = :id ", nativeQuery = true)
     void updateMindMap(@Param("mapList") String mapList, @Param("updateDate") Date updateDate,
                        @Param("mapname") String mapname, @Param("id") Integer id);

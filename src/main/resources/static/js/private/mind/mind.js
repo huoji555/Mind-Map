@@ -23,7 +23,7 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
             editable : true
         }
         jm = new jsMind(options);
-        //jm.show(mind);
+        jm.show(mind);
     }
 
     //新建图谱
@@ -49,25 +49,6 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
                 })
             }
         })
-    }
-
-    //显示完整图谱
-    $rootScope.openMap = function () {
-
-        $http.post('/mindmap/openMap?mapid='+mapid).then(function (response) {
-
-            var status = response.data.data.status;
-
-            if (status == 200) {
-                var datas = eval('('+ response.data.data.datas +')');
-                mapid = response.data.data.mapid;
-                jm.show(datas);
-            } else {
-                alert("服务器异常");
-            }
-
-        })
-
     }
 
 
@@ -144,6 +125,25 @@ function myMapController($scope,$http,$window,$rootScope) {
                 $scope.pagenation($scope.currPage,pageSize);
             } else if (status == 201) {
                 alert(msg);
+            }
+
+        })
+
+    }
+
+    //显示完整图谱
+    $rootScope.openMap = function () {
+
+        $http.post('/mindmap/openMap?mapid='+mapid).then(function (response) {
+
+            var status = response.data.data.status;
+
+            if (status == 200) {
+                var datas = eval('('+ response.data.data.datas +')');
+                mapid = response.data.data.mapid;
+                jm.show(datas);
+            } else {
+                alert("服务器异常");
             }
 
         })
@@ -245,10 +245,7 @@ function openMapController($scope,$http,$window,$rootScope) {
                 var selected_node = jm.get_selected_node();
                 var selected_id = get_selected_nodeid();
 
-                if(selected_ifRoot()){
-                    //fresh page
-                    $window.location = "mindmap.html#!myMap";
-                } else {
+                if(! selected_ifRoot() ){
                     jm.remove_node(selected_node);
                 }
 
@@ -259,6 +256,10 @@ function openMapController($scope,$http,$window,$rootScope) {
 
                     if (status == 200) {
                         console.log(msg);
+                        if (selected_ifRoot()) {
+                            //fresh page
+                            $window.location = "mindmap.html#!myMap";
+                        }
                     } else if (status == 201) {
                         alert(msg);
                     }
