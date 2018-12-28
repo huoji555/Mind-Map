@@ -6,6 +6,7 @@ var type = 0;           //check the browser fresh status
 mind.config(['$routeProvider',function ($routeProvider) {
     $routeProvider.when('/',{templateUrl:"html/mind/myMapContent.html",controller:myMapController})
                   .when('/myMap',{templateUrl:"html/mind/myMapContent.html",controller:myMapController})
+                  .when('/shareMap',{templateUrl:"html/mind/shareMapContent.html",controller:shareMapController})
                   .when('/openMap',{templateUrl:"html/mind/mindContent.html",controller:openMapController})
 }]);
 
@@ -43,7 +44,7 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
                         mapid = response.data.data.mapid;
                         jm.show(datas);
                     } else if (status == 201) {
-                        alert(response.data.data.message);
+                        $.messager.alert("操作提示", response.data.data.message, "info");
                     }
 
                 })
@@ -51,6 +52,25 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
         })
     }
 
+    //分享图谱
+    $rootScope.shareMap = function (x) {
+
+        if (x == 'outside') {x = mapid;}
+
+        $http.post('/shareMap/share?mapid='+x).then(function (response) {
+
+            var status = response.data.data.status;
+            var msg = response.data.data.message;
+
+            if (status == 200) {
+                $.messager.alert("操作提示", "分享成功！", "info");
+            } else if (status == 400) {
+                $.messager.alert("操作提示", msg, "info");
+            }
+
+        })
+
+    }
 
 });
 
@@ -119,12 +139,12 @@ function myMapController($scope,$http,$window,$rootScope) {
             var msg = response.data.data.message;
 
             if (status == 200) {
-                if ($scope.lists.length == 1) {
+                if ($scope.lists.length == 1 && $scope.currPage != 0) {
                     $scope.currPage -= 1;
                 }
                 $scope.pagenation($scope.currPage,pageSize);
             } else if (status == 201) {
-                alert(msg);
+                $.messager.alert("操作提示", msg, "info");
             }
 
         })
@@ -143,7 +163,7 @@ function myMapController($scope,$http,$window,$rootScope) {
                 mapid = response.data.data.mapid;
                 jm.show(datas);
             } else {
-                alert("服务器异常");
+                $.messager.alert("操作提示", "服务器异常", "info");
             }
 
         })
@@ -152,6 +172,84 @@ function myMapController($scope,$http,$window,$rootScope) {
 
 }
 
+
+/*------------- 加载分享图谱（list） -------*/
+function shareMapController($scope,$http,$window,$rootScope) {
+
+    var pageSize = 12;
+
+    //分页部分
+    $scope.pagenation = function (page,pageSzie) {
+
+        $http.get('shareMap/getShareMap?page='+page+'&size='+pageSzie)
+            .then(function (response) {
+                $scope.totalNum = response.data.data.totalElements;//数据总数
+                $scope.pages = response.data.data.totalPages;//页数
+                $scope.currPage = response.data.data.number;//当前页
+                $scope.isFirstPage = response.data.data.first;//是否是首页
+                $scope.isLastPage = response.data.data.last;//是否是尾页
+                $scope.lastUpPage = $scope.pages - 1;//倒数第二页
+                $scope.lists = response.data.data.content;
+            })
+
+    }
+
+    $scope.pagenation(0,pageSize);
+
+    $scope.page = function (page,oper) {
+
+        if(oper == 'first'){ //首页
+            $scope.pagenation(0,pageSize)
+        }
+        if(oper == 'up'){   //上一页
+            if (page == 0){
+                return;
+            }
+            $scope.pagenation(page-1,pageSize);
+        }
+        if(oper == 'next'){ //下一页
+            if (page == $scope.pages-1){
+                return;
+            }
+            $scope.pagenation(page+1,pageSize);
+        }
+        if (oper == 'last'){  //末页
+            $scope.pagenation(page-1,pageSize);
+        }
+    }
+
+    //删除分享图谱
+    $scope.deleteShareMap = function (x,mindUser) {
+
+        $http.get('/shareMap/delete?mapid='+x+'&mindUser='+mindUser).then(function (response) {
+
+            var status = response.data.data.status;
+            var msg = response.data.data.message;
+
+            if (status == 200) {
+                if ($scope.lists.length == 1 && $scope.currPage != 0) {
+                    $scope.currPage -= 1;
+                }
+                $scope.pagenation($scope.currPage,pageSize);
+            } else if (status == 400) {
+                $.messager.alert("操作提示", msg, "info");
+            }
+
+        })
+
+    }
+
+    //打开我的图谱
+    $scope.openMyMap = function (x) {
+
+        mapid = x;
+        type += 1;
+        $window.location = "mindmap.html#!openMap";
+        $rootScope.openMap();
+
+    }
+
+}
 
 
 /*------------- 打开知识图谱 ---------------*/
@@ -191,7 +289,7 @@ function openMapController($scope,$http,$window,$rootScope) {
                         if (status == 200) {
                             console.log(msg);
                         } else if (status == 201) {
-                            alert(msg);
+                            $.messager.alert("操作提示", msg, "info");
                         }
 
                     })
@@ -225,7 +323,7 @@ function openMapController($scope,$http,$window,$rootScope) {
                     if (status == 200) {
                         console.log(msg);
                     } else if (status == 201) {
-                        alert(msg);
+                        $.messager.alert("操作提示", msg, "info");
                     }
 
                 });
@@ -261,7 +359,7 @@ function openMapController($scope,$http,$window,$rootScope) {
                             $window.location = "mindmap.html#!myMap";
                         }
                     } else if (status == 201) {
-                        alert(msg);
+                        $.messager.alert("操作提示", msg, "info");
                     }
 
                 })
@@ -285,7 +383,7 @@ function openMapController($scope,$http,$window,$rootScope) {
                 var datas = eval('('+ response.data.data.datas +')');
                 jm.show(datas);
             } else {
-                alert("服务器异常");
+                $.messager.alert("操作提示", "服务器异常", "info");
             }
 
         })

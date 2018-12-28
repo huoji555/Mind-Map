@@ -12,6 +12,8 @@ public interface ShareMapService {
 
     void delete(String mapid);
 
+    boolean existsShareMap(String mapid);
+
     Page<ShareMap> getShareMapList(String share_id, String mapname, Date firstDate, Date lastDate, Pageable pageable);
 
 }

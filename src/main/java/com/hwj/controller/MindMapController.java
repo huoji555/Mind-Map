@@ -3,6 +3,7 @@ package com.hwj.controller;
 import com.google.common.collect.Maps;
 import com.hwj.entity.MindMap;
 import com.hwj.service.MindMapService;
+import com.hwj.service.ShareMapService;
 import com.hwj.util.JsonAnalyze;
 import com.hwj.util.ResultBean;
 import com.hwj.vo.MindNode;
@@ -24,6 +25,8 @@ public class MindMapController {
 
     @Autowired
     private MindMapService mindMapService;
+    @Autowired
+    private ShareMapService shareMapService;
     @Autowired
     private JsonAnalyze jsonAnalyze;
 
@@ -212,6 +215,7 @@ public class MindMapController {
 
         if (nodeid.equals(mapid)) {
             mindMapService.deleteMap(mapid);
+            shareMapService.delete(mapid);
             result.put("status",200);
             result.put("message","删除成功");
             return new ResultBean<>(result);

@@ -24,8 +24,12 @@ public class ShareMapServiceImpl implements ShareMapService {
     public void delete(String mapid) { shareMapRepository.delShareMap(mapid); }
 
     @Override
+    public boolean existsShareMap(String mapid) { return shareMapRepository.existsShareMapByMapid(mapid); }
+
+    @Override
     public Page<ShareMap> getShareMapList(String share_id, String mapname, Date firstDate, Date lastDate, Pageable pageable) {
         return shareMapRepository.getShareMapByPage(share_id, mapname, firstDate, lastDate, pageable);
     }
+
 
 }
