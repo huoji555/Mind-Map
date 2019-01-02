@@ -41,7 +41,6 @@ indexApp.controller('indexCon',function ($scope,$http,$window,$rootScope) {
                 var adminId = response.data.data.adminId;
 
                 if (status == 201){
-                    alert("您还未登录，请登录后再操作");
                     $window.location = "login.html";
                 }
                 $scope.roleId = roleId;

@@ -1,6 +1,8 @@
 var mind = angular.module('mind',['ngRoute']);
 var jm = null;          //JSMind options
 var mapid = null;       //The MapId
+var mapUser = null;     //The MapUser
+var admin = null;       //The loginUser
 var type = 0;           //check the browser fresh status
 
 mind.config(['$routeProvider',function ($routeProvider) {
@@ -14,6 +16,21 @@ mind.config(['$routeProvider',function ($routeProvider) {
 
 /*------------- 整体页面控制器 -------------*/
 mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
+
+    //验证是否登录
+    $rootScope.ifLogin = function () {
+
+        $http.post("/login/ifLogin")
+            .then(function (response) {
+                var status = response.data.data.status;
+                var adminId = response.data.data.adminId;
+
+                if (status == 201){$window.location = "login.html";
+                } else if (status == 200){ mapUser = adminId;}
+
+            })
+    }
+    $rootScope.ifLogin();
 
     //初始化JsMind
     $rootScope.open_empty = function () {
@@ -203,6 +220,7 @@ function myMapController($scope,$http,$window,$rootScope) {
             if (status == 200) {
                 var datas = eval('('+ response.data.data.datas +')');
                 mapid = response.data.data.mapid;
+                mapUser = response.data.data.mapUser;
                 jm.show(datas);
             } else {
                 $.messager.alert("操作提示", "服务器异常", "info");
@@ -320,7 +338,7 @@ function openMapController($scope,$http,$window,$rootScope) {
                 var topic = r;
                 var selectId = get_selected_nodeid();
 
-                var node = jm.add_node(jm.get_selected_node(), nodeid, topic, null,"right");
+                if (mapUser == admin) {var node = jm.add_node(jm.get_selected_node(), nodeid, topic, null,"right");}
 
                 $http.post('/mindmap/addNode?nodeid='+nodeid+'&topic='+topic+'&parentid='+selectId+'&mapid='+mapid)
                     .then(function (response) {
@@ -356,7 +374,7 @@ function openMapController($scope,$http,$window,$rootScope) {
             var r = loap(options);
 
             if (r) {
-                jm.update_node(selected_id,r);
+                if (mapUser == admin) {jm.update_node(selected_id,r);}
 
                 $http.post('/mindmap/modifyNode?nodeid='+selected_id+'&nodename='+r+'&mapid='+mapid).
                 then(function (response) {
@@ -389,9 +407,7 @@ function openMapController($scope,$http,$window,$rootScope) {
                 var selected_node = jm.get_selected_node();
                 var selected_id = get_selected_nodeid();
 
-                if(! selected_ifRoot() ){
-                    jm.remove_node(selected_node);
-                }
+                if( (!selected_ifRoot()) && (mapUser == admin) ){jm.remove_node(selected_node);}
 
                 $http.post('/mindmap/deleteNode?nodeid='+selected_id+'&mapid='+mapid).then(function (response) {
 
@@ -400,7 +416,7 @@ function openMapController($scope,$http,$window,$rootScope) {
 
                     if (status == 200) {
                         console.log(msg);
-                        if (selected_ifRoot()) {
+                        if (selected_ifRoot() && (mapUser == admin) ) {
                             //fresh page
                             $window.location = "mindmap.html#!myMap";
                         }

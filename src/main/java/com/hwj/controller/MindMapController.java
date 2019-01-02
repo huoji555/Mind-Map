@@ -307,6 +307,7 @@ public class MindMapController {
         result.put("status", 200);
         result.put("datas", mindMapService.openMind(list,null));
         result.put("mapid",mindMap.getMapid());
+        result.put("mapUser",mindMap.getUserid());
         return new ResultBean<>(result);
 
     }
