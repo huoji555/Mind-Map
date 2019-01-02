@@ -331,6 +331,8 @@ function openMapController($scope,$http,$window,$rootScope) {
                         if (status == 200) {
                             console.log(msg);
                         } else if (status == 201) {
+                            console.log(msg);
+                        } else if (status == 400) {
                             $.messager.alert("操作提示", msg, "info");
                         }
 
@@ -365,6 +367,8 @@ function openMapController($scope,$http,$window,$rootScope) {
                     if (status == 200) {
                         console.log(msg);
                     } else if (status == 201) {
+                        console.log(msg);
+                    } else if (status == 400) {
                         $.messager.alert("操作提示", msg, "info");
                     }
 
@@ -401,6 +405,8 @@ function openMapController($scope,$http,$window,$rootScope) {
                             $window.location = "mindmap.html#!myMap";
                         }
                     } else if (status == 201) {
+                        console.log(msg);
+                    }  else if (status == 400) {
                         $.messager.alert("操作提示", msg, "info");
                     }
 

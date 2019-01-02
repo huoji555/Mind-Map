@@ -112,7 +112,7 @@ public class MindMapController {
         String mapList = mindMap.getMapList();
 
         if (!adminId.equals(mindUser)){
-            result.put("status",201);
+            result.put("status",400);
             result.put("message","不是您的图");
             return new ResultBean<>(result);
         }
@@ -162,7 +162,7 @@ public class MindMapController {
         String mapname = null;
 
         if (!adminId.equals(mindUser)){
-            result.put("status",201);
+            result.put("status",400);
             result.put("message","不是您的图");
             return new ResultBean<>(result);
         }
@@ -226,7 +226,7 @@ public class MindMapController {
         String mapList = mindMap.getMapList();
 
         if (!adminId.equals(mindUser)){
-            result.put("status",201);
+            result.put("status",400);
             result.put("message","不是您的图");
             return new ResultBean<>(result);
         }
@@ -333,6 +333,53 @@ public class MindMapController {
 
         Page<MindMap> list = mindMapService.queryMindMapByPage(adminId, "", null, null, pageable);
         return new ResultBean<>(list);
+    }
+
+
+
+
+    /**
+     * @auther: Ragty
+     * @describe: 拖拽保存
+     * @param: [requestJsonBody, request]
+     * @return: com.hwj.util.ResultBean<java.util.Map<java.lang.String,java.lang.Object>>
+     * @date: 2019/1/2
+     */
+    @PostMapping("/saveMapPosition")
+    public ResultBean<Map<String,Object>> saveMapPosition(@RequestBody String requestJsonBody,
+                                                          HttpServletRequest request) throws Exception{
+
+        Map<String,Object> result = Maps.newHashMap();
+        HttpSession session = request.getSession();
+        String adminId = String.valueOf(session.getAttribute("admin"));
+
+        Map<String,Object> map = jsonAnalyze.json2Map(requestJsonBody);
+        String beforeId = String.valueOf(map.get("beforeId"));
+        String afterId = String.valueOf(map.get("afterId"));
+        String rootId = String.valueOf(map.get("rootid"));
+
+        MindMap mindMap = mindMapService.queryMindByMapid(rootId);
+
+        if(!adminId.equals(mindMap.getUserid())){
+            result.put("status",400);
+            result.put("message","不是您的图");
+            return new ResultBean<>(result);
+        }
+
+        List<MindNode> list = jsonAnalyze.parseList(mindMap.getMapList());
+        for(ListIterator<MindNode> it = list.listIterator(); it.hasNext(); ){
+            MindNode mindNode = it.next();
+            if(mindNode.getId().equals(beforeId)) { mindNode.setParentid(afterId); }
+        }
+
+        mindMap.setMapList(jsonAnalyze.list2Json(list));
+        mindMap.setUpdateDate(new Date());
+        mindMapService.save(mindMap);
+
+        result.put("status",200);
+        result.put("message","拖拽成功");
+        return new ResultBean<>(result);
+
     }
 
 

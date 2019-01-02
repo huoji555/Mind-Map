@@ -316,10 +316,18 @@
 		           		   contentType:"application/json",
 		           		   dataType:"json",
 		           		   data:data,
-		           		   url:"saveMapPosition.do",
+		           		   url:"mindmap/saveMapPosition",
                     	   
 		           		   success:function(data){
-		           			  console.log("拖动保存成功");
+                    	       var msg = data.data.message;
+                    	       var status = data.data.status;
+
+                    	       if(status == 200) {
+                                   console.log(msg);
+                               } else if(status == 400) {
+                    	           console.log(msg);
+                               }
+
 		           		   },
 		           		   error:function(){
 		           			  console.log("网络连接失败！");  
