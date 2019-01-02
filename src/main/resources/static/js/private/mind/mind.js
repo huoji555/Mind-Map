@@ -72,6 +72,48 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
 
     }
 
+    //保存文件
+    $rootScope.save_file = function () {
+        var mind_data = jm.get_data();
+        var mind_name = mind_data.meta.name;
+        var mind_str = jsMind.util.json.json2string(mind_data);
+        jsMind.util.file.save(mind_str, 'text/jsmind', mind_name + '.jm');
+    }
+
+    //打开文件
+    $rootScope.open_file = function () {
+        var file_input = document.getElementById('file_input');
+        var files = file_input.files;
+        if (files.length > 0) {
+            var file_data = files[0];
+            jsMind.util.file.read(file_data, function(jsmind_data,
+                                                      jsmind_name) {
+                var mind = jsMind.util.json.string2json(jsmind_data);
+                if (!!mind) {
+                    type += 1;
+                    $window.location = "mindmap.html#!openMap";
+                    jm.show(mind);
+                } else {
+                    alert('can not open this file as mindmap');
+                }
+            });
+        } else {
+            alert('please choose a file first');
+        }
+    }
+
+    //打开文件触发
+    $rootScope.open_browser = function() {
+        $("#file_input").click();
+
+    }
+
+    //生成图片
+    $rootScope.screen_shot = function () {
+        jm.shoot();
+    }
+
+
 });
 
 
