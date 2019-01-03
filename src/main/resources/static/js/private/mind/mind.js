@@ -122,12 +122,92 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
     //打开文件触发
     $rootScope.open_browser = function() {
         $("#file_input").click();
-
     }
 
     //生成图片
     $rootScope.screen_shot = function () {
         jm.shoot();
+    }
+    
+    //编辑颜色
+    $rootScope.set_color = function (color) {
+        var sel=$("jmnode.selected").attr("nodeid");
+        var color1=shiftcolor(color);
+        jm.set_node_color(sel, color1);
+
+        $http.get('/mindmap/setColor',{params:{nodeid:sel,mapid:mapid,color:color1}}).then(function (response) {
+            var status = response.data.data.status;
+            var msg = response.data.data.message;
+
+            if (status == 200) {console.log(msg);}
+            else if (status == 400) {console.log(msg);}
+
+        })
+        
+    }
+
+    //颜色转换
+    function shiftcolor(color){
+        switch(color){
+            case "浅紫":
+                color="#CD96CD";
+                break;
+            case "郁金色":
+                color="#fdb933";
+                break;
+            case "抹茶":
+                color="#6BB073";
+                break;
+            case "咖色":
+                color="#BF7F50";
+                break;
+            case "玫瑰红":
+                color="#FF0000";
+                break;
+            case "原色":
+                color="#1abc9c";
+                break;
+            case "圣诞红":
+                color="#BF0A10";
+                break;
+            case "深紫":
+                color="#9b59b6";
+                break;
+            case "藏青":
+                color="#34495e";
+                break;
+            case "要什么颜色":
+                color="#733C80";
+                break;
+            case "天蓝":
+                color="#426ab3";
+                break;
+            case "砖红":
+                color="#e74c3c";
+                break;
+            case "碳灰":
+                color="#404040";
+                break;
+            case "亮粉":
+                color="#ff3399";
+                break;
+            case "凑数色":
+                color="#8B1A1A";
+                break;
+        }
+        return color;
+    }
+
+    //遍历一个图谱的所有节点（加载图谱时调用）
+    $rootScope.traverse = function (json) {
+
+        if(!json){return ;}
+        jm.set_node_color(json.id, json.color);
+        if(json.children&&json.children.length>0){
+            for(var i=0;i<json.children.length;i++){
+                this.traverse(json.children[i]);
+            }
+        }
     }
 
 
@@ -222,6 +302,7 @@ function myMapController($scope,$http,$window,$rootScope) {
                 mapid = response.data.data.mapid;
                 mapUser = response.data.data.mapUser;
                 jm.show(datas);
+                $rootScope.traverse(datas.data);
             } else {
                 $.messager.alert("操作提示", "服务器异常", "info");
             }

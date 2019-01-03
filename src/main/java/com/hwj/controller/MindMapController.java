@@ -7,6 +7,7 @@ import com.hwj.service.ShareMapService;
 import com.hwj.util.JsonAnalyze;
 import com.hwj.util.ResultBean;
 import com.hwj.vo.MindNode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -379,6 +380,48 @@ public class MindMapController {
 
         result.put("status",200);
         result.put("message","拖拽成功");
+        return new ResultBean<>(result);
+
+    }
+
+
+
+
+    /**
+     * @auther: Ragty
+     * @describe: 保存颜色
+     * @param: [nodeid, color, mapid]
+     * @return: com.hwj.util.ResultBean<java.util.Map<java.lang.String,java.lang.Object>>
+     * @date: 2019/1/3
+     */
+    @GetMapping("/setColor")
+    public ResultBean<Map<String,Object>> setColor(String mapid, String nodeid,
+                                                   String color, HttpServletRequest request) throws Exception{
+
+        Map<String,Object> result = Maps.newHashMap();
+        HttpSession session = request.getSession();
+        String adminId = String.valueOf(session.getAttribute("admin"));
+
+        MindMap mindMap = mindMapService.queryMindByMapid(mapid);
+
+        if(!adminId.equals(mindMap.getUserid())){
+            result.put("status",400);
+            result.put("message","不是您的图");
+            return new ResultBean<>(result);
+        }
+
+        List<MindNode> list = jsonAnalyze.parseList(mindMap.getMapList());
+        for(ListIterator<MindNode> it = list.listIterator(); it.hasNext(); ){
+            MindNode mindNode = it.next();
+            if(mindNode.getId().equals(nodeid)) { mindNode.setColor(color);}
+        }
+
+        mindMap.setMapList(jsonAnalyze.list2Json(list));
+        mindMap.setUpdateDate(new Date());
+        mindMapService.save(mindMap);
+
+        result.put("status",200);
+        result.put("message","success");
         return new ResultBean<>(result);
 
     }
