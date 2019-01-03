@@ -9,6 +9,7 @@ import com.hwj.entity.Admin;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
+import java.util.List;
 
 public interface AdminRepository extends PagingAndSortingRepository<Admin, String>{
 	
@@ -26,5 +27,5 @@ public interface AdminRepository extends PagingAndSortingRepository<Admin, Strin
 			nativeQuery = true)
 	Page<Admin> queryAdminsByDate(@Param("firstDate") Date firstDate,@Param("lastDate") Date lastDate, Pageable pageable);
 
-	
+	List<Admin> findAll();
 }
