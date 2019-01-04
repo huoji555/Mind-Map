@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hwj.vo.Mind;
 import com.hwj.vo.MindNode;
 import org.springframework.stereotype.Component;
 
@@ -139,6 +140,19 @@ public class JsonAnalyze {
 		List<MindNode> mindList = null;
 		try {
 			mindList = objectMapper.readValue(str, new TypeReference<List<MindNode>>(){});
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+
+		return mindList;
+	}
+
+	public  List<Mind>  parseMindList(String str) throws Exception{
+
+		List<Mind> mindList = null;
+		try {
+			mindList = objectMapper.readValue(str, new TypeReference<List<Mind>>(){});
 		} catch (Exception e) {
 			// TODO: handle exception
 			return null;

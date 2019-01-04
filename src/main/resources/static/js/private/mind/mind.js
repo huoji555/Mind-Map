@@ -527,6 +527,7 @@ function openMapController($scope,$http,$window,$rootScope) {
             if (status == 200) {
                 var datas = eval('('+ response.data.data.datas +')');
                 jm.show(datas);
+                $rootScope.traverse(datas.data);
             } else {
                 $.messager.alert("操作提示", "服务器异常", "info");
             }
