@@ -265,7 +265,7 @@ function myMapController($scope,$http,$window,$rootScope) {
         mapid = x;
         type += 1;
         $window.location = "mindmap.html#!openMap";
-        $rootScope.openMap();
+        $rootScope.openMap("expand");
 
     }
 
@@ -291,7 +291,7 @@ function myMapController($scope,$http,$window,$rootScope) {
     }
 
     //显示完整图谱
-    $rootScope.openMap = function () {
+    $rootScope.openMap = function (y) {
 
         $http.post('/mindmap/openMap?mapid='+mapid).then(function (response) {
 
@@ -303,6 +303,7 @@ function myMapController($scope,$http,$window,$rootScope) {
                 mapUser = response.data.data.mapUser;
                 jm.show(datas);
                 $rootScope.traverse(datas.data);
+                if(y == "expand") {jm.expand_to_depth(1);}
             } else {
                 $.messager.alert("操作提示", "服务器异常", "info");
             }
@@ -386,7 +387,7 @@ function shareMapController($scope,$http,$window,$rootScope) {
         mapid = x;
         type += 1;
         $window.location = "mindmap.html#!openMap";
-        $rootScope.openMap();
+        $rootScope.openMap("expand");
 
     }
 

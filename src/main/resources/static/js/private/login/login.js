@@ -32,7 +32,6 @@ function LoginController($scope,$http,$window,$rootScope) {
                     if (response.data.data.roleId == "0" || response.data.data.roleId == "1"){
                         $window.location = "index.html";
                     } else if (response.data.data.roleId == "2") {
-                        alert("普通用户");
                         $window.location = "mindmap.html";
                     }
                 } else if (status == 201){
