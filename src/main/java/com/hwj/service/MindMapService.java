@@ -27,6 +27,6 @@ public interface MindMapService {
 
     List<MindNode> getNope(List<MindNode> less, List<MindNode> more);
 
-
+    void delRedisCache(List<MindNode> list);
 
 }

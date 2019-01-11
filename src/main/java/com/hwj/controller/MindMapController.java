@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.hwj.entity.MindMap;
 import com.hwj.service.MindMapService;
 import com.hwj.service.ShareMapService;
+import com.hwj.service.ZsdService;
 import com.hwj.util.JsonAnalyze;
 import com.hwj.util.ResultBean;
 import com.hwj.vo.MindNode;
@@ -13,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.listener.Topic;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +31,10 @@ public class MindMapController {
     private MindMapService mindMapService;
     @Autowired
     private ShareMapService shareMapService;
+    @Autowired
+    private ZsdService zsdService;
+    @Autowired
+    private RedisTemplate redisTemplate;
     @Autowired
     private JsonAnalyze jsonAnalyze;
 
@@ -208,21 +215,8 @@ public class MindMapController {
         HttpSession session = request.getSession();
         String adminId = String.valueOf(session.getAttribute("admin"));
 
-        if (adminId.equals("null") || adminId == "null") {
-            result.put("status",201);
-            result.put("message","登录超时");
-            return new ResultBean<>(result);
-        }
-
-        if (nodeid.equals(mapid)) {
-            mindMapService.deleteMap(mapid);
-            shareMapService.delete(mapid);
-            result.put("status",200);
-            result.put("message","删除成功");
-            return new ResultBean<>(result);
-        }
-
         MindMap mindMap = mindMapService.queryMindByMapid(mapid);
+        ValueOperations ops = redisTemplate.opsForValue();
         String mindUser = mindMap.getUserid();
         String mapList = mindMap.getMapList();
 
@@ -232,12 +226,28 @@ public class MindMapController {
             return new ResultBean<>(result);
         }
 
+        //delete part(Add the Redis)
+        if (nodeid.equals(mapid)) {
+            mindMapService.deleteMap(mapid);
+            mindMapService.delRedisCache(jsonAnalyze.parseList(mapList));
+            shareMapService.delete(mapid);
+            zsdService.deleteByMapid(mapid);
+            result.put("status",200);
+            result.put("message","删除成功");
+            return new ResultBean<>(result);
+        }
+
         //获取自己以及之后的节点
         List<MindNode> list = jsonAnalyze.parseList(mapList);
         List<MindNode> storage = new ArrayList<>();
 
         //之后是循环操作这个，删除每个节点上的数据
         List<MindNode> delList = mindMapService.getChild(list,nodeid,storage);
+        for(ListIterator<MindNode> it = delList.listIterator(); it.hasNext();) {
+            MindNode mindNode = it.next();
+            redisTemplate.delete("zsd"+mindNode.getId());
+            zsdService.deleteByNodeid(mindNode.getId());
+        }
 
         List<MindNode> delAfter = mindMapService.getNope(delList,list);
 

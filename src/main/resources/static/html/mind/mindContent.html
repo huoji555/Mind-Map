@@ -15,7 +15,39 @@
             });
         });
 
+
+        $("#jsmind_container").on('click',"jmnode", function(e) {
+            e.preventDefault();
+            _iframe("zsd.html");
+        });
+
     });
 
+
+    function _iframe(a) {
+
+        zeroModal.show({
+            title: '详细描述',
+            iframe: true,
+            url: a,
+            width: '80%',
+            height: '80%',
+            cancel: false,               //允许关闭
+            resize: true,                //允许移动
+            max: true,                   //允许最大化
+            min: true,                   //允许最小化
+            dragHandle: 'container',     //点击任意地方框拖动(旺仔摇滚冻即视感)
+            opacity: 0.8,                //设置遮罩透明度
+            transition: false,
+            overlayClose: true
+
+        });
+    }
+
+
 </script>
+
+<link rel="stylesheet" type="text/css" href="js/modal/zeroModal.css" />
+
+<script type="text/javascript" src="js/modal/zeroModal.min.js"></script>
 

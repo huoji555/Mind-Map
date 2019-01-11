@@ -36,3 +36,45 @@
     </div>
 
 </div>
+
+
+
+<script>
+
+    //获得选中节点的nodeid
+    function get_selected_nodeid() {
+        var selected_node = jm.get_selected_node();
+        if (!!selected_node) {   //两个叹号是为了将之数据类型转换为布朗型的
+            return selected_node.id;
+        } else {
+            return null;
+        }
+    }
+
+    //获得选中的节点
+    function get_selected_node(){
+        var select_node=jm.get_selected_node();
+        if(!!select_node){
+            return selected_node;
+        }else{
+            return null;
+        }
+    }
+
+    //获得选中的节点名称
+    function get_selected_nodeName(){
+        var selected_node = jm.get_selected_node();
+        if (!!selected_node) {   //两个叹号是为了将之数据类型转换为布朗型的
+            return selected_node.topic;
+        } else {
+            return null;
+        }
+    }
+
+    //获取当前图的mapid
+    function get_mapid() {
+        var mapid = jm.get_data("node_tree").data.id;
+        return mapid;
+    }
+
+</script>

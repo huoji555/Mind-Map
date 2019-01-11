@@ -9,6 +9,7 @@ import com.hwj.vo.MindNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -18,6 +19,8 @@ public class MindMapServiceImpl implements MindMapService {
 
     @Autowired
     private MindMapRepository mindMapRepository;
+    @Autowired
+    private RedisTemplate redisTemplate;
     @Autowired
     private JsonAnalyze jsonAnalyze;
 
@@ -224,8 +227,6 @@ public class MindMapServiceImpl implements MindMapService {
 
 
 
-
-
     /**
      * @auther: Ragty
      * @describe: 移除对象转换后的非法符号(工具方法)
@@ -243,6 +244,24 @@ public class MindMapServiceImpl implements MindMapService {
         datas = datas.replace("}'", "}");
 
         return datas;
+    }
+
+
+    /*
+     * @auther: Ragty
+     * @describe: 清除list中的Redis缓存
+     * @param: [list]
+     * @return: void
+     * @date: 2019/1/11
+     */
+    @Override
+    public void delRedisCache(List<MindNode> list) {
+
+        for(ListIterator<MindNode> it = list.listIterator(); it.hasNext(); ) {
+            MindNode mindNode = it.next();
+            redisTemplate.delete("zsd"+mindNode.getId());
+        }
+
     }
 
 

@@ -26,7 +26,7 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
                 var adminId = response.data.data.adminId;
 
                 if (status == 201){$window.location = "login.html";
-                } else if (status == 200){ mapUser = adminId;}
+                } else if (status == 200){ admin = adminId;}
 
             })
     }
@@ -47,7 +47,8 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
     //新建图谱
     $rootScope.newMap = function () {
 
-        $.messager.prompt('新建图谱','请输入图谱名称',function (r) {
+        $.messager.prompt('新建图谱','请输入图谱名称',function (options) {
+            var r = $rootScope.loap(options);
             if (r) {
                 type += 1;
                 $window.location = "mindmap.html#!openMap";
@@ -210,6 +211,14 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
         }
     }
 
+    //特殊字符的转义
+    $rootScope.loap = function (pee) {
+        var str = pee;
+        var str1 = str.replace(/&/g,"&amp;");
+        var str2 = str1.replace(/>/g,"&gt;");
+        var str3 = str2.replace(/</g,"&lt;");
+        return str3;
+    }
 
 });
 
@@ -414,7 +423,7 @@ function openMapController($scope,$http,$window,$rootScope) {
 
         $.messager.prompt('新增子标签','请输入子标签名称',function (options) {
 
-            var r = loap(options);
+            var r = $rootScope.loap(options);
             if (r) {
                 var nodeid = jsMind.util.uuid2.newid();
                 var topic = r;
@@ -453,7 +462,7 @@ function openMapController($scope,$http,$window,$rootScope) {
 
         $.messager.prompt('编辑标签','请输入新的标签名',function (options) {
 
-            var r = loap(options);
+            var r = $rootScope.loap(options);
 
             if (r) {
                 if (mapUser == admin) {jm.update_node(selected_id,r);}
@@ -535,16 +544,6 @@ function openMapController($scope,$http,$window,$rootScope) {
 
         })
 
-    }
-
-
-    //特殊字符转义(解决建立新标签的问题)
-    function loap(options){
-        var str = options;
-        var str1 = str.replace(/&/g,"&amp;");
-        var str2 = str1.replace(/>/g,"&gt;");
-        var str3 = str2.replace(/</g,"&lt;");
-        return str3;
     }
 
     //获得选中节点的nodeid
