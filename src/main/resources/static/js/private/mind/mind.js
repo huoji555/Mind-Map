@@ -311,7 +311,12 @@ function myMapController($scope,$http,$window,$rootScope) {
                 var datas = eval('('+ response.data.data.datas +')');
                 mapid = response.data.data.mapid;
                 mapUser = response.data.data.mapUser;
-                jm.show(datas);
+                try {
+                    jm.show(datas);
+                } catch (e) {
+                    console.log("出错");
+                    $scope.openMyMap(mapid);
+                }
                 $rootScope.traverse(datas.data);
                 if(y == "expand") {jm.expand_to_depth(1);}
             } else {
