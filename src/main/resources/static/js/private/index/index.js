@@ -1,7 +1,7 @@
 var indexApp = angular.module('index',['ngRoute']);
 
 indexApp.config(['$routeProvider',function ($routeProvider) {
-    $routeProvider.when('/',{templateUrl:"html/Index/indexContent.html",controller:indexController})
+    $routeProvider.when('/',{templateUrl:"html/index/indexContent.html",controller:indexController})
                   .when('/adminMessage',{templateUrl:"html/manger/adminContent.html",controller:adminMessageController})
                   .when('/loginRecord',{templateUrl:"html/manger/loginRecordContent.html",controller:loginRecordController})
                   .when('/exception',{templateUrl:"html/manger/exceptionContent.html",controller:exceptionController})
