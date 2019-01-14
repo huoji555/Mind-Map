@@ -2,6 +2,8 @@ package com.hwj.controller;
 
 import com.google.common.collect.Maps;
 import com.hwj.entity.Zsd;
+import com.hwj.service.AdminService;
+import com.hwj.service.MindMapService;
 import com.hwj.service.ZsdService;
 import com.hwj.util.JsonAnalyze;
 import com.hwj.util.ResultBean;
@@ -24,6 +26,10 @@ public class ZsdController {
     @Autowired
     private RedisTemplate redisTemplate;
     @Autowired
+    private AdminService adminService;
+    @Autowired
+    private MindMapService mindMapService;
+    @Autowired
     private JsonAnalyze jsonAnalyze;
 
 
@@ -40,8 +46,7 @@ public class ZsdController {
 
         Map<String,Object> result = Maps.newHashMap();
         Map<String,Object> data = jsonAnalyze.json2Map(requestJsonData);
-        HttpSession session = request.getSession();
-        String adminId = String.valueOf(session.getAttribute("admin"));
+        String adminId = adminService.getCurrentUser(request);
 
         String nodeid = String.valueOf(data.get("nodeid"));
         String zsdms = String.valueOf(data.get("zsdms"));
@@ -53,18 +58,14 @@ public class ZsdController {
             return new ResultBean<>(result);
         }
 
-        Zsd zsd = zsdService.findZsd(nodeid);
-
-        try {
-            if ( !adminId.equals(zsd.getUserid()) ) {
-                result.put("status",400);
-                result.put("message","不是您的图");
-                return new ResultBean<>(result);
-            }
-        } catch (Exception e) {
-            //...
+        String userid = mindMapService.queryMapUser(mapid);
+        if ( !adminId.equals(userid) ) {
+            result.put("status",400);
+            result.put("message","不是您的图");
+            return new ResultBean<>(result);
         }
 
+        Zsd zsd = zsdService.findZsd(nodeid);
         if (zsd == null) {
             Zsd zsd1 = new Zsd();
             zsd1.setNodeid(nodeid);
@@ -137,7 +138,15 @@ public class ZsdController {
      * @date: 2019/1/10
      */
     @GetMapping("delZsd")
-    public ResultBean delZsd(String nodeid) {
+    public ResultBean delZsd(String nodeid,String mapid,
+                             HttpServletRequest request) {
+
+        String adminId = adminService.getCurrentUser(request);
+        String userid = mindMapService.queryMapUser(mapid);
+
+        if( !adminId.equals(userid) ) {
+            return new ResultBean();
+        }
 
         ValueOperations ops = redisTemplate.opsForValue();
         if( ops.get("zsd"+nodeid) != null ){ redisTemplate.delete("zsd"+nodeid); }

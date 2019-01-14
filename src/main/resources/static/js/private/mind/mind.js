@@ -60,6 +60,7 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
                     if (status == 200) {
                         var datas = eval('('+ response.data.data.datas +')');
                         mapid = response.data.data.mapid;
+                        mapUser = response.data.data.mapUser;
                         jm.show(datas);
                     } else if (status == 201) {
                         $.messager.alert("操作提示", response.data.data.message, "info");

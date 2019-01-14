@@ -27,6 +27,8 @@ public interface MindMapService {
 
     List<MindNode> getNope(List<MindNode> less, List<MindNode> more);
 
+    String queryMapUser(String mapid);
+
     void delRedisCache(List<MindNode> list);
 
 }

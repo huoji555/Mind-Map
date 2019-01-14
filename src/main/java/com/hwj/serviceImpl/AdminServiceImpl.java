@@ -9,6 +9,8 @@ import com.hwj.entity.Admin;
 import com.hwj.repository.AdminRepository;
 import com.hwj.service.AdminService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 
 @Service
@@ -31,6 +33,12 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public Page<Admin> findAllAdmin(Date firstDate, Date lastDate, Pageable pageable) {
 		return adminRepository.queryAdminsByDate(firstDate,lastDate,pageable);
+	}
+
+	@Override
+	public String getCurrentUser(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		return String.valueOf(session.getAttribute("admin"));
 	}
 
 	//有无匹配的登录对象

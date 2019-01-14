@@ -247,6 +247,11 @@ public class MindMapServiceImpl implements MindMapService {
     }
 
 
+    @Override
+    public String queryMapUser(String mapid) {
+        return mindMapRepository.queryMapUser(mapid);
+    }
+
     /*
      * @auther: Ragty
      * @describe: 清除list中的Redis缓存

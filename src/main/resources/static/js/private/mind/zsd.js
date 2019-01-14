@@ -16,7 +16,7 @@ function zsdController($scope,$http,$window,$rootScope) {
         if (describe == '请添加知识点描述' || describe == "") {
             //del the zsd
             if ( describe != zsdBefore ) {
-                $http.get('zsd/delZsd',{params:{nodeid:nodeid}})
+                $http.get('zsd/delZsd',{params:{nodeid:nodeid,mapid:mapid}})
                 return;
             } else {
                 alert("请重新输入");

@@ -3,6 +3,7 @@ package com.hwj.controller;
 import com.google.common.collect.Maps;
 import com.hwj.entity.MindMap;
 import com.hwj.entity.ShareMap;
+import com.hwj.service.AdminService;
 import com.hwj.service.MindMapService;
 import com.hwj.service.ShareMapService;
 import com.hwj.util.ResultBean;
@@ -27,6 +28,8 @@ public class ShareMapController {
     private ShareMapService shareMapService;
     @Autowired
     private MindMapService mindMapService;
+    @Autowired
+    private AdminService adminService;
 
 
     /*
@@ -60,8 +63,7 @@ public class ShareMapController {
     public ResultBean<Map<String,Object>> shareMap(@RequestParam String mapid, HttpServletRequest request){
 
         Map<String,Object> result = Maps.newHashMap();
-        HttpSession session = request.getSession();
-        String userid = String.valueOf(session.getAttribute("admin"));
+        String userid = adminService.getCurrentUser(request);
         MindMap mindMap = mindMapService.queryMindByMapid(mapid);
 
         if ( !userid.equals(mindMap.getUserid()) ) {
@@ -104,8 +106,7 @@ public class ShareMapController {
                                                          HttpServletRequest request) {
 
         Map<String,Object> result = Maps.newHashMap();
-        HttpSession session = request.getSession();
-        String userid = String.valueOf(session.getAttribute("admin"));
+        String userid = adminService.getCurrentUser(request);
 
         if ( !userid.equals(mindUser) ) {
             result.put("status",400);

@@ -4,6 +4,7 @@ import com.hwj.entity.Admin;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 public interface AdminService {
@@ -15,5 +16,7 @@ public interface AdminService {
 	int hasMatchAdmin(String username, String password);
 
 	Page<Admin> findAllAdmin(Date firstDate, Date lastDate, Pageable pageable);
+
+	String getCurrentUser(HttpServletRequest request);
 	
 }

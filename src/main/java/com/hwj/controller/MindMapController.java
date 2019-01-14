@@ -2,6 +2,7 @@ package com.hwj.controller;
 
 import com.google.common.collect.Maps;
 import com.hwj.entity.MindMap;
+import com.hwj.service.AdminService;
 import com.hwj.service.MindMapService;
 import com.hwj.service.ShareMapService;
 import com.hwj.service.ZsdService;
@@ -34,6 +35,8 @@ public class MindMapController {
     @Autowired
     private ZsdService zsdService;
     @Autowired
+    private AdminService adminService;
+    @Autowired
     private RedisTemplate redisTemplate;
     @Autowired
     private JsonAnalyze jsonAnalyze;
@@ -53,8 +56,7 @@ public class MindMapController {
 
         Map<String, Object> result = Maps.newHashMap();
 
-        HttpSession session = request.getSession();
-        String adminId = String.valueOf(session.getAttribute("admin"));
+        String adminId = adminService.getCurrentUser(request);
         String mapid = UUID.randomUUID().toString().replace("-","");
 
         if (adminId.equals("null") || adminId == "null") {
@@ -86,6 +88,7 @@ public class MindMapController {
         result.put("status", 200);
         result.put("datas", mindMapService.openMind(mapList,null));
         result.put("mapid", mapid);
+        result.put("mapUser",adminId);
 
         return new ResultBean<>(result);
     }
@@ -105,8 +108,7 @@ public class MindMapController {
                                                   HttpServletRequest request) throws Exception{
 
         Map<String,Object> result = Maps.newHashMap();
-        HttpSession session = request.getSession();
-        String adminId = String.valueOf(session.getAttribute("admin"));
+        String adminId = adminService.getCurrentUser(request);
 
 
         if (adminId.equals("null") || adminId == "null") {
@@ -154,8 +156,7 @@ public class MindMapController {
                                                      @RequestParam String mapid, HttpServletRequest request) throws Exception{
 
         Map<String,Object> result = Maps.newHashMap();
-        HttpSession session = request.getSession();
-        String adminId = String.valueOf(session.getAttribute("admin"));
+        String adminId = adminService.getCurrentUser(request);
 
 
         if (adminId.equals("null") || adminId == "null") {
@@ -212,8 +213,7 @@ public class MindMapController {
                                                      HttpServletRequest request) throws Exception{
 
         Map<String,Object> result = Maps.newHashMap();
-        HttpSession session = request.getSession();
-        String adminId = String.valueOf(session.getAttribute("admin"));
+        String adminId = adminService.getCurrentUser(request);
 
         MindMap mindMap = mindMapService.queryMindByMapid(mapid);
         ValueOperations ops = redisTemplate.opsForValue();
@@ -337,8 +337,7 @@ public class MindMapController {
     public ResultBean<Page<MindMap>> getMyMap(@RequestParam String page, @RequestParam String size,
                                               HttpServletRequest request) throws Exception{
 
-        HttpSession session = request.getSession();
-        String adminId = String.valueOf(session.getAttribute("admin"));
+        String adminId = adminService.getCurrentUser(request);
 
         Sort sort = new Sort(Sort.Direction.DESC,"update_date");
         Pageable pageable = new PageRequest(Integer.parseInt(page), Integer.parseInt(size), sort);
@@ -362,8 +361,7 @@ public class MindMapController {
                                                           HttpServletRequest request) throws Exception{
 
         Map<String,Object> result = Maps.newHashMap();
-        HttpSession session = request.getSession();
-        String adminId = String.valueOf(session.getAttribute("admin"));
+        String adminId = adminService.getCurrentUser(request);
 
         Map<String,Object> map = jsonAnalyze.json2Map(requestJsonBody);
         String beforeId = String.valueOf(map.get("beforeId"));
@@ -409,8 +407,7 @@ public class MindMapController {
                                                    String color, HttpServletRequest request) throws Exception{
 
         Map<String,Object> result = Maps.newHashMap();
-        HttpSession session = request.getSession();
-        String adminId = String.valueOf(session.getAttribute("admin"));
+        String adminId = adminService.getCurrentUser(request);
 
         MindMap mindMap = mindMapService.queryMindByMapid(mapid);
 

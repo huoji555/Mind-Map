@@ -49,5 +49,9 @@ public interface MindMapRepository extends JpaRepository<MindMap,String> , Pagin
                        @Param("mapname") String mapname, @Param("id") Integer id);
 
 
+    @Query(value = "select userid from mind_map where mapid = ?1",nativeQuery = true)
+    String queryMapUser(String mapid);
+
+
 
 }
