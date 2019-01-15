@@ -1872,3 +1872,27 @@
 2019-01-15 13:20:45.446 [http-nio-80-exec-6] INFO  com.hwj.config.HttpAspect -方法参数:args=0
 2019-01-15 13:20:45.456 [http-nio-80-exec-6] INFO  com.hwj.config.HttpAspect -耗时 : 12
 2019-01-15 13:20:45.457 [http-nio-80-exec-6] INFO  com.hwj.config.HttpAspect -返回结果:response=ResultBean(msg=success, code=0, data=Page 1 of 5 containing com.hwj.entity.ShareMap instances)
+2019-01-15 13:56:32.631 [http-nio-80-exec-3] INFO  com.hwj.config.HttpAspect -请求地址:url=http://localhost/
+2019-01-15 13:56:32.632 [http-nio-80-exec-3] INFO  com.hwj.config.HttpAspect -请求方法:method=GET
+2019-01-15 13:56:32.632 [http-nio-80-exec-3] INFO  com.hwj.config.HttpAspect -IP地址:ip=0:0:0:0:0:0:0:1
+2019-01-15 13:56:32.632 [http-nio-80-exec-3] INFO  com.hwj.config.HttpAspect -请求端口:host={}0:0:0:0:0:0:0:1
+2019-01-15 13:56:32.633 [http-nio-80-exec-3] INFO  com.hwj.config.HttpAspect -请求方法:class_method=com.hwj.controller.IndexController.index
+2019-01-15 13:56:32.633 [http-nio-80-exec-3] INFO  com.hwj.config.HttpAspect -方法参数:args={}
+2019-01-15 13:56:32.633 [http-nio-80-exec-3] INFO  com.hwj.config.HttpAspect -耗时 : 2
+2019-01-15 13:56:32.633 [http-nio-80-exec-3] INFO  com.hwj.config.HttpAspect -返回结果:response=login
+2019-01-15 13:56:41.542 [http-nio-80-exec-1] INFO  com.hwj.config.HttpAspect -请求地址:url=http://localhost/login/ifLogin
+2019-01-15 13:56:41.543 [http-nio-80-exec-1] INFO  com.hwj.config.HttpAspect -请求方法:method=POST
+2019-01-15 13:56:41.544 [http-nio-80-exec-1] INFO  com.hwj.config.HttpAspect -IP地址:ip=0:0:0:0:0:0:0:1
+2019-01-15 13:56:41.544 [http-nio-80-exec-1] INFO  com.hwj.config.HttpAspect -请求端口:host={}0:0:0:0:0:0:0:1
+2019-01-15 13:56:41.544 [http-nio-80-exec-1] INFO  com.hwj.config.HttpAspect -请求方法:class_method=com.hwj.controller.LoginController.ifLogin
+2019-01-15 13:56:41.545 [http-nio-80-exec-1] INFO  com.hwj.config.HttpAspect -方法参数:args=org.apache.catalina.connector.RequestFacade@f81a7e8
+2019-01-15 13:56:41.548 [http-nio-80-exec-1] INFO  com.hwj.config.HttpAspect -耗时 : 6
+2019-01-15 13:56:41.549 [http-nio-80-exec-1] INFO  com.hwj.config.HttpAspect -返回结果:response=ResultBean(msg=success, code=0, data={roleId=2, adminId=hwj, message=已登录, status=200})
+2019-01-15 13:56:41.627 [http-nio-80-exec-4] INFO  com.hwj.config.HttpAspect -请求地址:url=http://localhost/shareMap/getShareMap
+2019-01-15 13:56:41.628 [http-nio-80-exec-4] INFO  com.hwj.config.HttpAspect -请求方法:method=GET
+2019-01-15 13:56:41.628 [http-nio-80-exec-4] INFO  com.hwj.config.HttpAspect -IP地址:ip=0:0:0:0:0:0:0:1
+2019-01-15 13:56:41.628 [http-nio-80-exec-4] INFO  com.hwj.config.HttpAspect -请求端口:host={}0:0:0:0:0:0:0:1
+2019-01-15 13:56:41.629 [http-nio-80-exec-4] INFO  com.hwj.config.HttpAspect -请求方法:class_method=com.hwj.controller.ShareMapController.getShareMap
+2019-01-15 13:56:41.629 [http-nio-80-exec-4] INFO  com.hwj.config.HttpAspect -方法参数:args=0
+2019-01-15 13:56:41.635 [http-nio-80-exec-4] INFO  com.hwj.config.HttpAspect -耗时 : 8
+2019-01-15 13:56:41.635 [http-nio-80-exec-4] INFO  com.hwj.config.HttpAspect -返回结果:response=ResultBean(msg=success, code=0, data=Page 1 of 5 containing com.hwj.entity.ShareMap instances)

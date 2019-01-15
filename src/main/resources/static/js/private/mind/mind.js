@@ -64,6 +64,7 @@ mind.controller('mindControl',function ($scope,$http,$window,$rootScope) {
                         jm.show(datas);
                     } else if (status == 201) {
                         $.messager.alert("操作提示", response.data.data.message, "info");
+                        $window.location = "/";
                     }
 
                 })
@@ -446,7 +447,8 @@ function openMapController($scope,$http,$window,$rootScope) {
                         if (status == 200) {
                             console.log(msg);
                         } else if (status == 201) {
-                            console.log(msg);
+                            $.messager.alert("操作提示", msg, "info");
+                            $window.location = "/";
                         } else if (status == 400) {
                             $.messager.alert("操作提示", msg, "info");
                         }
@@ -482,7 +484,8 @@ function openMapController($scope,$http,$window,$rootScope) {
                     if (status == 200) {
                         console.log(msg);
                     } else if (status == 201) {
-                        console.log(msg);
+                        $.messager.alert("操作提示", msg, "info");
+                        $window.location = "/";
                     } else if (status == 400) {
                         $.messager.alert("操作提示", msg, "info");
                     }

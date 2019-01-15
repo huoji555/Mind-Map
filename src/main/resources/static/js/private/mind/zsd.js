@@ -35,7 +35,10 @@ function zsdController($scope,$http,$window,$rootScope) {
             if (status == 200) {
                 zsdBefore = describe;
                 alert(msg);
-            } else if (status == 400) {
+            } else if(status == 201) {
+                alert(msg);
+                $window.location = "/";
+            }else if (status == 400) {
                 alert(msg);
             }
 
@@ -69,12 +72,5 @@ function zsdController($scope,$http,$window,$rootScope) {
     }
 
     $scope.getZsd();
-
-    /*$scope.mmp = function ($event) {
-        if($event.ctrlKey == true && $event.keyCode == 83){
-            alert("jibai");
-            event.returnValue=false;
-        }
-    }*/
 
 }

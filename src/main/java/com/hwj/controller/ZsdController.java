@@ -53,7 +53,7 @@ public class ZsdController {
         String mapid = String.valueOf(data.get("mapid"));
 
         if (adminId.equals("null") || adminId == "null") {
-            result.put("status",400);
+            result.put("status",201);
             result.put("message","登录超时");
             return new ResultBean<>(result);
         }
