@@ -119,6 +119,7 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.24</version>
         </dependency>
+
          <!-- security 配置-->
 		<!--<dependency>
 		  <groupId>org.springframework.boot</groupId>
