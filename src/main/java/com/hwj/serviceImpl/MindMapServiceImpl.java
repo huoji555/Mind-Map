@@ -9,6 +9,7 @@ import com.hwj.vo.MindNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -260,13 +261,14 @@ public class MindMapServiceImpl implements MindMapService {
      * @date: 2019/1/11
      */
     @Override
-    public void delRedisCache(List<MindNode> list) {
+    public void delRedisCache(List<MindNode> list,String mapid) {
 
-        for(ListIterator<MindNode> it = list.listIterator(); it.hasNext(); ) {
-            MindNode mindNode = it.next();
-            redisTemplate.delete("zsd"+mindNode.getId());
+        if (mapid!=null || mapid!="") {
+            redisTemplate.delete("zsd:"+mapid);
+            return;
         }
 
+        //这边有待修改，先测试一个版本(最终所有的操作都市要放到Redis中的，本地只负责下拉,业务逻辑转移到Redis中处理，通过消息队列下拉)
     }
 
 

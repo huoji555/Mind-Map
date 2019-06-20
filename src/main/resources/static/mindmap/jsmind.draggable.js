@@ -299,7 +299,7 @@
                     
                  //判断拖动目标是否为原节点的小弟  
                 if(!jsMind.node.inherited(src_node, target_node)){
-                    
+
                   //保存移动节点的位置，下次打开时能够根据拖动的位置打开
                    try {
                 	  var adata={"beforeId":src_node.id,
@@ -307,10 +307,7 @@
                   		         "rootid":jm.get_root().id
                              };
                       var data=JSON.stringify(adata);
-					} catch (e) {
-						// TODO: handle exception
-					}
-                       
+
                        $.ajax({
                     	   type:"post",
 		           		   contentType:"application/json",
@@ -333,6 +330,10 @@
 		           			  console.log("网络连接失败！");  
 		           		   },
                        });
+
+                     } catch (e) {
+                        // TODO: handle exception
+                   }
                        
                     }  //更改节点bug
                        

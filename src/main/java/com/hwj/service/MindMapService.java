@@ -29,6 +29,6 @@ public interface MindMapService {
 
     String queryMapUser(String mapid);
 
-    void delRedisCache(List<MindNode> list);
+    void delRedisCache(List<MindNode> list,String mapid);
 
 }

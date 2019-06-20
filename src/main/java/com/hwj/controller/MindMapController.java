@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import java.util.*;
 
 @RestController
@@ -209,6 +210,7 @@ public class MindMapController {
      * @date: 2018/11/17
      */
     @PostMapping("/deleteNode")
+    @Transactional
     public ResultBean<Map<String,Object>> deleteNode(@RequestParam String nodeid, @RequestParam String mapid,
                                                      HttpServletRequest request) throws Exception{
 
@@ -229,7 +231,7 @@ public class MindMapController {
         //delete part(Add the Redis)
         if (nodeid.equals(mapid)) {
             mindMapService.deleteMap(mapid);
-            mindMapService.delRedisCache(jsonAnalyze.parseList(mapList));
+            mindMapService.delRedisCache(jsonAnalyze.parseList(mapList),mapid);
             shareMapService.delete(mapid);
             zsdService.deleteByMapid(mapid);
             result.put("status",200);
@@ -245,7 +247,7 @@ public class MindMapController {
         List<MindNode> delList = mindMapService.getChild(list,nodeid,storage);
         for(ListIterator<MindNode> it = delList.listIterator(); it.hasNext();) {
             MindNode mindNode = it.next();
-            redisTemplate.delete("zsd"+mindNode.getId());
+            redisTemplate.opsForHash().delete("zsd:"+mapid,mindNode.getId());
             zsdService.deleteByNodeid(mindNode.getId());
         }
 
@@ -288,7 +290,7 @@ public class MindMapController {
 
             if ( mindNode.getId().equals(nodeid) ) {
                 parentid = mindNode.getParentid();
-            }
+        }
         }
 
         result.put("status", 200);

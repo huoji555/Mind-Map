@@ -8,6 +8,7 @@ import com.hwj.service.ZsdService;
 import com.hwj.util.JsonAnalyze;
 import com.hwj.util.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.web.bind.annotation.*;
@@ -77,9 +78,10 @@ public class ZsdController {
             zsdService.update(zsdms,nodeid);
         }
 
-        ValueOperations ops = redisTemplate.opsForValue();
-        ops.set("zsd"+nodeid,zsdms);
-        redisTemplate.expire("zsd"+nodeid,7, TimeUnit.DAYS);
+        //这里目前不加消息队列
+        HashOperations hos = redisTemplate.opsForHash();
+        hos.put("zsd:"+mapid,nodeid,zsdms);
+        redisTemplate.expire("zsd:"+mapid,7, TimeUnit.DAYS);
 
         result.put("status",200);
         result.put("message","保存成功");
@@ -98,15 +100,15 @@ public class ZsdController {
      * @date: 2019/1/8
      */
     @GetMapping("getZsd")
-    public ResultBean<Map<String,Object>> getZsd(String nodeid) throws Exception{
+    public ResultBean<Map<String,Object>> getZsd(String nodeid,String mapid) throws Exception{
 
         Map<String,Object> result = Maps.newHashMap();
-        ValueOperations ops = redisTemplate.opsForValue();
+        HashOperations hos = redisTemplate.opsForHash();
 
-        String redisCache = (String) ops.get("zsd"+nodeid);
+        String redisCache = (String) hos.get("zsd:"+mapid,nodeid);
 
         if ( redisCache != null ) {
-            redisTemplate.expire("zsd"+nodeid,7,TimeUnit.DAYS);
+            redisTemplate.expire("zsd:"+mapid,7,TimeUnit.DAYS);
             result.put("status",200);
             result.put("data",redisCache);
         } else {
@@ -118,8 +120,9 @@ public class ZsdController {
                 return new ResultBean<>(result);
             }
 
-            ops.set("zsd"+nodeid,zsd.getZsdms());
-            redisTemplate.expire("zsd"+nodeid,7,TimeUnit.DAYS);
+            hos.put("zsd:"+mapid,nodeid,zsd.getZsdms());
+            redisTemplate.expire("zsd:"+mapid,7, TimeUnit.DAYS);
+
             result.put("status",200);
             result.put("data",zsd.getZsdms());
         }
@@ -148,8 +151,8 @@ public class ZsdController {
             return new ResultBean();
         }
 
-        ValueOperations ops = redisTemplate.opsForValue();
-        if( ops.get("zsd"+nodeid) != null ){ redisTemplate.delete("zsd"+nodeid); }
+        HashOperations hos = redisTemplate.opsForHash();
+        if (hos.hasKey("zsd:"+mapid,nodeid)) {hos.delete("zsd:"+mapid,nodeid);}
         zsdService.deleteByNodeid(nodeid);
 
         return new ResultBean<>();

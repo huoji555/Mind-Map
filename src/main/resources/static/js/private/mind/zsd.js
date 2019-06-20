@@ -48,6 +48,7 @@ function zsdController($scope,$http,$window,$rootScope) {
 
     $scope.getZsd = function () {
         var nodeid = parent.get_selected_nodeid();
+        var mapid  = parent.get_mapid();
         var html = null;
         $scope.zsdmc = parent.get_selected_nodeName();
         $('#a_content').summernote({
@@ -58,7 +59,7 @@ function zsdController($scope,$http,$window,$rootScope) {
             lang: 'zh-CN'
         });            /* 加载模态框配置 */
 
-        $http.get('zsd/getZsd',{params:{nodeid:nodeid}}).then(function (response) {
+        $http.get('zsd/getZsd',{params:{nodeid:nodeid,mapid:mapid}}).then(function (response) {
             var status = response.data.data.status;
             var data = response.data.data.data;
 
