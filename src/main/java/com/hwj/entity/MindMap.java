@@ -5,7 +5,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "mind_map")
+@Table(name = "mind_map",
+        indexes = {@Index(name = "mapid",columnList = "mapid")})
 public class MindMap implements Serializable {
 
     private static final long serialVersionUID = -4169287576837116459L;
