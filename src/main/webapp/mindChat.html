@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>mindChat</title>
+
+	<link href="css/bootstrap.css" rel="stylesheet">
+	<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+
+</head>
+<body>
+
+    <style>
+    
+      .mess{
+        display: inline-block;
+	    position: relative;
+	    padding: 0 10px;
+	    max-width: calc(100% - 40px);
+	    min-height: 30px;
+	    line-height: 2.5;
+	    font-size: 9pt;
+	    text-align: left;
+	    word-break: break-all;
+	    background-color: #b2e281;
+	    border-radius: 4px;
+      }
+      
+      .time{
+        display: inline-block;
+	    padding: 0 18px;
+	    font-size: 11pt;
+	    color: #fff;
+	    border-radius: 2px;
+	    background-color: #dcdcdc;     /* 设置时间样式  */
+      }
+      
+      #hh{
+        text-align: center;
+      }
+      
+      .dir{
+        text-align:left;
+      }
+    
+    </style>
+
+
+
+     <!-- mindChat 连接服务器 -->
+     <script type="text/javascript">
+     
+         var websocket = null;
+     
+         function link(){
+        	 
+             if('WebSocket' in window){
+            	 
+            	 var user = parent.getCurrentUser();  //获取当前登录用户id
+            	 var room = parent.getRootId();       //获取当前打开知识图谱的RootId(相当于房间号)
+            	 
+            	 if(room == false || user == false){
+            		 return false;
+            	 }
+            	 
+            	 var url = "ws://" + window.location.host +"/WebSocketManytoMany/"+user+","+room;
+            	 websocket = new WebSocket(url);
+             } else {
+            	 alert("当前浏览器不支持webSocket");
+             }     
+             
+             //连接失败时
+             websocket.onerror = function() {  
+            	 setMessageInnerHTML("WebSocket连接发生错误...");  
+ 		     };
+ 		     
+ 		     //连接成功建立的回调方法  
+ 		     websocket.onopen = function() {  
+ 		         setMessageInnerHTML("WebSocket连接成功");  
+ 		     }
+        	 
+ 		     
+ 		  	//接收到消息的回调方法  
+ 		    websocket.onmessage = function(event) {  
+ 		        console.log("回调信息",event.data)
+ 		        setMessageInnerHTML(event.data);
+ 		    }
+ 		  	
+ 		  	
+ 		    //连接关闭的回调方法  
+		    websocket.onclose = function() {  
+		        setMessageInnerHTML("WebSocket连接关闭");  
+		    }  
+ 		    
+ 		    
+		    //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。  
+		    window.onbeforeunload = function() {  
+		        closeWebSocket();  
+		    }  
+        	 
+         }
+     
+     </script>
+     
+     
+     <!-- 关闭webSocket及消息发送 -->
+     <script type="text/javascript">
+     
+     //将消息显示在网页上
+     function setMessageInnerHTML(innerHTML) {  
+    	 var date = new Date();
+    	 var hours = date.getHours();
+    	 var min = formatTime(date.getMinutes());
+    	 var sec = formatTime(date.getSeconds());
+    	 
+	     document.getElementById('message').innerHTML += "<div id='hh'><span class='time'>"+hours+":"+min+"</span></div>" +innerHTML ;
+	    } 
+     
+     
+     //关闭WebSocket连接  
+     function closeWebSocket() {  
+         websocket.close();  
+     }  
+     
+     //发送消息
+     function send(){
+    	 
+    	 var message = document.getElementById('text').value;  
+	        //message作为发送的信息，role作为发送的对象标识，socketId是此次会话的标识  
+	        var user = parent.getCurrentUser();    //获取当前登录用户id
+            var room = parent.getRootId();       //获取当前打开知识图谱的RootId(相当于房间号)
+	        var aa = {
+	        		'message':message,	//发送的信息
+	        		'role':user,		//用户账号
+	        		'room':room	//聊天室
+	        	}
+	        var data = JSON.stringify(aa);
+	        websocket.send(data);
+	        document.getElementById('text').value = "";
+     }
+     
+     </script>
+     
+     
+     <!-- 加载此页面时连接WebSocket -->
+     <script type="text/javascript">
+     
+	     $(function(){
+	    	 
+	    	 link();
+	    	 
+	     });
+     
+     </script>
+
+
+     <!-- 回车发送消息 -->
+     <script type="text/javascript">
+     
+     function enter(){
+  
+    	 if(event.keyCode == 13){
+    		 send();
+    	 }
+    	 
+     }
+     
+     //格式化时间
+     function formatTime (i){
+    	    if(i < 10){
+    	      i = "0" + i;
+    	    }
+    	    return i;
+     }
+     
+     </script>
+
+
+    
+    
+    <br/><br/>
+    <input id="text" type="text" onkeydown="enter();"/>
+    <button type="button" onclick="send()">发送消息</button>
+    
+    <div id="message"></div>
+    
+
+
+
+
+
+
+</body>
+</html>

@@ -13,7 +13,11 @@ import java.util.Set;
 
 
 
+
+
+
 import org.springframework.stereotype.Component;
+
 
 
 
@@ -22,8 +26,10 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hwj.entity.MindNode;
 
 @Component
 @SuppressWarnings("unchecked")
@@ -149,6 +155,30 @@ public class JsonAnalyze {
 		}
 		return json;
 	}
+	
+	
+	//转换为能取到的list（）
+	/**
+	 * @author Ragty
+	 * @param  转换为能够取到的list(直接取的话，取出来是未转换的)
+	 * @serialData 2018.6.10
+	 * @param str
+	 * @return
+	 */
+	public  List<MindNode>  parseList(String str){
+		
+		List<MindNode> mindList = null;
+		try {
+			 mindList =  
+				    objectMapper.readValue(str, new TypeReference<List<MindNode>>(){}); 
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+	
+		return mindList;
+	}
+	
 	
 }
 

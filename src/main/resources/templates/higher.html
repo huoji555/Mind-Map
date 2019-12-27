@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>higher.html</title>
+	
+	<meta charset="utf-8">
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    
+    <script src="js/jquery.min2.1.4.js"></script>
+    <script src="js/jquery.json-2.4.js"></script>
+    <script src="js/json2.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    
+    
+    <link rel="stylesheet" type="text/css" href="css/hotai/apache.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    
+    
+    
+    <script type="text/javascript">
+    
+    $(function(){
+    	
+    	$("#search").click(function(){
+    		
+   		 var html="";
+   		 var html1="";
+   		 var num = 0;	
+    	 var adata={"number":$("input:radio:checked").val(), 
+       		        "message":$("#message").val()
+                   };
+         var data=JSON.stringify(adata);
+         
+         $.ajax({
+        	 
+        	 type:"POST",
+        	 contentType:"application/json",
+        	 dataType:"json",
+        	 data:data,
+        	 url:"search1.do",
+        	 
+        	 success:function(data){
+        	     html+="<tbody>";
+        	     $.each(
+        	        data,
+        	        function(i,a){
+        	        	html+="<tr>";
+                    	html+="<td id='qwer'><image src='images/hotai/word.jpg'  width='25px' height='25px'>"+a.filename+"</image></td>";       
+                    	html+="<td>"+a.uploadtime+"</td>";
+                        html+="<td>"+a.filetype+"</td>";
+                    	html+="<td><image src='images/hotai/share.jpg' width='25px' height='25px'>";
+                    	html+="<image src='images/hotai/delete.png' width='25px' height='25px'></td>";
+                    	html+="</tr>";
+                    	
+                    	num = i+1;
+        	        }
+        	     
+        	     );
+        	     html1+="<table class='table'>";
+                 html1+="<caption>共有<span id='much'>"+num+"</span>条搜索数据</caption>";
+                 
+        	     html+="</tbody>";
+                 html+="</table>";
+                 
+                 html = html1+html;
+        	     $("#content").html(html);
+        	 },
+        	 
+         });
+         
+    	});
+    	
+    });
+    
+    
+    </script>
+    
+    <script type="text/javascript">
+    
+       $(function(){
+       
+      $("#message").addClass("background");
+      $("#message").addClass("font");
+      $("#message").addClass("inputLogin");
+      $("#message").addClass("input-group");
+      $("#message").addClass("btn-default");
+      
+         });
+    </script>
+    
+    
+
+  </head>
+  
+  <body>
+    
+      <center>
+    搜索:<input type="text"  id="message"><button id="search" class="btn btn-primary">搜索一下</button> <br>
+      <input type="radio" name="box" value="0">全部
+      <input type="radio" name="box" value="1">文档
+      <input type="radio" name="box" value="2">视频
+      <input type="radio" name="box" value="3">文件
+      <input type="radio" name="box" value="4">其它
+      <br>
+     
+       
+       
+       
+       <hr style="border-color:black;">
+       <div id="content"></div>
+       
+       
+      
+    
+  </body>
+</html>

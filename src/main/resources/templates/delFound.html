@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>文件回收站</title>
+
+    <script src="js/jquery.min2.1.4.js"></script>
+    <script src="js/jquery.json-2.4.js"></script>
+    <script src="js/json2.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="999/zeroModal.min.js"></script>
+    <script src="mindmap/jquery.easyui.min.js" type="text/javascript"></script>
+
+
+    <link rel="stylesheet" type="text/css" href="css/hotai/view.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"> 
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="css/jquery.contextmenu.css">
+    <link rel="stylesheet" type="text/css" href="css/index/floder.css"  >
+    <link rel="stylesheet" type="text/css" href="999/zeroModal.css" >
+    <link rel="stylesheet" type="text/css" href="mindmap/easyui.css">
+    
+    
+    <!--  预加载(只加载删除过的文件) -->
+    <script type="text/javascript">
+    
+    $(function(){
+    	load();
+    });
+    
+      
+    
+    function load(){
+    	var html="";
+    	var adata={"parentid":"0"};
+    	var data=JSON.stringify(adata);
+    	
+    	$.ajax({
+    		type:"POST",
+    		dataType:"json",
+    		data:data,
+    		contentType:"application/json",
+    		url:"getFileStream.do",
+    		
+    		success:function(data){
+    			
+    			
+                $.each(
+                   data,
+                   function(i,a){
+                 	   
+                	  if(a.delStatus=="1"){ 
+                      
+                          if(a.fileType=="video"){
+                        	  html+="<li class='aaa' style='text-align:center'>";
+                              html+="<img src='images/dota2/video.jpg'  class='hover' style='width:80px;height:60px;' oncontextmenu='Rubbish("+a.f_id+",\""+a.nodeid+"\")' value='"+a.f_parentid+"' id='"+a.f_id+"' >";
+                              html+="<div>"+a.filename+"</div>";
+                              html+="</li>";
+                          }else if(a.fileType=="picture"){
+                        	  html+="<li class='aaa' style='text-align:center'>";
+                              html+="<img src='images/dota2/picture.png'  class='hover' style='width:80px;height:60px;' oncontextmenu='Rubbish("+a.f_id+",\""+a.nodeid+"\")' value='"+a.f_parentid+"' id='"+a.f_id+"' >";
+                              html+="<div>"+a.filename+"</div>";
+                              html+="</li>";
+                          }else if(a.fileType=="other"){
+                        	  html+="<li class='aaa' style='text-align:center'>";
+                              html+="<img src='images/dota2/other.jpg'  class='hover' style='width:80px;height:60px;' oncontextmenu='Rubbish("+a.f_id+",\""+a.nodeid+"\")' value='"+a.f_parentid+"' id='"+a.f_id+"' >";
+                              html+="<div>"+a.filename+"</div>";
+                              html+="</li>";
+                          }else if(a.fileType=="doc"){
+                        	  html+="<li class='aaa' style='text-align:center'>";
+                              html+="<img src='images/dota2/doc.jpg'  class='hover' style='width:80px;height:60px;' oncontextmenu='Rubbish("+a.f_id+",\""+a.nodeid+"\")' value='"+a.f_parentid+"' id='"+a.f_id+"' >";
+                              html+="<div>"+a.filename+"</div>";
+                              html+="</li>";
+                          }
+                         
+                	      } 
+                                 	 
+                       });
+       
+                
+                $("#show").html(html);
+    			
+    		},
+    		
+    		errror:function(e){
+    			alert("连接失败");
+    		},
+    		
+    	});
+    	
+    	
+    	
+    }
+    
+    </script>
+    
+    
+    
+    <!-- 回收站的右键菜单-->
+    <script type="text/javascript">
+    
+    function Rubbish(yaya,nodeid){   
+    	
+        document.getElementById('o').value=yaya;
+        document.getElementById('f').value=nodeid;
+        
+    	$(this).on('contextmenu', function(e) {
+			e.preventDefault();
+			$('#mm').menu('show', { //菜单EasyUI
+				left : e.pageX,
+				top : e.pageY,
+				hideOnUnhover : false
+			});
+		});
+    	
+      }
+    </script>
+    
+    
+    
+    <!-- EasyUI右键菜单中的函数 -->
+    <script type="text/javascript">
+   
+    function pp(){
+		   alert("一个坑");
+	  }
+    
+    <!-- 删除数据流函数 -->
+    function  deleteFileStream(){
+	  	 var adata={"f_id":document.getElementById('o').value};
+	  	 var data=JSON.stringify(adata);  
+	  	 
+	  	   $.ajax({
+	  		 type:"POST",
+	  		 contentType:"application/json",
+	  		 dataType:"json",
+	  		 url:"delFileStream.do",
+	  		 data:data,
+	  		 
+	  		 success:function(data){
+	  			 
+	  			 if(data.a==1){
+	  				 alert("删除成功");
+	  				 load();
+	  			 }else if(data.a==2){
+	  				 alert("删除失败");
+	  				 load();
+	  			 }
+	  		 
+	  		 },
+	  		 
+	  		 error:function(e){
+	  			 alert("连接失败");
+	  			 load();
+	  		 }
+			 
+	  	 });   
+		   
+	   } 
+    
+    
+    
+    <!--  数据恢复函数  -->
+    function  writeFileStream(){
+    	
+	     var adata={"f_id":document.getElementById('o').value,
+	    		    "nodeid":document.getElementById('f').value
+	               };
+	   	 var data=JSON.stringify(adata);  
+	   	 
+	   	   $.ajax({
+	   		 type:"POST",
+	   		 contentType:"application/json",
+	   		 dataType:"json",
+	   		 url:"writreFileStream.do",
+	   		 data:data,
+	   		 
+	   		 success:function(data){
+	   			 
+	   			 if(data.a=="1"){
+	   				 alert("成功恢复数据");
+	   				 load();
+	   			 }else{
+	   				 alert("恢复失败");
+	   				 load();
+	   			 }
+	   		    			 
+	   		 },
+	   		 
+	   		 error:function(e){
+	   			 alert("连接失败");
+	   			 window.location.relaod();
+	   		 }
+	 		 
+	   	 }); 
+	    	
+    }
+    
+    </script>
+
+
+</head>
+
+
+<body>
+
+
+&nbsp;&nbsp;
+<caption>&nbsp;&nbsp;文件回收站</caption>
+
+<hr style="border-color:black;">
+
+<div id="show"></div>
+
+<!-- 右键菜单 -->
+<div id="mm" class="easyui-menu" style="width: 120px;height:auth; z-index: 99999" hidden="hidden">
+<div data-options="iconCls:'icon-circle-arrow-right'" onClick="deleteFileStream()" style="height:40px;padding:10px 0;">删除</div>
+<div class="menu-sep"></div>
+<div data-options="iconCls:'icon-edit'" onClick="writeFileStream()" style="height:40px;padding:10px 0;" >数据恢复</div>
+<div class="menu-sep"></div>
+</div>
+
+<div id="o" hidden="hidden"></div>
+<div id="f" hidden="hidden"></div>
+
+</body>
+</html>

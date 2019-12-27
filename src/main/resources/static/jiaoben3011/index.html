@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>jQuery文件夹创建删除修改代码 - 站长素材</title>
+<script type="text/javascript" src="js/jquery-1.8.8.js"></script>
+<script type="text/javascript" src="js/menu.js"></script>
+
+
+<script type="text/javascript">
+//
+$(function(){
+	var $parent = $('#divall'),$bgcolor = $('#divall li'),$carry = $('.carrynews'),
+	$removenews = $('.remove'),$removeall = $('.removeall'),$removeright = $('#removethispc'),
+	$namehide = $('#divall li input.changename'),$changename = $('#changename');
+	$removenews.hide();
+	//新建
+	 $carry.live('click' , function(){
+		    alert('确定新建文件夹？')
+			setTimeout(
+    function(){
+			 $parent.append("<li><input type='text' \class='changename'\ value='新建文件夹'/></li>");
+			 },500);
+	        });
+	//清空
+	$removeall.live('click' , function(){
+		alert('确定清空所有文件夹？')
+		setTimeout(
+    function(){
+			     $parent.empty();
+				 
+			 },500);
+		}); //新文件夹不起作用！！		
+			
+	//变色
+	$bgcolor.live('click' , function(){ 
+	var btns = document.getElementById('removebutton');
+	    btns02 = document.getElementById('removethispc');
+	   $removenews.fadeIn(250);	
+	   $(this).addClass('bgclocrc').siblings().removeClass('bgclocrc');
+	   $(this).attr("id",'remove').siblings().attr('id','');
+	   $( " input[type=text] ").attr("id",'namecc').siblings().attr('id',' ');
+       btns.onclick = function(){//js 调用
+		alert('确定删除文件夹？');	  
+				   setTimeout(
+		function(){   
+				  if($bgcolor.hasClass('bgclocrc'))
+				  {
+				   //alert(123)
+				   // document.getElementById('remove').remove();//js
+				   $('#remove').remove();//jq
+				   $removenews.fadeOut(250);
+				   }else
+				   {
+					  alert('请选择文件')
+					   }
+			  },250)
+		}//
+		
+	  btns02.onclick = function(){//js 调用
+		alert('确定删除文件夹？');	  
+				   setTimeout(
+		function(){   
+				  if($bgcolor.hasClass('bgclocrc'))
+				  {
+				   $('#remove').remove();//jq
+				   $removenews.fadeOut(250);
+				   }else
+				   {
+					  alert('请选择文件')
+					   }
+			  },250)
+		}//	右键功能---删除
+	
+	//右键菜单
+    var container = document.getElementById('remove');  
+    var menu = document.getElementById('menu');
+     
+    /*显示菜单*/
+    function showMenu() {
+ 
+        var evt = window.event || arguments[0];
+         
+        /*获取当前鼠标右键按下后的位置，据此定义菜单显示的位置*/
+        var rightedge = container.clientWidth-evt.clientX;
+        var bottomedge = container.clientHeight-evt.clientY;
+ 
+        /*如果从鼠标位置到容器右边的空间小于菜单的宽度，就定位菜单的左坐标（Left）为当前鼠标位置向左一个菜单宽度*/
+        if (rightedge < menu.offsetWidth)               
+            menu.style.left = container.scrollLeft + evt.clientX - menu.offsetWidth + "px";            
+        else
+        /*否则，就定位菜单的左坐标为当前鼠标位置*/
+            menu.style.left = container.scrollLeft + evt.clientX + "px";
+         
+        /*如果从鼠标位置到容器下边的空间小于菜单的高度，就定位菜单的上坐标（Top）为当前鼠标位置向上一个菜单高度*/
+        if (bottomedge < menu.offsetHeight)
+            menu.style.top = container.scrollTop + evt.clientY - menu.offsetHeight + "px";
+        else
+        /*否则，就定位菜单的上坐标为当前鼠标位置*/
+            menu.style.top = container.scrollTop + evt.clientY + "px";
+             
+        /*设置菜单可见*/
+        menu.style.display = "block";             
+        LTEvent.addListener(menu,"contextmenu",LTEvent.cancelBubble);
+    }
+    /*隐藏菜单*/
+    function hideMenu() {
+        menu.style.display = 'none';
+    }                              
+    LTEvent.addListener(container,"contextmenu",LTEvent.cancelBubble);
+    LTEvent.addListener(container,"contextmenu",showMenu);
+    LTEvent.addListener(document,"click",hideMenu);                    	
+	
+	//
+	$changename.live('click' , function(){
+		
+		if($bgcolor.hasClass('bgclocrc'))
+				  {
+				   $('#remove').find('.changename').val('');
+				   $('#remove').find('.changename').css('border','1px solid #FF0000')
+				   }else
+				   {
+					  alert('请选择文件')
+					   }
+		
+		}); 
+	
+	});
+		
+	//修改文件名
+		$namehide.live('focus' , function(){
+		    $(this).css('border','1px solid #FF0000');
+			$(this).val('');
+			 //键盘控制
+	/* document.onkeydown = function (event) {
+           var e=event.srcElement; 
+            if(event.keyCode==13) 
+            { 
+            alert('确定修改文件名?');
+            return true; 
+            } 
+	    }*/    
+			});
+		$namehide.live('blur' , function(){
+			alert('确定修改文件名？')
+			 $(this).css('border','none');
+			 if( $(this).val() == ""){
+				 $(this).val('新建文件夹');
+				 }else{
+					// $(this).parent().find('span').text() = $(this).value; 
+					 }
+			});	
+	   		
+		//纯属娱乐耍耍，如需更多功能亲们自行开发...............
+
+	
+	});
+
+</script>
+
+<style type="text/css">
+*{margin:0;padding:0;}
+.alldom{width:100%;height:100%;}
+ul{padding:0;list-style:none;}
+ul li{overflow:hidden;width:100px;height:115px;float:left;margin-left:55px;background:url(images/213125.png) center top no-repeat;border:1px solid #fff;position:relative;transition:all 0.2s ease-in 0.1s;}
+ul li.bgclocrc{background:url(images/213125.png) center top no-repeat #f1f2fd;border:1px solid #a7aae3;}
+ul li:hover{background:url(images/213125.png) center top no-repeat #f1f2fd;border:1px solid #a7aae3;}
+input.changename{position:absolute;border-radius:0px;left:-25px;bottom:10px;overflow:hidden;width:98px;height:20px;color:#595c5f;line-height:20px;text-align:center;font-size:12px;z-index:0;border:none;}	
+input.changename:hover{background:none;color:#F33;}	
+input{width:88px;height:24px;line-height:20px;text-align:center;background:none;border:1px solid #CCC;border-radius:8px;transition:all 0.2s ease-in 0.1s;margin-left:25px;}
+input:hover{background:#09F;color:#fff;}
+.menu-zdy{width:120px;padding:4px;height:auto;background:#f8f8f8;border:1px solid #999;text-align:center;position:absolute;display:none;}
+.menu-zdy a{text-decoration:none;text-align:center;line-height:24px;font-family:'Microsoft YaHei';font-size:12px;color:#666;transition:all 0.2s ease-in 0.1s;}
+.menu-zdy .menu-one{padding:5px;width:100px;height:24px;border-bottom:1px dashed #FC0;}
+.menu-zdy .menu-two{padding:5px;width:100px;height:24px;border-bottom:1px dashed #FC0;}
+.menu-zdy a:hover{padding:3px 5px;color:#000;background:#fff;}
+</style>
+
+</head>
+
+<body>
+
+<p style=" margin:10px auto; padding:10px 0; border-bottom:1px solid #666;"><input type="submit" value="创建新文件夹" class="carrynews"/><input type="submit" value="清空文件夹" class="removeall"/><input type="submit" value="删除文件夹" class="remove" id="removebutton"/></p><br/>
+
+
+<div  class="alldom">
+    <ul id="divall">
+        <li><input type="text" class="changename" value="我的文件夹一"/></li>
+        <li><input type="text" class="changename" value="我的文件夹二"/></li>
+        <li><input type="text" class="changename" value="我的文件夹三"/></li>
+        <li><input type="text" class="changename" value="我的文件夹四"/></li>
+        <li><input type="text" class="changename" value="我的文件夹五"/></li>
+        <li><input type="text" class="changename" value="我的文件夹六"/></li>
+        <li><input type="text" class="changename" value="我的文件夹七"/></li>
+    </ul>
+</div>
+
+<div style=" clear:both;"></div>
+
+<div class="menu-zdy" id="menu">
+
+   <div class="menu-one">
+       <a href="#nogo" id="changename">修改文件夹名称</a>
+   </div>
+   
+   <div class="menu-two">
+       <a href="#nogo" id="removethispc">删除此文件</a>
+   </div>
+   
+</div>    
+
+
+</body>
+</html>

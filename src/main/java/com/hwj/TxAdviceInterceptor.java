@@ -16,6 +16,9 @@ import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource;
@@ -25,11 +28,11 @@ import org.springframework.transaction.interceptor.TransactionAttribute;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 /**
- * <p>Company: B505信息技术研究所 </p> 
+ * 
  * @Description: 基于注解的方式的统一事物处理
  * @Create Date: 2017年9月30日下午8:47:07
  * @Version: V1.00 
- * @Author: 赵良臣
+ * @Author: 
  */
 @Aspect
 @Configuration
@@ -80,5 +83,6 @@ public class TxAdviceInterceptor {
     public SessionFactory sessionFactory(HibernateEntityManagerFactory hemf){    
         return hemf.getSessionFactory();    
     }     
+    
 
 }

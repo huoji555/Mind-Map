@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>毛线头登录</title>
+<link rel="stylesheet" href="Login/css/style.css">
+
+<script type="text/javascript" src="js/index/jquery.min.js"></script>
+<script type="text/javascript" src="js/index/bootstrap.min.js"></script>
+<script src="Login/js/common.js"></script>
+<!--背景图片自动更换-->
+<script src="Login/js/supersized.3.2.7.min.js"></script>
+<script src="Login/js/supersized-init.js"></script>
+<!--表单验证-->
+<script src="Login/js/jquery.validate.min.js?var1.14.0"></script>
+
+
+<!--  登录数据提交与接收  -->
+<script type="text/javascript">
+
+        $(function(){
+            $("#login2").click(function(){
+            	login();
+            }); 
+        });
+        
+        /* 空格登录 */
+        function EnterPress(){
+        	
+        	if(event.keyCode == 13){
+        		login();
+        	}
+        	
+        	
+        }
+        
+        /* 登录函数 */
+        function login(){
+        	
+        	var adata={
+                    "user":$("#input").val(),
+                    "password":$("#password").val()
+                };
+                var data=JSON.stringify(adata);
+
+                $.ajax({
+                    type:"POST",
+                    contentType:"application/json",
+                    dataType:"json",
+                    data:data,
+                    url:"loginCheck2.do",
+                    success:function(data) {
+     
+                        if (data.Status == "NotHaveUser" || data.Status == "PasswordError") {
+                            alert("用户名或密码填写不正确");
+                        } else if(data.Status=="RoleError"){
+                       		alert("角色不正确");
+                       } else if (data.Status == "student") {
+                           location.href = "index.do";
+                       }else if (data.Status == "teacher"||data.Status == "admin") {
+                           location.href = "main.do";
+                       }
+                    },
+                    error:function(e){
+                        alert("网络连接失败");
+
+                    }
+                });
+        	
+        }
+        
+    </script>
+    
+
+<body onkeydown="EnterPress()">
+
+<div class="login-container">
+	<h1>毛线头</h1>
+	
+	<div class="connect">
+		<p>毛线头，帮你理清学习思路.</p>
+	</div>
+	
+	
+	<!-- 登录部分 -->
+	    <form>
+		<div>
+			<input id="input" type="text" name="username" class="username" placeholder="用户名" autocomplete="off"/>
+		</div>
+		<div>
+			<input id="password" type="password" name="password" class="password" placeholder="密码" oncontextmenu="return false" onpaste="return false" />
+		</div>
+		<button id="login2" type="button" >登 陆</button>
+	    </form>
+
+	<a href="register.do">
+		<button type="button" class="register-tis">还有没有账号？</button>
+	</a>
+    
+</div>
+
+</body>
+
+</html>

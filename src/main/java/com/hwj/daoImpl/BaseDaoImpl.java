@@ -11,6 +11,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.jpa.HibernateEntityManagerFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hwj.dao.IBaseDao;
@@ -50,21 +51,20 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 	@Override
 	public void save(T entity) {
 		// TODO Auto-generated method stub
-		System.out.println(entity);
 		getCurrentSession().save(entity);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
+	@Transactional
 	public T get(Serializable id) {
 		// TODO Auto-generated method stub
-		System.out.println(entityClass);
 		return (T) getCurrentSession().get(entityClass, id);
 	}
 
 	@Override
 	public void delete(T entity) {
-		System.out.println(entity);
+		//更新底层删除
+		getCurrentSession().update(entity);
 		getCurrentSession().delete(entity);
 	}
 
@@ -83,19 +83,14 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public T get(String propertyName, Object value) {
-		System.out.println(entityClass.getName());
 		String hql = "from " + entityClass.getName() + "  model where model."
 				+ propertyName + " = :name";
 		Query query = getCurrentSession().createQuery(hql);
 		query.setParameter("name", value);
-		System.out.println(123);
 		@SuppressWarnings("unchecked")
 		List<T> list = query.list();
-		System.out.println(list);
 		if (list.size() > 0) {
-			System.out.println(list);
 			return list.get(0);
-
 		}
 		return null;
 	}
@@ -120,14 +115,11 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 
 	@Override
 	public List<T> getAll() {
-		System.out.println("Dao层");
 		String hql = "from " + entityClass.getName();
 		Query query = getCurrentSession().createQuery(hql);
 		@SuppressWarnings("unchecked")
 		List<T> list = query.list();
-		System.out.println(list);
 		if (list.size() > 0) {
-
 			return list;
 		} else {
 			return null;
@@ -182,12 +174,10 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 
 	@Override
 	public List<T> select(String propertyName, Object value) {
-		System.out.println(entityClass.getName());
 		String hql = "from " + entityClass.getName() + "  model where model."
 				+ propertyName + " like '%" + value + "%'";
 		Query query = getCurrentSession().createQuery(hql);
 		// query.setParameter("name", "%"+value+"%");
-		System.out.println(123);
 		@SuppressWarnings("unchecked")
 		List<T> list = query.list();
 		System.out.println(list);
@@ -202,15 +192,12 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 	@Override
 	public List<T> select(String propertyName1, String propertyName2,
 			Object value1, Object value2) {
-		System.out.println(propertyName1 + "" + propertyName2 + ""
-				+ value1.toString() + "   " + value1 + "" + value2);
 		String hql = " from " + entityClass.getName()
 				+ " as model where model." + propertyName1 + "like '%" + value1
 				+ "%'";
 		hql += " and " + " model." + propertyName2 + " like '%" + value2
 				+ "%'   ";
 		Query query = getCurrentSession().createQuery(hql);
-		// query.setParameter("name1","%"+ value1+"%");
 		// query.setParameter("name2","%"+ value2+"%");
 		@SuppressWarnings("unchecked")
 		List<T> list = query.list();
@@ -246,14 +233,11 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 				+ propertyName1 + " = :name1 ";
 		hql += "and model." + propertyName2 + " = :name2";
 
-		// Query query=
 		@SuppressWarnings("unchecked")
 		List<T> list = getCurrentSession().createQuery(hql)
 				.setParameter("name1", value1).setParameter("name2", value2)
 				.list();
-		// query.setParameter("value", value);
 
-		// List<T> list=query.list();
 		if (list.size() > 0) {
 			return list;
 		} else {
@@ -262,6 +246,8 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 		}
 	}
 
+	
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public T get(String propertyName1, String propertyName2,
@@ -284,6 +270,74 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 		}
 
 	}
+	
+	
+	
+	@Override
+	public List<T> getAllByPage(Integer currentPage, Integer pageSize,
+			String propertyName, Object value) {
+		// TODO Auto-generated method stub
+		String hql="from "+entityClass.getName()+" as model where model."+propertyName+" like '%"+value+"%'";
+		
+		@SuppressWarnings("unchecked")
+		List<T> list=getCurrentSession().createQuery(hql).setFirstResult((currentPage-1)*pageSize)
+	             .setMaxResults(pageSize).list();
+		System.out.println("匹配分页法1");
+		
+		if(list.size()>0){
+			return list;
+		}
+		
+		return null;
+	}
+
+	
+	
+	@Override
+	public List<T> getAllByPage(Integer currentPage, Integer pageSize,
+			String propertyName1, Object value1, String propertyName2,
+			Object value2) {
+		// TODO Auto-generated method stub
+		String hql="from "+entityClass.getName()+" as model where model."+propertyName1+" like '%"+value1+"%'";
+	           hql+=" and model."+propertyName2+" like '%"+value2+"%' ";
+           
+   		@SuppressWarnings("unchecked")
+		List<T> list=getCurrentSession().createQuery(hql).setFirstResult((currentPage-1)*pageSize)
+   	             .setMaxResults(pageSize).list();
+   		System.out.println("匹配分页法2");     
+   		
+   		if(list.size()>0){
+			return list;
+		}
+		
+		return null;
+	}
+
+	
+	
+	@Override
+	public Long countByOne(String propertyName, Object value) {
+		// TODO Auto-generated method stub
+		String hql = "select Count (model) from " + entityClass.getName()+ " as model";
+		       hql+=" where model."+propertyName+" like '%"+value+"%'";
+		Long total = (Long) getCurrentSession().createQuery(hql).uniqueResult();
+		return total;
+		
+	}
+
+	
+	
+	@Override
+	public Long countByTwo(String propertyName1, Object value1,
+			String propertyName2, Object value2) {
+		// TODO Auto-generated method stub
+		String hql = "select Count (model) from " + entityClass.getName()+ " as model";
+	           hql+=" where model."+propertyName1+" like '%"+value1+"%'";
+	           hql+=" and model."+propertyName2+" like '%"+value2+"%' ";
+		Long total = (Long) getCurrentSession().createQuery(hql).uniqueResult();
+		return total;
+	}
+
 
 
 }

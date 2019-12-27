@@ -1,0 +1,38 @@
+@CHARSET "UTF-8";
+
+/* 控制思维导图页面的样式 */
+.page-header h1 {
+    padding: 10px;
+    margin: 0 8px;
+    font-size: 24px;
+    font-weight: lighter;
+    color: #2679b5;
+}
+.page-header h1 small {
+    margin: 0 6px;
+    font-size: 14px;
+    font-weight: normal;
+    color: #8089a0;
+}
+.blue {
+    color: #478fca !important;
+}
+.green {
+    color: #69aa46 !important;
+}
+.align-left span{
+	margin-left: 15px;
+}
+.align-left span:hover{
+	cursor: pointer;
+}
+.pagination li:hover{
+	cursor: pointer;
+} 
+.link-style{
+	color: #337ab7;
+}
+.link-style:hover{
+	cursor: pointer;  /* 鼠标样式，手的形状 */
+	text-decoration: underline;   /* 文字的下划线 */
+}

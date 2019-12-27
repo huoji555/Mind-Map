@@ -6,7 +6,8 @@
 	<groupId>com.hwj</groupId>
 	<artifactId>demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
+	
 
 	<name>Mind_Map</name>
 	<description>Demo project for Spring Boot</description>
@@ -40,7 +41,7 @@
 		<dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <version>1.0.0.Final</version>
+            <version>1.0.2.Final</version>
         </dependency>
         <!-- JDBC连接数据库 -->
 		<dependency>
@@ -59,18 +60,36 @@
 			<artifactId>HikariCP</artifactId>
 			<!-- <scope>runtime</scope> -->
 		</dependency> 
-		<!-- 因为配置了thymeleaf 模板，可以将此注释
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency> -->
 		<!-- thymeleaf 模板   默认包含spring-boot-starter-web-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
-		<!-- 到出为war需要的相关依赖--> 
-		<dependency>  
+		<!-- security 配置-->
+		<dependency>
+		  <groupId>org.springframework.boot</groupId>
+		  <artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<!-- Redis 配置 -->
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.lettuce</groupId>
+                    <artifactId>lettuce-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+		<dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
+		
+		
+		
+		<!-- 导出为war需要的相关依赖--> 
+		<!-- <dependency>  
             <groupId>org.springframework.boot</groupId>  
             <artifactId>spring-boot-starter-thymeleaf</artifactId> 
             <exclusions>
@@ -90,7 +109,7 @@
   			<artifactId>tomcat-servlet-api</artifactId>
   			<version>8.0.36</version>
   			<scope>provided</scope>
-		  </dependency>
+		  </dependency> --> 
 		<!-- 连接mysql数据库驱动 -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -164,11 +183,42 @@
 			<scope>test</scope>
 		</dependency>
 		
+		<!-- 后台验证码相关包（之后可去掉） -->
 		<dependency>
-		    <groupId>org.springframework.boot</groupId>
-		    <artifactId>spring-boot-autoconfigure</artifactId>
-		    <version>1.5.6.RELEASE</version>
+		    <groupId>nl.captcha</groupId>
+	 		<artifactId>simplecaptcha</artifactId>
+			<version>1.2.1</version>
+	    </dependency>
+	
+	    <!-- 狗皮药膏(打包时起作用) -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>2.15.0</version>
 		</dependency>
+		
+		<!-- web-Socket -->
+		<dependency>  
+           <groupId>org.springframework.boot</groupId>  
+           <artifactId>spring-boot-starter-websocket</artifactId>  
+       </dependency>  
+		
+		<!-- fastJson -->
+		<dependency>
+		    <groupId>com.alibaba</groupId>
+		    <artifactId>fastjson</artifactId>
+		    <version>1.2.47</version>
+		</dependency>
+		
+		<!-- 汉语言处理包 -->
+		<dependency>
+		    <groupId>com.hankcs</groupId>
+		    <artifactId>hanlp</artifactId>
+		    <version>portable-1.6.8</version>
+		</dependency>
+		
+		
+		
 		
 	</dependencies>
 
@@ -180,8 +230,9 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<fork>true</fork>
-        			<source>1.7</source>  
-       				<target>1.7</target>
+        			<source>1.8</source>  
+       				<target>1.8</target>
+       				<encoding>utf-8</encoding>
 				</configuration>
 			</plugin>
 			<!-- maven 打包时跳过测试 -->

@@ -52,6 +52,9 @@ public class student  implements Serializable{
 	}
 	
 	
+	public student() {
+	}
+	
 	@Override
 	public String toString() {
 		return "student [id=" + id + ", name=" + name + ", password="

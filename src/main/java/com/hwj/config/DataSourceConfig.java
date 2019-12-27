@@ -14,11 +14,9 @@ import org.springframework.context.annotation.PropertySource;
 
 
 /**
-  * <p>Company: ;联系电话 15369337607 </p> 
-  * @Description: 
+  * @Description: 数据连接池配置
   * @Create Date: 2017年8月13日下午11:59:49
   * @Version: V1.00 
-  * @Author: 赵良臣
   */
 @Configuration
 @PropertySource("classpath:datasource.properties")

@@ -1,0 +1,67 @@
+@CHARSET "UTF-8";
+.background{
+   background-color:transparent;	
+   border: solid 1px;
+   color:black;
+   
+}
+.font{
+        font-weight:500;
+        font-size:large;
+        color:black;
+      }
+      
+.cc{
+	background-size:100% 100%;
+}
+.input-group{
+    border:1px black solid;
+    border-spacing:1px;
+    border-radius:4px;
+}
+.inputLogin{
+    opacity: 0.4;
+    transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    -webkit-box-shadow:0 0 0px 1000px #ffffff inset;
+    height:34px;
+    width:326px;
+    padding:6px 12px;
+    border:none;
+}
+.input-group-addon{
+    color:black;
+    background-color:RGBA(255,255,255,0.4);
+
+}
+.btn-default{
+    width:300px;
+    background-color:rgba(255,255,255,0.4);
+}
+
+.loginForm{
+    padding:15px;
+    width:400px;
+    height: 300px;
+    margin-left:auto;
+    margin-right:auto;
+    vertical-align: middle;
+}
+.select {
+   background: transparent;
+   width: 100px;
+   padding: 5px;
+   font-size: 16px;
+   color:black;
+   border: 1px solid #ccc;
+   height: 34px;
+   -webkit-appearance: none; /*for chrome*/
+}
+.button{
+    opacity: 0.4;
+    transition:border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    -webkit-box-shadow:0 0 0px 1000px #ffffff inset;
+    height:34px;
+    width:200px;
+    padding:6px 12px;
+    border:1px;
+}

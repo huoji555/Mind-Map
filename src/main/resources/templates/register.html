@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>毛线头注册</title>
+<link rel="stylesheet" href="Login/css/style.css">
+
+<script src="http://www.jq22.com/jquery/1.11.1/jquery.min.js"></script>
+<script src="Login/js/common.js"></script>
+<!--背景图片自动更换-->
+<script src="Login/js/supersized.3.2.7.min.js"></script>
+<script src="Login/js/supersized-init.js"></script>
+<!--表单验证-->
+<script src="Login/js/jquery.validate.min.js?var1.14.0"></script>
+
+
+
+	<!--  注册数据提交与接收  -->
+	<script type="text/javascript">
+	
+	   $(function(){
+	       $("#register").click(function(){
+	       	Register();
+	       });
+	   });
+	   
+	</script> 
+	
+	
+	
+	<!-- 回车注册 -->
+	<script type="text/javascript">
+	
+	function EnterPress(){
+    	
+    	if(event.keyCode == 13){
+    		Register();
+    	}
+    	
+    }
+	
+	</script>
+    
+    
+    <!-- 用户注册函数Register -->
+    <script type="text/javascript">
+    
+    function Register(){
+    	
+    	if($("#nickName").val() == ""){
+    		$("#tip").text("用户名不能为空");
+    		$("#nickName").focus();
+    		return false;
+    	} else if($("#password").val() == ""){
+    		$("#tip").text("密码不能为空");
+    		$("#password").focus();
+    		return false;
+    	} else if($("#phoneNumber").val() == ""){
+    		$("#tip").text("电话号码不能为空");
+    		$("#phoneNumber").focus();
+    		return false;
+    	} else if($("#email").val() == ""){
+    		$("#tip").text("邮箱地址不能为空");
+    		$("#email").focus();
+    		return false;
+    	}  else if($("#realName").val() == ""){
+    		$("#tip").text("真实姓名不能为空");
+    		$("#realName").focus();
+    		return false;
+    	} else if($("#verifyImage").val() == ""){
+    		$("#tip").text("验证码不能为空");
+    		$("#verifyImage").focus();
+    		return false;
+    	} 
+    	
+    	
+    	var adata={
+                "nickName":$("#nickName").val(),
+                "password":$("#password").val(),
+                "phoneNumber":$("#phoneNumber").val(),
+                "email":$("#Email").val(),
+                "realName":$("#realName").val(),
+                "verifyImage":$("#verifyCode").val(),
+                "role":"2"
+            };
+          
+           
+            var data=JSON.stringify(adata);
+
+            $.ajax({
+                type:"POST",
+                contentType:"application/json",
+                dataType:"json",
+                data:data,
+                url:"register2.do",
+                success:function(data){
+                    if(data.a=="2"){
+                        alert("用户名已经被注册了！");
+                        $(".verifyImage").attr("src","getVerifyCode.do");
+                    }else if(data.a=="1"){
+                        alert("验证码不正确");
+                        $(".verifyImage").attr("src","getVerifyCode.do");
+                    }else if(data.a=="3"){
+                    	alert("注册成功！");
+                        location.href="index.do";
+                    }else if(data.a=="4"){
+                        alert("未知的错误");
+                        $(".verifyImage").attr("src","getVerifyCode.do");
+                    }else if(data.a=="5"){
+                    	alert("数据不完整，请重新注册");
+                    	$(".verifyImage").attr("src","getVerifyCode.do");
+                    }
+                },
+                error:function(e){
+                    alert("网络连接失败");
+
+                }
+            });
+            
+    }
+    
+
+    </script>
+    
+    
+    
+    <!--  每次加载页面后重新加载验证码  -->
+    <!--  下面的src是接受返回图片的地址 -->
+    <!--  点击图片后更换验证码 -->
+    <script type="text/javascript" >
+
+        function reloadVerifyCode()
+        {
+            $(".verifyImage").attr("src","getVerifyCode.do");
+            
+        }
+
+        jQuery(document).ready(function(){
+            //每次加载页面后重新加载验证码
+            reloadVerifyCode();
+        });
+    </script>
+
+
+
+<body onkeydown="EnterPress()">
+
+<div class="register-container">
+	<h1>毛线头</h1>
+	
+	<div class="connect">
+		<p>毛线头，帮你理清学习思路.</p>
+	</div>
+	<div id="tip" class="tip"></div>
+	
+	<!-- 注册部分 -->
+	<form action="" method="post" id="registerForm">
+		<div>
+			<input id="nickName" type="text" name="username" class="username" placeholder="您的用户名" autocomplete="off"/>
+		</div>
+		<div>
+			<input id="password" type="password" name="password" class="password" placeholder="输入密码" oncontextmenu="return false" onpaste="return false" />
+		</div>
+		<div>
+			<input type="password" name="confirm_password" class="confirm_password" placeholder="再次输入密码" oncontextmenu="return false" onpaste="return false" />
+		</div>
+		<div>
+			<input id="phoneNumber" type="text" name="phone_number" class="phone_number" placeholder="输入手机号码" autocomplete="off" />
+		</div>
+		<div>
+			<input id="realName" type="text" name="realName"  placeholder="输入真实姓名" autocomplete="off" />
+		</div>
+		<div>
+			<input id="Email" type="email" name="email" class="email" placeholder="输入邮箱地址" oncontextmenu="return false" onpaste="return false" />
+		</div>
+		<div class="input-group">
+            <input type="text" id="verifyCode"  name="verifyCode" valType="required" placeholder="请输入验证码" />
+            <img class="verifyImage"  src="getVerifyCode.do"  align="left" style="cursor:pointer;"
+                 onclick="reloadVerifyCode();" title="点击更换验证码" alt="看不清，换一张" />
+        </div>
+
+		<button id="register" type="button">注 册</button>
+	</form>
+	<a href="testLogin.do">
+		<button type="button" class="register-tis">已经有账号？</button>
+	</a>
+
+</div>
+
+</body>
+</html>

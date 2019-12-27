@@ -1,0 +1,64 @@
+@CHARSET "UTF-8";
+.divcss{
+	position:relative;
+	width:1100px;
+	height:500px;
+	border:1px solid #C1C1C1;
+	align:center;
+	
+}
+.divcss-a{
+	position:absolute;
+	width:1030px;
+	height:400px;
+	left:0px;
+	top:50px;
+	border:1px solid #C1C1C1;
+    align:center;	
+}
+.box{
+	width:"55px";
+	height:"55px";
+	text-align:center;
+	font-szie:18px;
+	display:inline;
+	 }
+.divcss-b{
+	position:absolute;
+	width:300px;
+	height:200px;
+	left:0px;
+	top:50px;
+	border:3px solid #C1C1C1;
+	
+}
+.roll{ 
+	position:absolute;
+	height:400px;
+	overflow-y:auto;
+	
+	 } 
+.foolish{
+	width:120px;
+	height:120px;
+	border:1px solid green;
+	text-align:center;
+	line-height:120px;
+		
+}
+a:link { 
+color:#34AA4B; 
+text-decoration:underline; 
+} 
+a:visited { 
+color:#34AA4B; 
+text-decoration:none; 
+} 
+a:hover { 
+color:#34AA4B; 
+text-decoration:none; 
+} 
+a:active { 
+color:#34AA4B; 
+text-decoration:none; 
+}

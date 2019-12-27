@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="summernote/dist/summernote.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/biji/AliIcon.css">
+<link rel="stylesheet" type="text/css" href="css/biji/AliIcon2.css">
+<link rel="stylesheet" href="css/biji/biji.css" />
+<link rel="stylesheet" href="css/fileUpload/upload.css" />
+
+<script type="text/javascript" src="js/jquery.min2.1.4.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="summernote/dist/summernote.js"></script>
+<script src="summernote/dist/lang/summernote-zh-CN.js"></script>    <!-- 中文-->
+<script src="js/pdf.js"></script>
+
+<style>
+.tags{
+  width: 90%;
+  background: #f5f5f5;
+  margin: 0 auto;
+}
+
+/* .nav li {
+	box-shadow: 0 0 0 0.2px rgba(97,97,97,1) inset; */
+</style>
+
+</head>
+<body onkeydown="Ctrl()">
+
+	 <div class="form-group">
+        <label for="" style=" width:95%; margin:auto; margin-left: 5%;">
+        	<span style="float:left;margin:0,auto;margin-top: 5px;">知识点名称 </span>
+        	<input type="email" class="form-control" id="zsdmc" onsubmit="return false;"  placeholder="知识点名称" style="width:85%;float:right;margin-right: 5%;">
+        </label><br/>
+     </div>           <!-- zsdmc End!!! -->
+     
+     <form class="knowlegMap">
+     
+     <div class="tags">
+       <ul class="nav nav-pills nav-justified" style="width:100%;">
+	     <li role="presentation" id="zsdms">
+	       <a onclick="getzsd()">知识点描述</a>
+	     </li>
+	     <li role="presentation" id="myFile">
+	       <a onclick="getUpload()">我的文件</a>
+	     </li>
+	     <li role="presentation" id="myCollect">
+	       <a onclick='showCollectionFile()'>文件收藏</a>
+	     </li>
+	     <li role="presentation" id="myShare">
+	       <a onclick='getShareUpload()'>文件分享</a>
+	     </li>
+	     <li role="presentation" id="UploadFile">
+	       <a onclick='uploadShow()'>上传文件</a>
+	     </li>
+	     <li role="presentation" style="text-align:right;">
+	       <button onclick='cut();' type='button' class="btn btn-primary btn-block">保存</button>
+	     </li>
+	 </ul>
+	 </div>
+	 
+     <div style="width:90%; margin:0 auto;">
+        <div  class="summernote" id="a_content" name="a_content"></div>
+     </div>
+     </form>                  <!-- 显示加载模态框的界面 -->
+
+ 
+ 
+   <!-- 初始界面加载 -->
+   <script type="text/javascript">
+   
+	   $(function(){
+		   
+		    getzsd();
+	
+	   });
+   
+   </script>
+ 
+ 
+      <!-- 获取并显示知识点内容 -->
+	  <script>
+	 
+	    <!-- 获取并显示知识点内容 -->
+	    function getzsd(){
+			  
+	    	$('#a_content').summernote({
+		          height: 400,
+		          tabsize: 2,
+		          minHeight: 20,
+		          maxHeight: 900,
+		          lang: 'zh-CN'
+		      });            /* 加载模态框配置 */
+		      
+			  var html="";
+			  var button = "";
+			  var nodeid=parent.get_selected_nodeid();
+			  var nodeName=parent.get_selected_nodeName();
+			  var rootid = parent.getRootId();
+			  var adata={"nodeid":nodeid,
+					     "rootid":rootid 
+					    };
+			  var data=JSON.stringify(adata);
+			  $("li").removeClass("active");
+			  $("#zsdms").addClass("active");
+			  
+			     $.ajax({
+			    	 type:"POST",
+			    	 contentType:"application/json",
+			    	 dataType:"json",
+			    	 data:data,
+			    	 url:"getMapZsd.do",
+			    	 
+			    	 success:function(data){
+			    		 
+			    		 if(data.map.zsdmc == undefined || data.map.zsdmc == null ||  data.map.zsdmc == ""){
+			    			 $("#zsdmc").attr("placeholder",nodeName);
+			    		 } else{
+			    			 $("#zsdmc").attr("value",data.map.zsdmc);
+			    		 }
+			    		 
+				 		 if(data.map.zsdms == undefined){
+				 			html = "请添加知识描述";
+				 			$('.summernote').summernote('code',html);
+				 		 } else{
+				 			html = data.map.zsdms;
+				 			$('.summernote').summernote('code',html);
+				 		 }
+				 		 
+				 		 document.getElementById('store').value = html; 
+				 		 
+			    	 },
+			    	 
+			    	 error:function(e){
+			    		 alert("连接显示知识点失败");
+			    	 },
+			    	 
+			     });
+			  
+		   }
+	    
+	    
+	    
+	      <!-- 保存节点上的知识点  -->
+		  function savezsd(){
+			  var nodeid=parent.get_selected_nodeid();
+			  var rootid = parent.getRootId();
+			  var adata={"zsdid":nodeid,
+						 "zsdmc":$("#zsdmc").val(),
+						 "rootid":rootid,
+				         "zsdms":$('#a_content').summernote('code')
+				        };
+			  var data=JSON.stringify(adata);
+			  
+			  $.ajax({
+		    	  type:"POST",
+		    	  contentType:"application/json",
+		    	  dataType:"json",
+		    	  data:data,
+		    	  url:"saveMapZsd.do",
+		    	  
+		    	  success:function(data){
+		    		  if(data.a=="1"){
+		    			  alert("修改知识点知识成功");
+		    			  window.location.reload("biji.html");
+		    		  }else if(data.a=="2"){
+		    			  alert("修改知识点知识失败");
+		    			  window.location.reload("biji.html");
+		    		  } else if(data.a=="3"){
+		    			  alert("不是您的知识图谱");
+		    			  window.location.reload("biji.html");
+		    		  }
+		    		  
+		    	  },
+		  
+		    	  error:function(r){
+		    		  alert("连接失败");
+		    	  }, 
+		  
+		      });  
+			  
+		  }	    
+		  
+	
+	      //确保切换时，知识点描述会保存
+		  function cut(){
+			  
+			  if($("#zsdms").attr("class") == "active"){
+				  var zsdBefore = document.getElementById('store').value;
+				  var zsdNow = $('#a_content').summernote('code');
+				  
+				  if(zsdBefore != zsdNow){
+					  savezsd();
+				  }
+			  }
+			  
+		  }
+	      
+	      //增加Ctrl+s保存知识点
+	      function Ctrl(){
+	    	  
+	    	  if(event.ctrlKey == true && event.keyCode == 83){
+	    		  cut();
+	    		  event.returnValue=false;  //不同浏览器之间会有阻塞，现在有点懒，以后碰到问题写个多浏览器判断即可
+	        	}
+	    	  
+	      }
+	    
+	  </script>
+	  
+	  
+	  
+	  <!-- 获取或者删除上传文件(对上传文件的操作)-->
+	  <script type="text/javascript">
+	  
+	     <!-- 获取节点上的上传文件 -->
+	     function getUpload(){
+	    	 
+	    	cut(); 
+	    	var nodeid = parent.get_selected_nodeid();
+	    	var html = "";
+	    	var da={"nodeid":nodeid};
+	    	
+	    	   $.ajax({
+	    		   type : "POST",
+				   url : "getMapUpload.do",
+				   data : da,
+				   
+				   success: function(data){
+					   $('#a_content').summernote('destroy');
+					   $("li").removeClass("active");
+					   $("#myFile").addClass("active");
+					   
+					   var json = $.parseJSON(data);
+					   
+					   if(json.state=='0'){
+						   
+						   $.each(json.list2,function(index,content){
+							   
+							   if(content.fileType=="other"){
+								   html = html+"<div class='box'><div><img src='"+content.tubiao+"'><a class='name' href='pdf/generic/web/viewer.html?file="+content.filepath+"'>"+content.zlmc+"</a>"+
+							           "<span class='time'><i class='iconfont icon-shijian' ></i>"+content.time+"</span></div>"+ 
+								       "<div><p class='inc'><i class='iconfont icon-shuqianbookmark29'></i>"+content.zlms+"</p>"+
+								       "<span class='span'>"+
+									   "<a href='pdf/generic/web/viewer.html?file="+content.filepath+"'><i class='iconfont icon-chakan' id='sp' style='color: green;'></i></a>"+
+									   "<a  onclick='shareUpload("+nodeid+","+content.zlid+");'><i class='iconfont icon-fenxiang' id='sp'></i></a>"+
+									   "<a  onclick='collectUpload("+content.zlid+","+nodeid+")'><i class='iconfont icon-shoucang' id='sp' style='color: red;'></i></a>"+
+									   "<a  onclick='delUpload("+content.zlid+");'><i class='iconfont icon-shanchu' id='sp' style='color:black;'></i></a>"+
+								       "</span></div></div>";
+							   } else {
+								   html = html+"<div class='box'><div><img src='"+content.tubiao+"'><a class='name' href='"+content.filepath+"'>"+content.zlmc+"</a>"+
+							           "<span class='time'><i class='iconfont icon-shijian' ></i>"+content.time+"</span></div>"+ 
+								       "<div><p class='inc'><i class='iconfont icon-shuqianbookmark29'></i>"+content.zlms+"</p>"+
+								       "<span class='span'>"+
+									   "<a href='"+content.filepath+"'><i class='iconfont icon-chakan' id='sp' style='color: green;'></i></a>"+
+									   "<a  onclick='shareUpload("+nodeid+","+content.zlid+");'><i class='iconfont icon-fenxiang' id='sp'></i></a>"+
+									   "<a  onclick='collectUpload("+content.zlid+","+nodeid+")'><i class='iconfont icon-shoucang' id='sp' style='color: red;'></i></a>"+
+									   "<a  onclick='delUpload("+content.zlid+");'><i class='iconfont icon-shanchu' id='sp' style='color:black;'></i></a>"+
+								       "</span></div></div>";
+							   }
+							   
+						   });
+						   
+					   } else {
+						   html += "</br></br></br></br></br></br><h1 align='center'>暂无上传文件</h1>";
+					   }
+					   
+					   $("#a_content").html(html);
+					   
+				   },
+				   
+				   
+	    	   });
+	    	 
+	     }
+	  
+	     
+	    <!-- 删除节点上的文件  -->
+		function delUpload(zlid){
+			
+			var nodeid=parent.get_selected_nodeid();
+			var rootid = parent.getRootId();
+			var adata={"zlid":zlid,
+					   "nodeid":nodeid,
+					   "rootid":rootid
+			         };
+			var data=JSON.stringify(adata);
+			
+			  $.ajax({
+				  type:"POST",
+				  contentType:"application/json",
+				  dataType:"json",
+				  url:"delUpload.do",
+				  data:data,
+				  
+				  success:function(data){
+					  
+					  if(data.a==1){
+						  alert("删除成功");
+						  window.location.reload();
+					  }else if(data.a==2){
+						  alert("非合法操作");
+					  }else{
+						  alert("删除失败");
+					  }
+				  },
+				  
+				  error:function(e){
+					  alert("访问删除接口失败");
+				  }
+				  
+			  });		
+			
+			}	     
+	     
+	  </script>
+  
+  
+  
+      <!-- 文件上传  -->
+      <script type="text/javascript">
+      
+         //加载上传文件的页面
+         function uploadShow(){
+        	 
+        	 cut();
+        	 $('#a_content').summernote('destroy');
+			 $("li").removeClass("active");
+			 $("#UploadFile").addClass("active");
+        	 
+			 var html = "";
+			 html += "<div class='box1'>";
+			 html += "<i class='iconfont icon-wendangtianjia' id='wj'></i>";
+			 html += "<input type='file' id='wenjian' name='wenjian' onclick='showButton()' value='' style='margin:0 auto;' title='上传附件'>";
+			 html += "</div><div id='button'></div>";
+			 
+        	 $("#a_content").html(html);
+        	 
+         }
+         
+         
+         //若有上传文件，则显示上传按钮
+         function showButton(){
+
+        	 var html = "";
+        	 
+        	 if($("#wenjian").val()== ""){
+        		 html += "<button class='btn btn-success' type='button' style ='margin-top:10px; float:right;' onclick='uploadFile()'>上传</button>";
+        		 $("#button").html(html);
+        	 } else{
+        		 $("#button").html(html);
+        	 }
+        	 
+         }
+         
+         
+         //节点上传文件
+	   	 function uploadFile(){
+	 		 
+			 var formData = new FormData();
+			 var nodeid=parent.get_selected_nodeid();
+			 var rootid = parent.getRootId();
+		  	 formData.append("wenjian",$("#wenjian")[0].files[0]);
+		  	 formData.append("nodeid",nodeid);
+		  	 formData.append("rootid",rootid);
+		  	  
+		     $.ajax({
+		         url: 'setMapUpload.do',  
+		         type: 'post',
+		         data : formData, 
+		         processData : false, 
+		         contentType : false,
+		        
+		         success: function (data) {
+		        	 var json = $.parseJSON(data);
+		        	 if(json.a == "1"){
+		        		 alert("上传成功");
+		        		 uploadShow();
+		        	 } else if (json.a == "5"){
+		        		 alert("不是您的知识图谱");
+		        		 uploadShow();
+		        	 } else if (json.a == "3"){
+		        		 alert("已上传过该文件");
+		        		 uploadShow();
+		        	 } else if (json.a == "2"){
+		        		 alert("上传失败");
+		        		 uploadShow();
+		        	 }
+		          },
+		          error: function (data) {
+		              alert("服务器向你抛了个异常");
+		          } 
+		      }); 
+			  
+		  }
+         
+         
+      </script>
+      
+      
+      
+      <!-- 节点上传文件相关操作  -->
+      <script type="text/javascript">
+      
+        //分享上传文件
+		function shareUpload(nodeid,zlid){
+			
+			var rootid = parent.getRootId();
+			var adata={"nodeid":nodeid,
+					   "zlid":zlid,
+					   "rootid":rootid
+			          };
+			var data=JSON.stringify(adata);
+			
+			$.ajax({
+				type:"POST",
+				contentType:"application/json",
+				dataType:"json",
+				url:"saveNodeFile.do",
+				data:data,
+				
+				success:function(data){
+					
+					if(data.a=="1"){
+					   alert("分享成功");
+					   getShareUpload();
+					}else if(data.a=="2"){
+					   alert("非法操作，请登录");
+					   getShareUpload();
+					}else if(data.a=="3"){
+					   alert("已分享，请勿重新提交");
+					   getShareUpload();
+					}
+				},
+				
+				error:function(e){
+					alert("连接分享接口失败");
+				},						
+			});
+		}	
+      
+ 
+        //获取显示节点上的分享文件
+		function getShareUpload(){
+			
+			  cut();
+			  var html="";	
+			  var nodeid=parent.get_selected_nodeid();
+			  var adata={"nodeid":nodeid};
+			  var data=JSON.stringify(adata);	
+			  	
+			    $.ajax({
+			    	type:"POST",
+			    	contentType:"application/json",
+			    	dataType:"json",
+			    	data:data,
+			    	url:"getShareUpload.do",
+			    	
+			    	success:function(data){
+			    		$('#a_content').summernote('destroy');
+						$("li").removeClass("active");
+						$("#myShare").addClass("active");
+			    		
+			    		if(data.state=="0"){
+			    			
+				    		$.each(data.list2,function(index,content){
+							
+				    			if(content.fileType=="other"){
+				    				html = html+"<div class='box'><div><img src='"+content.tubiao+"'><a class='name' href='pdf/generic/web/viewer.html?file="+content.filepath+"'>"+content.zlmc+"</a>"+
+							           "<span class='time'><i class='iconfont icon-shijian' ></i>"+content.time+"</span></div>"+ 
+								       "<div><p class='inc'><i class='iconfont icon-shuqianbookmark29'></i>"+content.zlms+"</p>"+
+								       "<span class='span'>"+
+									   "<a href='pdf/generic/web/viewer.html?file="+content.filepath+"'><i class='iconfont icon-chakan' id='sp' style='color: green;'></i></a>"+
+									   "<a  onclick='collectUpload("+content.zlid+","+nodeid+")'><i class='iconfont icon-shoucang' id='sp' style='color: red;'></i></a>"+
+									   "<a  onclick='delShareUpload("+content.zlid+");'><i class='iconfont icon-shanchu' id='sp' style='color:black;'></i></a>"+
+								       "</span></div></div>";	   
+				    			}else{
+				    				html = html+"<div class='box'><div><img src='"+content.tubiao+"'><a class='name' href='"+content.filepath+"'>"+content.zlmc+"</a>"+
+							           "<span class='time'><i class='iconfont icon-shijian' ></i>"+content.time+"</span></div>"+ 
+								       "<div><p class='inc'><i class='iconfont icon-shuqianbookmark29'></i>"+content.zlms+"</p>"+
+								       "<span class='span'>"+
+									   "<a href='"+content.filepath+"'><i class='iconfont icon-chakan' id='sp' style='color: green;'></i></a>"+
+									   "<a  onclick='collectUpload("+content.zlid+","+nodeid+")'><i class='iconfont icon-shoucang' id='sp' style='color: red;'></i></a>"+
+									   "<a  onclick='delShareUpload("+content.zlid+");'><i class='iconfont icon-shanchu' id='sp' style='color:black;'></i></a>"+
+								       "</span></div></div>";	    
+				    			}
+				    		
+				    		      });
+								
+			    	      	 }else{
+			    	      		html += "</br></br></br></br></br></br><h1 align='center'>暂无分享文件</h1>";
+			    	      	 }
+			    		
+			    		$("#a_content").html(html);
+			    	},
+			    	
+			    	error:function(e){
+			    		   alert("连接失败");
+			    	}
+			    	
+			    });
+				
+			}  
+        
+        
+        //删除分享文件
+		function delShareUpload(f_id){
+			
+			var nodeid=parent.get_selected_nodeid();
+			var rootid = parent.getRootId();
+			var adata={"f_id":f_id,
+					   "nodeid":nodeid,
+					   "rootid":rootid
+					   };
+			var data=JSON.stringify(adata);
+			
+			    $.ajax({
+			    	type:"POST",
+			    	contentType:"application/json",
+			    	dataType:"json",
+			    	data:data,
+			    	url:"delShareUpload.do",
+			    	
+			    	success:function(data){
+			    		
+			    		if(data.a==1){
+			    			alert("删除成功");
+			    			getShareUpload();
+			    		}else{
+			    			alert("删除失败");
+			    			getShareUpload();
+			    		}
+			    	},
+			    	
+			    	error:function(e){
+			    		alert("连接失败");
+			    	}
+			    	
+			    	
+			    });
+			
+		}        
+      
+      </script>
+      
+      
+      
+      <!-- 节点上收藏文件相关操作  -->
+      <script type="text/javascript">
+      
+        //节点上收藏文件功能
+		function collectUpload(zlid,nodeid){
+			
+			var rootid = parent.getRootId();
+			var adata={"zlid":zlid,
+					   "nodeid":nodeid,
+					   "rootid":rootid
+			       };
+			var data=JSON.stringify(adata);
+			
+			$.ajax({
+				type:"POST",
+				contentType:"application/json",
+				dataType:"json",
+				data:data,
+				url:"saveCollectUpload.do",
+				
+				success:function(data){
+					
+					if(data.a=="1"){
+						alert("收藏成功");
+						showCollectionFile();
+					}else if(data.a=="3"){
+						alert("已收藏过该文件");
+						showCollectionFile();
+					}else{
+						alert("收藏失败");
+						showCollectionFile();
+					}
+					
+				},
+				
+				error:function(e){			
+					alert("连接失败");
+				}
+				
+			});
+	
+		}
+		
+		
+		
+		//显示收藏文件
+		function showCollectionFile(){
+			
+			cut();
+			var nodeid=parent.get_selected_nodeid();
+			
+			var html="";
+			var adata={"nodeid":nodeid};
+			var data=JSON.stringify(adata);
+			
+			   $.ajax({
+				   type:"POST",
+				   contentType:"application/json",
+				   dataType:"json",
+				   data:data,
+				   url:"getCollectUpload.do",
+				   
+				   success:function(data){
+					   $('#a_content').summernote('destroy');
+					   $("li").removeClass("active");
+					   $("#myCollect").addClass("active");
+
+					   if(data.state=="0"){
+						   
+						   $.each(data.list2,function(i,content){
+							   
+							   if(content.fileType=="other"){
+								   html = html+"<div class='box'><div><img src='"+content.tubiao+"'><a class='name' href='pdf/generic/web/viewer.html?file="+content.filepath+"'>"+content.zlmc+"</a>"+
+						           "<span class='time'><i class='iconfont icon-shijian' ></i>"+content.time+"</span></div>"+ 
+							       "<div><p class='inc'><i class='iconfont icon-shuqianbookmark29'></i>"+content.zlms+"</p>"+
+							       "<span class='span'>"+
+								   "<a href='pdf/generic/web/viewer.html?file="+content.filepath+"'><i class='iconfont icon-chakan' id='sp' style='color: green;'></i></a>"+
+								   "<a  onclick='shareUpload("+nodeid+","+content.zlid+");'><i class='iconfont icon-fenxiang' id='sp'></i></a>"+
+								   "<a  onclick='delCollectionFile("+content.zlid+");'><i class='iconfont icon-shanchu' id='sp' style='color:black;'></i></a>"+
+							       "</span></div></div>";
+							   }else{
+								   html = html+"<div class='box'><div><img src='"+content.tubiao+"'><a class='name' href='"+content.filepath+"'>"+content.zlmc+"</a>"+
+						           "<span class='time'><i class='iconfont icon-shijian' ></i>"+content.time+"</span></div>"+ 
+							       "<div><p class='inc'><i class='iconfont icon-shuqianbookmark29'></i>"+content.zlms+"</p>"+
+							       "<span class='span'>"+
+								   "<a href='"+content.filepath+"'><i class='iconfont icon-chakan' id='sp' style='color: green;'></i></a>"+
+								   "<a  onclick='shareUpload("+nodeid+","+content.zlid+");'><i class='iconfont icon-fenxiang' id='sp'></i></a>"+
+								   "<a  onclick='delCollectionFile("+content.zlid+");'><i class='iconfont icon-shanchu' id='sp' style='color:black;'></i></a>"+
+							       "</span></div></div>";
+							   }
+						      
+						   });   
+					   }else{   
+						   html += "</br></br></br></br></br></br><h1 align='center'>暂无收藏文件</h1>";
+					   }
+					   
+					   $("#a_content").html(html);
+				   },
+				   
+				   error:function(e){   
+					   alert("收藏文件连接失败");
+				   },
+		   
+			   });	
+		}
+		
+		
+		//删除收藏文件
+		function delCollectionFile(zlid){
+			
+			var nodeid=parent.get_selected_nodeid();
+			var rootid = parent.getRootId();
+			var adata={"zlid":zlid,
+					   "nodeid":nodeid,
+					   "rootid":rootid
+			          };
+			var data=JSON.stringify(adata);
+			
+			   $.ajax({
+				   type:"POST",
+				   contentType:"application/json",
+				   dataType:"json",
+				   data:data,
+				   url:"delCollectUpload.do",
+				   
+				   success:function(data){
+					   
+					   if(data.a=="1"){
+						   alert("删除成功");
+						   showCollectionFile();
+					   }else{
+						   alert("删除失败");
+						   showCollectionFile();
+					   }	   
+				   },
+				   
+				   error:function(e){
+					   alert("连接失败");
+					   window.location.reload();
+				   },
+				   
+			   });
+		    }      
+      
+      
+      
+      
+      </script>
+      
+  
+  <div id="store"></div>  <!-- 作为全局变量存储知识点描述 -->
+  
+
+
+
+
+</body>
+</html>

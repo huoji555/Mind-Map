@@ -1,0 +1,240 @@
+/*  瓒呴摼鎺ヨ缃�  */
+
+.aa {
+	font-family: "瀹嬩綋";
+	font-size: 12px;
+	color: #FFFFFF;
+	font-style: normal;
+}
+.aa001 {
+	font-size: 50px;
+	font-weight: 900;
+	color: #FFFFFF;
+	font-style:normal;
+}
+.aa002 {
+	font-family: "鏂板畫浣�";
+	font-size: 20px;
+	font-style: normal;
+	color:#3f4749;
+	font-weight: 700;
+}
+.aa003 {
+	font-family: "宋体";
+	font-size: 30px;
+	color:#5b544d;
+	font-style: normal;
+}
+.aa004 {
+	font-family: "鏂板畫浣�";
+	font-size: 25px;
+	color: #FFFFFF;
+	font-weight: 500;
+	font-style: normal;
+}
+.aa005 {
+	font-family: "微软雅黑";
+	font-size: 20px;
+	font-weight: 700;
+	font-style: normal;
+}
+.aa006 {
+	padding-top: 20px;
+}
+.aa007 {
+	color: #FFFFFF;
+	background-color: #1d1a20;
+}
+.aa008 {
+	font-family: "鏂板畫浣�";
+	font-size: 16px;
+	color: #FFFFFF;
+	font-style: normal;
+}
+.aa009 {
+	font-family: "鏂板畫浣�";
+	font-size: 23px;
+	font-weight: 900;
+	color: #000000;
+	font-style: normal;
+}
+.aa010 {
+	font-family: "鏂板畫浣�";
+	font-size: 23px;
+	font-weight: 900;
+	color: #FFFFFF;
+	font-style: normal;
+}
+.aa011 {
+	font-family: 宋体;
+    font-size: 38px;
+    font-style: ;
+    color: #ffffff;
+    font-weight: 900;
+}
+.register {
+	font-family: "鏂板畫浣�";
+	font-size: 18px;
+	font-weight: 700;
+	color: #000000;
+	font-style: normal;
+}
+.register01 {
+	font-family: "鏂板畫浣�";
+	font-size: 16px;
+	font-weight: 500;
+	color: #EE0000;
+	font-style: normal;
+}
+.bb {
+	font-family: "瀹嬩綋";
+	font-size: 20px;
+	font-weight: 700;
+	color: #FFFFFF;
+
+}
+.bb001 {;
+	display: table-cell;
+	vertical-align: middle;
+}
+.cc {
+	background-color: #E8E8E8;
+}
+.cc001 {
+	background-size:100%  100%;
+	background-color: #d8d0ba;
+}
+.cc002 {
+	background-repeat:no-repeat;
+}
+.cc003 {
+	background-color: #FFFFFF;
+}
+.cc004{
+	background-color: #44596a;
+}
+
+.ee {
+	font-weight: 200;
+	font-variant: normal;
+	text-decoration: underline;
+}
+/*  娉ㄥ唽  */
+.ff1 {
+	position:absolute;
+	right:465px;top:130px;/*  鍦ㄩ骞曚笂瀹氫綅  */
+	z-index:1;
+	background-color:#CFCFCF;
+}
+.ff2 {
+	position:absolute;right:0px;top:0px;
+	z-index:1;
+	background-color: transparent;/*  閫忔槑  */
+}
+.ff3:hover {
+	background-color:#E3E3E3;
+}
+.ff4 {
+	position:absolute;right:35px;top:93px;
+	z-index:2;
+	background-color: transparent;
+}
+/*  鐧诲綍  */
+.ff01 {
+	position:absolute;right:465px;top:130px;
+	z-index:1;
+	background-color: #CFCFCF;
+}
+.ff02 {
+	position:absolute;right:0px;top:0px;
+	z-index:1;
+	background-color: transparent;
+}
+.ff03:hover
+{
+	background-color:#E3E3E3;
+}
+.ff04 {
+	position:absolute;right:55px;top:88px;
+	z-index:2;
+	background-color: transparent;
+}
+.ff05 {
+	position:absolute;right:55px;top:143px;
+	z-index:2;
+	background-color: transparent;
+}
+.ff001 {
+	position:absolute;left:30px;bottom:230px;
+	z-index:1;
+}
+.ff002 {
+	position:absolute;right:30px;bottom:230px;
+	z-index:1;
+}
+.ff003 {
+	position:absolute;right:10px;bottom:80px;
+	z-index:1;
+}
+.ff004 {
+	position:absolute;right:30px;top:3px;
+	z-index:1;
+}
+.studyC2:link {
+	color:#008B00;  text-decoration:none; font-family: "鏂板畫浣�";  font-size: 15px;
+}
+.studyC2:visited {
+	color:#008B00;  text-decoration:none; font-family: "鏂板畫浣�";  font-size: 15px;
+}
+.studyC2:hover {
+	color:#0000FF;  text-decoration:none; font-family: "鏂板畫浣�";  font-size: 15px;
+}
+.studyC2:active {
+	color:#FFFFFF;  text-decoration:none; font-family: "鏂板畫浣�";  font-size: 15px;
+}
+.studyA1 {
+	font-family: "鏂板畫浣�";
+	font-size: 30px;
+	color:#009ACD;
+	font-style: normal;
+	font-weight: 700;
+}
+.blur {	
+    filter: url(blur.svg#blur); /* FireFox, Chrome, Opera */
+    
+    -webkit-filter: blur(10px); /* Chrome, Opera */
+       -moz-filter: blur(10px);
+        -ms-filter: blur(10px);    
+            filter: blur(10px);
+    
+    filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius=10, MakeShadow=false); /* IE6~IE9 */
+}
+.head1:link {
+	        font-family: "微软雅黑";
+            color:#FFFFFF;
+            font-style:normal;
+        }
+.head1:visited {
+            color:#FFFFFF; text-decoration:none;
+        }
+.head1:hover {
+            color:#ABABAB;  text-decoration:none;
+        }
+.head1:active {
+            color:#008B00;  text-decoration:none;
+        }
+        
+.mind:link {
+	        font-family: "微软雅黑";
+            color:#715c4d;
+            font-style:normal;
+        }
+.mind:visited {
+            color:#FFFFFF; text-decoration:none;
+        }
+.mind:hover {
+            color:#676767;  text-decoration:none;
+        }
+.mind:active {
+            color:#008B00;  text-decoration:none;
+        }

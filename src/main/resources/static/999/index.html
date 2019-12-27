@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>zeroModal demo</title>
+    <link rel="stylesheet" type="text/css" href="./zeroModal.css" />
+    <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+    <script src="./lib/mustache.js"></script>
+    <script src="./zeroModal.js"></script>
+    <script src="./zeroModal.min.js"></script>
+    <style type="text/css">
+    ol {
+        counter-reset: li;
+        list-style: none;
+        *list-style: decimal;
+        font: 13px 'trebuchet MS', 'lucida sans';
+        padding: 0;
+        margin-bottom: 4em;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+    }
+    
+    ol ol {
+        margin: 0 0 0 2em;
+    }
+    
+    .rounded-list a {
+        position: relative;
+        display: block;
+        padding: .4em .4em .4em 2em;
+        *padding: .4em;
+        margin: .8em 0;
+        background: #ddd;
+        color: #444;
+        text-decoration: none;
+        border-radius: .3em;
+        transition: all .3s ease-out;
+    }
+    
+    .rounded-list a:hover {
+        background: #eee;
+    }
+    
+    .rounded-list a:hover:before {
+        transform: rotate(360deg);
+    }
+    
+    .rounded-list a:before {
+        content: counter(li);
+        counter-increment: li;
+        position: absolute;
+        left: -1.3em;
+        top: 50%;
+        margin-top: -1.3em;
+        background: #87ceeb;
+        height: 2em;
+        width: 2em;
+        line-height: 2em;
+        border: .3em solid #fff;
+        text-align: center;
+        font-weight: bold;
+        border-radius: 2em;
+        transition: all .3s ease-out;
+    }
+    
+    rectangle-list a {
+        position: relative;
+        display: block;
+        padding: .4em .4em .4em .8em;
+        *padding: .4em;
+        margin: .5em 0 .5em 2.5em;
+        background: #ddd;
+        color: #444;
+        text-decoration: none;
+        transition: all .3s ease-out;
+    }
+    
+    .rectangle-list a:hover {
+        background: #eee;
+    }
+    
+    .rectangle-list a:before {
+        content: counter(li);
+        counter-increment: li;
+        position: absolute;
+        left: -2.5em;
+        top: 50%;
+        margin-top: -1em;
+        background: #fa8072;
+        height: 2em;
+        width: 2em;
+        line-height: 2em;
+        text-align: center;
+        font-weight: bold;
+    }
+    
+    .rectangle-list a:after {
+        position: absolute;
+        content: '';
+        border: .5em solid transparent;
+        left: -1em;
+        top: 50%;
+        margin-top: -.5em;
+        transition: all .3s ease-out;
+    }
+    
+    .rectangle-list a:hover:after {
+        left: -.5em;
+        border-left-color: #fa8072;
+    }
+    
+    .rectangle-list a {
+        position: relative;
+        display: block;
+        padding: .4em .4em .4em .8em;
+        *padding: .4em;
+        margin: .5em 0 .8em 2.5em;
+        background: #ddd;
+        color: #444;
+        text-decoration: none;
+        transition: all .3s ease-out;
+    }
+    
+    .rectangle-list a:hover {
+        background: #eee;
+    }
+    
+    .rectangle-list a:before {
+        content: counter(li);
+        counter-increment: li;
+        position: absolute;
+        left: -2.5em;
+        top: 50%;
+        margin-top: -1em;
+        background: #fa8072;
+        height: 2em;
+        width: 2em;
+        line-height: 2em;
+        text-align: center;
+        font-weight: bold;
+    }
+    
+    .rectangle-list a:after {
+        position: absolute;
+        content: '';
+        border: .5em solid transparent;
+        left: -1em;
+        top: 50%;
+        margin-top: -.5em;
+        transition: all .3s ease-out;
+    }
+    
+    .rectangle-list a:hover:after {
+        left: -.5em;
+        border-left-color: #fa8072;
+    }
+    </style>
+</head>
+
+<body>
+    <h1 style="text-align:center">zeroModal</h1>
+    <h5 style="text-align:center">jQuery弹出层组件，扁平化风格，默认可拖动，支持弹出常用的模态框及操作提示框、等待层等。支持amd或cmd规范，或直接引入。</h5>
+    <div style="position:absolute;width:200px;left:220px;">
+        <ol class="rounded-list">
+            <li><a href="javascript:_basic()">basic</a></li>
+            <li><a href="javascript:_params()">带标题</a></li>
+            <li><a href="javascript:_escape()">内容不转义</a></li>
+            <li><a href="javascript:_button()">带按钮</a></li>
+            <li><a href="javascript:_setsize()">自定义尺寸(px、pt、%)</a></li>
+            <li><a href="javascript:_custombutton()">自定义按钮</a></li>
+            <li><a href="javascript:_notoverlay()">不要遮罩</a></li>
+            <li><a href="javascript:_setOpacity()">设置遮罩层透明度</a></li>
+            <li><a href="javascript:_iframe()">嵌套iframe</a></li>
+            <li><a href="javascript:_esc()">esc键退出</a></li>
+            <li><a href="javascript:_resize()">允许拖放大小</a></li>
+            <li><a href="javascript:_maxmin()">允许最大化最小化</a></li>
+            <li><a href="javascript:_drag()">点击层任意地方拖动</a></li>
+            <li><a href="javascript:_setPosition()">自定义弹框位置</a></li>
+        </ol>
+    </div>
+    <div style="position:absolute;width:200px;left:480px;">
+        <ol class="rectangle-list">
+            <li><a href="javascript:_loading(1)">等待框1 (loading)</a></li>
+            <li><a href="javascript:_loading(2)">等待框2 (loading)</a></li>
+            <li><a href="javascript:_loading(3)">等待框3 (loading)</a></li>
+            <li><a href="javascript:_loading(4)">等待框4 (loading)</a></li>
+            <li><a href="javascript:_loading(5)">等待框5 (loading)</a></li>
+            <li><a href="javascript:_loading(6)">等待框6 (loading)</a></li>
+            <!--<li><a href="javascript:_progress(1)">progress1</a></li>-->
+        </ol>
+    </div>
+    <div style="position:absolute;width:200px;left:760px;">
+        <ol class="rounded-list">
+            <li><a href="javascript:_alert1()">提示框1 (alert)</a></li>
+            <li><a href="javascript:_alert2()">提示框2 (alert)</a></li>
+            <li> <a href="javascript:_confirm1()">确认框1 (confirm)</a></li>
+            <li> <a href="javascript:_confirm2()">确认框2 (confirm)</a></li>
+            <li> <a href="javascript:_error()">失败提示框 (error)</a></li>
+            <li> <a href="javascript:_success()">成功提示框 (success)</a></li>
+        </ol>
+    </div>
+    <script>
+    function _basic() {
+        zeroModal.show();
+    }
+
+    function _params() {
+        zeroModal.show({
+            title: 'hello world',
+            content: 'this is zeroModal',
+            close: false
+        });
+    }
+
+    function _escape() {
+        zeroModal.show({
+            title: 'hello world',
+            content: '<b>this is zeroModal</b>',
+            escape: false
+        });
+    }
+
+    function _button() {
+        zeroModal.show({
+            title: 'hello world',
+            content: 'this is zeroModal',
+            ok: true,
+            cancel: true,
+            okFn: function(opt) {
+                console.log(opt);
+                alert('clicked ok and not close');
+                return false;
+            }
+        });
+    }
+
+    function _setsize() {
+        zeroModal.show({
+            title: 'hello world',
+            content: 'this is zeroModal',
+            width: '60%',
+            height: '40%'
+        });
+    }
+
+    function _notoverlay() {
+        zeroModal.show({
+            title: 'hello world',
+            content: 'this is zeroModal',
+            width: '60%',
+            height: '40%',
+            overlay: false
+        });
+    }
+
+    function _iframe() {
+        zeroModal.show({
+            title: 'hello world',
+            iframe: true,
+            url: 'http://www.baidu.com',
+            width: '80%',
+            height: '80%',
+            cancel: true
+        });
+    }
+
+    function _esc() {
+        zeroModal.show({
+            title: 'hello world',
+            content: 'this is zeroModal',
+            esc: true
+        });
+    }
+
+    function _resize() {
+        zeroModal.show({
+            title: 'hello world',
+            content: 'this is zeroModal',
+            width: '60%',
+            height: '40%',
+            resize: true
+        });
+    }
+
+    function _maxmin() {
+        zeroModal.show({
+            title: 'hello world',
+            content: 'this is zeroModal',
+            width: '60%',
+            height: '40%',
+            max: true,
+            min: true
+        });
+    }
+
+    function _loading(type) {
+        zeroModal.loading(type);
+    }
+
+    function _progress() {
+        zeroModal.progress();
+    }
+
+    function _alert1() {
+        zeroModal.alert('请选择数据进行操作!');
+    }
+
+    function _alert2() {
+        zeroModal.alert({
+            content: '操作提示!',
+            contentDetail: '请选择数据后再进行操作',
+            okFn: function() {
+                alert('ok callback');
+            }
+        });
+    }
+
+    function _confirm1() {
+        zeroModal.confirm("确定提交审核吗？", function() {
+            alert('ok');
+            //return false;
+        });
+    }
+
+    function _confirm2() {
+        zeroModal.confirm({
+            content: '确定提交审核吗？',
+            contentDetail: '提交后将不能进行修改。',
+            okFn: function() {
+                alert('ok');
+            },
+            cancelFn: function() {
+                alert('cancel');
+            }
+        });
+    }
+
+    function _error() {
+        zeroModal.error('请选择数据进行操作!');
+
+        /*zeroModal.error({
+            content: '请选择数据进行操作!',
+            width: '800px'
+        });*/
+    }
+
+    function _success() {
+        zeroModal.success('操作成功!');
+    }
+
+    function _setOpacity() {
+        zeroModal.show({
+            title: 'hello world',
+            content: 'this is zeroModal',
+            width: '60%',
+            height: '40%',
+            opacity: 0.8
+        });
+    }
+
+    function _drag() {
+        zeroModal.show({
+            title: 'hello world',
+            content: 'this is zeroModal',
+            dragHandle: 'container',
+            ok: true
+        });
+    }
+
+    function _custombutton() {
+        zeroModal.show({
+            title: 'hello world',
+            iframe: true,
+            url: 'http://www.baidu.com',
+            width: '60%',
+            height: '60%',
+            buttons: [{
+                className: 'zeromodal-btn zeromodal-btn-primary',
+                name: '这是自定义按钮',
+                fn: function(opt) {
+                    alert(1);
+                    return false;
+                }
+            }, {
+                className: 'zeromodal-btn zeromodal-btn-default',
+                name: '取消',
+                fn: function(opt) {
+                    alert(2);
+                }
+            }]
+        });
+    }
+
+    function _setPosition() {
+        zeroModal.show({
+            title: 'hello world',
+            content: 'this is zeroModal',
+            top: '30px',
+            left: '30px',
+            width: '280px',
+            height: '600px'
+        });
+    }
+    </script>
+</body>
+
+</html>
