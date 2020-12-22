@@ -8,14 +8,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 
 
-
 /**
-  * <p>Company: 联系电话 1536933707 </p> 
-  * @Description: 
-  * @Create Date: 2017年8月14日上午12:01:03
-  * @Version: V1.00 
-  * @Author: 赵良臣
-  */
+ * @author Ragty
+ * @describe 配置错误解析页面
+ * @Date  2018.10.15
+ */
 @Configuration
 public class ErrorConfiguration {
 	

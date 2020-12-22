@@ -1,0 +1,16 @@
+<!-- the name of knowledge -->
+<div ng-keypress="($event.ctrlKey == true && $event.which === 83)?saveZsd():0">
+<div class="form-group">
+    <label for="" style=" width:95%; margin:auto; margin-left: 5%;">
+        <span style="float:left;margin:0,auto;margin-top: 5px;margin-right: 2.5%;">知识点名称 </span>
+        <input type="email" class="form-control" ng-model="zsdmc" onsubmit="return false;" style="width:75%;margin-right:2.5%;float: left;">
+        <button type="button" class="btn btn-primary" style="width: 9%" ng-click="saveZsd();" >保存</button>
+    </label><br/>
+</div>           <!-- zsdmc End!!! -->
+
+
+<!-- describe of the knowledge -->
+<div style="width:90%; margin:0 auto;">
+    <div  class="summernote" id="a_content" name="a_content"></div>
+</div>
+</div>

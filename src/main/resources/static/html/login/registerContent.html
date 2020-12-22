@@ -1,0 +1,54 @@
+<div class="row justify-content-center" ng-keypress="($event.which === 13)?register(reg):0">
+    <div class="col-md-6">
+        <div class="card mx-4">
+            <div class="card-body p-4">
+                <h2>注册</h2>
+                <p class="text-muted">注册您的账号</p>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="icon-user"></i>
+                      </span>
+                    </div>
+                    <input class="form-control" type="text" placeholder="用户名" ng-model="reg.username" required>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="icon-lock"></i>
+                      </span>
+                    </div>
+                    <input class="form-control" type="password" placeholder="密码（8位以上包含数字和字母）" ng-model="reg.password">
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="icon-lock"></i>
+                      </span>
+                    </div>
+                    <input class="form-control" type="password" placeholder="密码确认" ng-model="reg.password1">
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                        <i class="icon-envelope"></i>
+                      </span>
+                    </div>
+                    <input class="form-control" type="text" placeholder="邮箱" ng-model="reg.email">
+                </div>
+                <div class="input-group mb-4">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">
+                          <i class="icon-shield"></i>
+                      </span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="验证码" ng-model="reg.verfiyCode">
+                    <button class="btn btn-ghost btn-primary" ng-if="timing == '0'" ng-click="verifyCode(reg)">获取验证码</button>
+                    <button class="btn btn-ghost btn-primary" ng-if="timing != '0'" disabled>{{timing}}s后重新获取</button>
+                </div>
+
+                <button class="btn btn-block btn-success" type="button" ng-click="register(reg)">注册</button>
+            </div>
+        </div>
+    </div>
+</div>

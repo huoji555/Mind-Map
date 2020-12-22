@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+  <head>
+    <base href="./">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Mind Map</title>
+    <!-- Icons-->
+    <link href="node_modules/@coreui/icons/css/coreui-icons.min.css" rel="stylesheet">
+    <link href="node_modules/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">
+    <link href="node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="node_modules/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+    <!-- Main styles for this application-->
+    <link href="css/style.css" rel="stylesheet">
+    <link href="node_modules/pace-progress/css/pace.min.css" rel="stylesheet">
+  </head>
+
+  <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show" ng-app="index" ng-controller="indexCon">
+   <!--   头部   -->
+
+    <header class="app-header navbar">
+      <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <a class="navbar-brand">
+        Mind Map
+      </a>
+      <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <!--头像部分（留一个退出）-->
+      <ul class="nav navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            <img class="img-avatar" src="">
+            <canvas id="headImg" style="display:none"></canvas>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <div class="dropdown-header text-center">
+              <strong>设置</strong>
+            </div>
+            <a class="dropdown-item"  class="fa fa-key" data-target="#updatePWD" data-toggle="modal">
+              <i></i> 修改密码</a>
+            <a class="dropdown-item" ng-click="quit()">
+              <i class="fa fa-lock"></i> 退出</a>
+          </div>
+        </li>
+      </ul>
+
+    </header>
+    <div class="app-body">
+      <div class="sidebar">
+        <nav class="sidebar-nav">
+          <ul class="nav">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html" ng-click="changeName('系统介绍')">
+                <i class="nav-icon icon-speedometer"></i> Mind Map
+              </a>
+            </li>
+            <!--系统信息模块-->
+            <li class="nav-title">账户</li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#!adminMessage" ng-click="changeName('用户信息')">
+                <i class="nav-icon icon-drop"></i> 用户信息</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#!loginRecord" ng-click="changeName('登录信息')">
+                <i class="nav-icon icon-cup"></i> 登录信息</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#!exception" ng-click="changeName('异常信息')">
+                <i class="nav-icon icon-book-open"></i> 异常信息</a>
+            </li>
+
+            <!--票据管理模块-->
+            <li class="nav-title">票据管理</li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#!/ticketUpload" ng-click="changeName('票据导入')">
+                <i class="nav-icon icon-pie-chart"></i> 票据导入</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#!/ticketDiscount" ng-click="changeName('已贴现票据')">
+                <i class="nav-icon icon-calculator"></i> 已贴现票据</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#!/tradeMessage" ng-click="changeName('当日市场票价')">
+                <i class="nav-icon icon-star"></i> 当日市场票价</a>
+            </li>
+
+            <!--财务汇总模块-->
+            <li class="nav-title">财务分析</li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#!/financeTotals" ng-click="changeName('财务汇总')">
+                <i class="nav-icon icon-pie-chart"></i> 财务汇总</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#!/discountTotals" ng-click="changeName('已贴现统计')">
+                <i class="nav-icon icon-pie-chart"></i> 已贴现统计</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#!/noneDiscountTotals" ng-click="changeName('未贴现统计')">
+                <i class="nav-icon icon-pie-chart"></i> 未贴现统计</a>
+            </li>
+
+
+            <!-- 后台管理模块 -->
+            <li class="nav-title" ng-show="roleId=='1'">后台管理</li>
+            <li class="nav-item" ng-show="roleId=='1'">
+              <a class="nav-link" href="index.html#!/auditingBack" ng-click="changeName('企业审核')">
+                <i class="nav-icon icon-pie-chart"></i> 企业审核</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#!/tradeEntry" ng-click="changeName('市场票价录入')">
+                <i class="nav-icon icon-star"></i> 市场票价录入</a>
+            </li>
+
+          </ul>
+        </nav>
+        <button class="sidebar-minimizer brand-minimizer" type="button"></button>
+      </div>
+      <main class="main">
+        <!-- Breadcrumb-->
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">Mind Map</li>
+          <li class="breadcrumb-item">
+            <a style="color: #20a8d8;">{{first}}</a>
+          </li>
+        </ol>
+
+        <div class="container-fluid">
+          <div class="animated fadeIn">
+            <div class="card">
+              <div class="card-header">
+                <i class="icon-drop"></i> {{first}}</div>
+              <div class="card-body">
+
+                <div ng-view></div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </main>
+    </div>
+    <footer class="app-footer">
+      <div>
+
+        <span>Mind Map&copy; 2018 HBNU信息技术研究所</span>
+      </div>
+    </footer>
+
+
+    <!-- CoreUI and necessary plugins-->
+    <script src="node_modules/jquery/js/jquery.min.js"></script>
+    <script src="node_modules/popper.js/js/popper.min.js"></script>
+    <script src="node_modules/bootstrap/js/bootstrap.min.js"></script>
+    <script src="node_modules/pace-progress/js/pace.min.js"></script>
+    <script src="node_modules/perfect-scrollbar/js/perfect-scrollbar.min.js"></script>
+    <script src="node_modules/@coreui/coreui/js/coreui.min.js"></script>
+    <!-- Plugins and scripts required by this view-->
+    <script src="node_modules/@coreui/coreui-plugin-chartjs-custom-tooltips/js/custom-tooltips.min.js"></script>
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/angular-route.js"></script>
+    <script type="text/javascript" src="js/private/index/index.js"></script>
+    <script type="text/javascript" src="js/laydate/laydate/laydate.js"></script>
+
+
+   <div class="modal fade" id="updatePWD" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+     <div class="modal-dialog modal-success modal-lg" role="document">
+       <div class="modal-content">
+         <div class="modal-header">
+           <h4 class="modal-title">修改密码</h4>
+           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+             <span aria-hidden="true">×</span>
+           </button>
+         </div>
+         <div class="modal-body">
+
+           <div class="row">
+             <div class="form-group col-sm-5">
+               <label>原始密码</label>
+               <input type="password" class="form-control" ng-model="orignPwd"  placeholder="原始密码" required/>
+             </div>
+           </div>
+           <div class="row">
+             <div class="form-group col-sm-5">
+               <label>新密码</label>
+               <input type="password" class="form-control" ng-model="newPwd"  placeholder="新密码（8位以上包含数字和字母）"  required/>
+             </div>
+           </div>
+           <div class="row">
+             <div class="form-group col-sm-5">
+               <label>密码确认</label>
+               <input type="password" class="form-control" ng-model="repPWD"  placeholder="请再次输入密码" required/>
+             </div>
+           </div>
+
+
+         </div>
+         <div class="modal-footer">
+           <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+           <button type="button" class="btn btn-info" ng-click="update(PWD)">修改密码</button>
+         </div>
+       </div><!-- /.modal-content -->
+     </div><!-- /.modal-dialog -->
+   </div><!-- /.modal -->
+
+
+
+  </body>
+</html>

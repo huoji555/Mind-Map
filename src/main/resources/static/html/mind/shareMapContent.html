@@ -1,0 +1,38 @@
+<div id="shareMap" style="width:95%;margin-left:55px;height:600px;">
+    <table class='table table-hover' style="margin-top: 35px; border-collapse: inherit">
+        <thead style="background-color: #f2f2f2"><tr><th>图谱名称</th><th>分享作者</th><th>分享时间</th><th>更新时间</th><th>查看</th><th>删除</th></tr></thead>
+        <tbody ng-repeat="list in lists">
+        <tr>
+            <td>{{list.mapname}}</td>
+            <td>{{list.shareId}}</td>
+            <td>{{list.shareDate | date:"yyyy-MM-dd HH:mm:ss"}}</td>
+            <td>{{list.updateDate | date:"yyyy-MM-dd HH:mm:ss"}}</td>
+            <td><span class='link-style' ng-click="openMyMap(list.mapid)">查看</span></td>
+            <td><span class='link-style' ng-click="deleteShareMap(list.mapid,list.shareId)">删除</span></td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <!--分页底部-->
+    <div align="center">
+        <ul class="pagination justify-content-center">
+            <li class="page-item">
+                <a class="page-link" ng-click="page(currPage,'first')" disabled="disabled">
+                    <span aria-hidden="true">首页</span>
+                </a>
+            </li>
+            <li class="page-item"><a class="page-link" ng-click="page(currPage,'up')">上一页</a></li>
+            <li class="page-item"><a class="page-link" ng-click="page(currPage,'next')">下一页</a></li>
+            <li class="page-item">
+                <a class="page-link" ng-click="page(pages,'last');" aria-label="Next">
+                    <span aria-hidden="true">末页</span>
+                </a>
+            </li>
+            <!--<li style="margin-top: 0.6%; margin-left: 5%;">
+                <span>第{{currPage+1}}页</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>共{{pages}}页</span>
+            </li>-->
+        </ul>
+    </div>
+
+</div>

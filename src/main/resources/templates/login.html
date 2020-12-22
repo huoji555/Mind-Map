@@ -1,113 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <!-- Icons-->
+    <link href="node_modules/@coreui/icons/css/coreui-icons.min.css" rel="stylesheet">
+    <link href="node_modules/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">
+    <link href="node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="node_modules/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+    <!-- Main styles for this application-->
+    <link href="css/style.css" rel="stylesheet">
 </head>
+<body ng-app="login" class="app flex-row align-items-center">
 
+   <div class="container" ng-view></div>
 
-<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
-
-<script type="text/javascript">
-
-      $(function(){
-    	  
-    	  $("#ss").click(function(){
-    		  
-    		  var adata={"name":$("#name").val(),
-    	                 "password":$("#password").val()			  
-    		           };
-    		  var data=JSON.stringify(adata);
-    		  
-    		  $.ajax({
-    			  type:"POST",
-    			  contentType:"application/json",
-    			  dataType:"json",
-    			  data:data,
-    			  url:"saveStudent.do",
-    			  
-    			  success:function(data){
-    				  
-    				  alert("成功");
-    				  
-    			  },
-    			  
-    			  error:function(){
-    				  
-    				  alert("失败");
-    			  },
-    			  
-    			  
-    		  });
-    		  
-    	  });    	  
-  
-    	  
-      });
-
-</script>
-
-
-
-<script type="text/javascript">
-
-     $(function(){
-    	 
-    	  $("#jj").click(function(){
-    		 
-    	    var adata={"name":$("#name").val(),
-    	     		   "password":$("#password").val()
-                	 };
-    		var data=JSON.stringify(adata);
-    		
-    		$.ajax({
-    			type:"POST",
-    			contentType:"application/json",
-    			dataType:"json",
-    			data:data,
-    			url:"getId.do",
-    			
-    			success:function(data){
-    				alert(data.id);
-    				document.getElementById('show').value=data.id;
-    				
-    			     },
-    			     
-    			error:function(){
-    				alert("网络连接失败");
-    			}     
-    			
-    		}); 
-    		 
-    	  });
-    	 
-     });
-  
-</script>
-
-
-
-
-
-
-<body>
-
-<h1>咔咔咔咔咔咔咔咔咔咔咔咔咔咔咔咔</h1>
-
-
-用户:<input type="text" id="name" >
-密码:<input type="password" id="password">
-<br><br><hr>
-
-显示区<input type="text" id="show">
-
-
-<button id="ss">注册</button><br/>
-<button id="jj">显示id</button>
-
-
-
-
+   <script type="text/javascript" src="js/angular.min.js"></script>
+   <script type="text/javascript" src="js/angular-route.js"></script>
+   <script type="text/javascript" src="js/private/login/login.js"></script>
 
 </body>
 </html>

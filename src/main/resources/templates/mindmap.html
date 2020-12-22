@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mind Map</title>
+    <link rel="stylesheet" type="text/css" href="mindmap/css/easyui.css"/>
+    <link rel="stylesheet" type="text/css" href="mindmap/css/jsmind.css"/>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="mindmap/css/mind.css"/>
+    <!-- Icons-->
+    <link href="node_modules/@coreui/icons/css/coreui-icons.min.css" rel="stylesheet">
+    <link href="node_modules/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">
+    <link href="node_modules/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="node_modules/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+</head>
+<body ng-app="mind" ng-controller="mindControl" class="main-container">
+
+<!-- 侧导航栏 -->
+<div class="l_nav">
+    <ul>
+        <a ng-click="newMap()"><li title="新建" ><i class="icon-note hovli bigger-120"></i></li></a>
+        <a href="mindmap.html#!myMap"><li title="我的知识图谱"><i class="icon-user hovli"></i></li></a>
+        <a href="mindmap.html#!shareMap"><li title="查看分享图谱"><i class="icon-clock hovli bigger-120"></i></li></a>
+        <li ng-click="open_browser()" title="打开文件"><i class="icon-folder hovli bigger-120"></i></li>
+        <input type="file" id="file_input" onchange="angular.element(this).scope().open_file()" style="display:none;"  accept=".jm">
+        <li ng-click="save_file()" title="生成文件"><i class="icon-doc hovli bigger-120"></i></li>
+        <li ng-click="screen_shot()"  title="生成图片"><i class="icon-camera hovli"></i></li>
+        <li onclick="chat();" title="讨论"><i class="icon-bubbles hovli bigger-120"></i></li>
+        <li ng-click="shareMap('outside');" title="分享"><i class="icon-share hovli bigger-120"></i></li>
+    </ul>
+</div>
+
+<!-- 右键菜单 -->
+<div id="mm" class="easyui-menu" style="width:120px; height:auto;" hidden="hidden">
+    <div data-options="iconCls:'icon-pencil'" ng-click="addNode()" style="height:23px;padding:5px 0;">新建子标签</div>
+    <div data-options="iconCls:'icon-wrench'" ng-click="modifyNode()" style="height:23px;padding:5px 0;" >修改标签名</div>
+    <div class="menu-sep"></div>
+    <div data-options="iconCls:'icon-trash'" ng-click="deleteNode()" style="height:23px;padding:5px 0;">删除该标签</div>
+    <div class="menu-sep"></div>
+    <div data-options="iconCls:'icon-map'" ng-click="showChild()" style="height:23px;padding:5px 0;">显示子节点</div>
+    <div class="menu-sep"></div>
+    <div data-options="iconCls:'icon-graph'" ng-click="openMap()" style="height:23px;padding:5px 0;">显示完整图</div>
+    <div class="menu-sep"></div>
+    <div data-options="iconCls:'icon-magic-wand'" style="height:23px;padding:5px 0;">
+        <span>编辑颜色</span>
+        <div style="width: 150px;">
+            <div ng-click="set_color('玫瑰红');">玫瑰红</div>
+            <div ng-click="set_color('咖色');">咖色</div>
+            <div ng-click="set_color('浅紫');">浅紫</div>
+            <div ng-click="set_color('抹茶');">抹茶</div>
+            <div ng-click="set_color('郁金色');">郁金色</div>
+            <div ng-click="set_color('原色');">原色</div>
+            <div ng-click="set_color('圣诞红');">圣诞红</div>
+            <div ng-click="set_color('天蓝');">天蓝</div>
+            <div ng-click="set_color('深紫');">深紫</div>
+            <div ng-click="set_color('藏青');">藏青</div>
+            <div ng-click="set_color('要什么颜色');">要什么颜色</div>
+            <div ng-click="set_color('凑数色');">凑数色</div>
+            <div ng-click="set_color('砖红');">砖红</div>
+            <div ng-click="set_color('碳灰');">碳灰</div>
+            <div ng-click="set_color('亮粉');">亮粉</div>
+        </div>
+    </div>
+</div>
+
+<div ng-view ></div>
+
+<!--mindjs-->
+<script type="text/javascript" src="js/jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src="mindmap/jquery.easyui.min.js"></script>
+<script src="mindmap/jsmind.js"></script>
+<script src="mindmap/jsmind.draggable.js"></script>
+<script src="mindmap/jsmind.screenshot.js"></script>
+<!-- 基础js -->
+<script type="text/javascript" src="js/angular.min.js"></script>
+<script type="text/javascript" src="js/angular-route.js"></script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
+<script type="text/javascript" src="js/private/mind/mind.js"></script>
+
+
+</body>
+</html>

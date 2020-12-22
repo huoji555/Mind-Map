@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>使用 layDate 独立版</title>
+   <script src="laydate/laydate.js"></script> <!-- 改成你的路径 -->
+    <script>
+    /*lay('#version').html('-v'+ laydate.v);*/
+
+    //执行一个laydate实例
+    //常规用法
+    laydate.render({
+      elem: '#test1' //指定元素
+    });
+    //国际版
+    laydate.render({
+      elem: '#test1-1'
+      ,lang: 'en'
+    }); 
+    //年选择器
+    laydate.render({
+      elem: '#test2'
+      ,type: 'year'
+    });
+    //年月选择器
+    laydate.render({
+      elem: '#test3'
+      ,type: 'month'
+    });
+    //时间选择器
+    laydate.render({
+      elem: '#test4'
+      ,type: 'time'
+    });
+    //时间选择器
+    laydate.render({
+      elem: '#test5'
+      ,type: 'datetime'
+    });
+    //日期范围
+    laydate.render({
+      elem: '#test6'
+      ,range: true
+    });
+    //年范围
+    laydate.render({
+      elem: '#test7'
+      ,type: 'year'
+      ,range: true
+    });
+    //年月范围
+    laydate.render({
+      elem: '#test8'
+      ,type: 'month'
+      ,range: true
+    });
+    //时间范围
+    laydate.render({
+      elem: '#test9'
+      ,type: 'time'
+      ,range: true
+    });
+    //日期时间范围
+    laydate.render({
+      elem: '#test10'
+      ,type: 'datetime'
+      ,range: true
+    }); 
+    //墨绿主题
+    laydate.render({
+      elem: '#test29'
+      ,theme: 'molv'
+    });
+    //自定义颜色
+    laydate.render({
+      elem: '#test30'
+      ,theme: '#393D49'
+    });
+    //格子主题
+    laydate.render({
+      elem: '#test31'
+      ,theme: 'grid'
+    });
+
+    </script>
+  <style>
+  body{padding: 20px;}
+  .demo-input{padding-left: 10px; height: 38px; min-width: 262px; line-height: 38px; border: 1px solid #e6e6e6;  background-color: #fff;  border-radius: 2px;}
+
+  </style>
+</head>
+
+<body>
+    <input type="text" class="demo-input" placeholder="常规用法" id="test1">
+    <input type="text" class="demo-input" placeholder="国际版" id="test1-1">
+    <input type="text" class="demo-input" placeholder="年选择器" id="test2">
+    <input type="text" class="demo-input" placeholder="年月选择器" id="test3">
+    <input type="text" class="demo-input" placeholder="时间选择器" id="test4">
+    <input type="text" class="demo-input" placeholder="时间选择器" id="test5">
+    <div style="margin-bottom: 30px;"></div>
+    <input type="text" class="demo-input" placeholder="日期范围" id="test6">
+    <input type="text" class="demo-input" placeholder="年范围" id="test7">
+    <input type="text" class="demo-input" placeholder="年月范围" id="test8">
+    <input type="text" class="demo-input" placeholder="时间范围" id="test9">
+    <input type="text" class="demo-input" placeholder="日期时间范围" id="test10">
+    <div style="margin-bottom: 30px;"></div>
+    <input type="text" class="demo-input" placeholder="墨绿主题" id="test29">
+    <input type="text" class="demo-input" placeholder="自定义颜色" id="test30">
+    <input type="text" class="demo-input" placeholder="格子主题" id="test31">
+
+
+   
+</body>
+</html>
